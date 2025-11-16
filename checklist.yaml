@@ -1,0 +1,9 @@
+criteria:
+  code_accessible: 0.1
+  has_readme: 0.15
+  has_requirements: 0.15
+  has_tests: 0.1
+  mentions_dataset: 0.15
+  has_license: 0.1
+  recently_updated: 0.1
+  example_usage: 0.15

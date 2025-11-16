@@ -1,0 +1,15 @@
+{
+  "P01": {
+    "repo_name": "siegelz/core-bench",
+    "stars": 52,
+    "forks": 6,
+    "open_issues": 8,
+    "last_update": "2025-10-28",
+    "has_license": true,
+    "has_readme": true,
+    "has_requirements": true,
+    "has_tests": true,
+    "mentions_dataset": true,
+    "example_usage": true
+  }
+}
