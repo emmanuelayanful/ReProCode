@@ -73,4 +73,4 @@ for _, row in tqdm(papers.iterrows(), total=len(papers)):
 with open(OUT_PATH, "w") as f:
     json.dump(metadata, f, indent=2)
 
-print(f"✅ Saved metadata to {OUT_PATH}")
+print(f"Saved metadata to {OUT_PATH}")
