@@ -13,9 +13,6 @@
     "example_usage": true
   },
   "P02": {
-    "error": "404 {\"message\": \"Not Found\", \"documentation_url\": \"https://docs.github.com/rest/repos/repos#get-a-repository\", \"status\": \"404\"}"
-  },
-  "P03": {
     "repo_name": "openai/human-eval",
     "stars": 3021,
     "forks": 422,
@@ -28,7 +25,7 @@
     "mentions_dataset": true,
     "example_usage": true
   },
-  "P04": {
+  "P03": {
     "repo_name": "google-research/google-research",
     "stars": 36749,
     "forks": 8240,
@@ -41,7 +38,7 @@
     "mentions_dataset": true,
     "example_usage": false
   },
-  "P05": {
+  "P04": {
     "repo_name": "swe-bench/swe-bench",
     "stars": 3817,
     "forks": 693,
@@ -54,7 +51,7 @@
     "mentions_dataset": true,
     "example_usage": true
   },
-  "P06": {
+  "P05": {
     "repo_name": "bigcode-project/starcoder",
     "stars": 7471,
     "forks": 531,
@@ -67,7 +64,7 @@
     "mentions_dataset": true,
     "example_usage": true
   },
-  "P07": {
+  "P06": {
     "repo_name": "salesforce/CodeT5",
     "stars": 3081,
     "forks": 487,
@@ -79,5 +76,18 @@
     "has_tests": false,
     "mentions_dataset": false,
     "example_usage": false
+  },
+  "P07": {
+    "repo_name": "code-rag-bench/code-rag-bench",
+    "stars": 160,
+    "forks": 17,
+    "open_issues": 10,
+    "last_update": "2025-11-14",
+    "has_license": false,
+    "has_readme": true,
+    "has_requirements": true,
+    "has_tests": false,
+    "mentions_dataset": true,
+    "example_usage": true
   }
 }

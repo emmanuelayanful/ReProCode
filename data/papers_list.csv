@@ -1,8 +1,8 @@
 paper_id,title,github_url
 P01,CORE-Bench: Computational Reproducibility Benchmark,https://github.com/siegelz/core-bench
-P02,CodeRAG Bench,https://github.com/zhaoyanpeng/coderag-bench
-P03,HumanEval,https://github.com/openai/human-eval
-P04,MBPP Benchmark,https://github.com/google-research/google-research
-P05,SWE-Bench,https://github.com/swe-bench/swe-bench
-P06,StarCoder,https://github.com/bigcode-project/starcoder
-P07,CodeT5,https://github.com/salesforce/CodeT5
+P02,HumanEval,https://github.com/openai/human-eval
+P03,MBPP Benchmark,https://github.com/google-research/google-research
+P04,SWE-Bench,https://github.com/swe-bench/swe-bench
+P05,StarCoder,https://github.com/bigcode-project/starcoder
+P06,CodeT5,https://github.com/salesforce/CodeT5
+P07,CodeRAG-Bench,https://github.com/code-rag-bench/code-rag-bench
