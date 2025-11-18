@@ -1,15 +1,83 @@
 {
   "P01": {
     "repo_name": "siegelz/core-bench",
-    "stars": 52,
+    "stars": 53,
     "forks": 6,
     "open_issues": 8,
-    "last_update": "2025-10-28",
+    "last_update": "2025-11-18",
     "has_license": true,
     "has_readme": true,
     "has_requirements": true,
     "has_tests": true,
     "mentions_dataset": true,
     "example_usage": true
+  },
+  "P02": {
+    "error": "404 {\"message\": \"Not Found\", \"documentation_url\": \"https://docs.github.com/rest/repos/repos#get-a-repository\", \"status\": \"404\"}"
+  },
+  "P03": {
+    "repo_name": "openai/human-eval",
+    "stars": 3021,
+    "forks": 422,
+    "open_issues": 42,
+    "last_update": "2025-11-18",
+    "has_license": true,
+    "has_readme": true,
+    "has_requirements": true,
+    "has_tests": false,
+    "mentions_dataset": true,
+    "example_usage": true
+  },
+  "P04": {
+    "repo_name": "google-research/google-research",
+    "stars": 36749,
+    "forks": 8240,
+    "open_issues": 1677,
+    "last_update": "2025-11-18",
+    "has_license": true,
+    "has_readme": true,
+    "has_requirements": false,
+    "has_tests": true,
+    "mentions_dataset": true,
+    "example_usage": false
+  },
+  "P05": {
+    "repo_name": "swe-bench/swe-bench",
+    "stars": 3817,
+    "forks": 693,
+    "open_issues": 72,
+    "last_update": "2025-11-18",
+    "has_license": true,
+    "has_readme": true,
+    "has_requirements": false,
+    "has_tests": true,
+    "mentions_dataset": true,
+    "example_usage": true
+  },
+  "P06": {
+    "repo_name": "bigcode-project/starcoder",
+    "stars": 7471,
+    "forks": 531,
+    "open_issues": 102,
+    "last_update": "2025-11-17",
+    "has_license": true,
+    "has_readme": true,
+    "has_requirements": true,
+    "has_tests": false,
+    "mentions_dataset": true,
+    "example_usage": true
+  },
+  "P07": {
+    "repo_name": "salesforce/CodeT5",
+    "stars": 3081,
+    "forks": 487,
+    "open_issues": 86,
+    "last_update": "2025-11-18",
+    "has_license": true,
+    "has_readme": true,
+    "has_requirements": false,
+    "has_tests": false,
+    "mentions_dataset": false,
+    "example_usage": false
   }
 }
