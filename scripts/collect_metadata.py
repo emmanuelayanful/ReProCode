@@ -5,7 +5,7 @@ import yaml, os, json
 from tqdm import tqdm
 from datetime import datetime
 from dotenv import load_dotenv
-
+import github.Auth
 load_dotenv()  # loads .env file
 
 # --- CONFIG ---
@@ -15,6 +15,7 @@ OUT_PATH = "data/raw_metadata.json"
 
 # --- SETUP ---
 g = Github(GITHUB_TOKEN)
+# g = github.Auth.Token(GITHUB_TOKEN)
 papers = pd.read_csv(DATA_PATH)
 metadata = {}
 
