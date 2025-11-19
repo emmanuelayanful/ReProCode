@@ -1,0 +1,4 @@
+paper_id,score,predicted_score,error,stars,forks,open_issues,has_readme,has_requirements,has_tests,has_license,mentions_dataset,example_usage,recently_updated
+P01,0.0,0.1724999999999999,0.1724999999999999,53,6,8,1,1,1,1,1,1,1
+P02,0.1,0.13424999999999995,0.03424999999999995,3021,422,42,1,1,0,1,1,1,1
+P06,0.55,0.17450000000000002,-0.37550000000000006,3081,487,86,1,0,0,1,0,0,1
