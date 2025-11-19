@@ -15,6 +15,7 @@ for pid, repo in meta.items():
         for key, weight in checklist.items():
             if repo.get(key, False):
                 score -= weight
+    score = max(0.0, min(1.0, score))
     records.append({"paper_id": pid, "score": round(score, 2)})
 
 df = pd.DataFrame(records)

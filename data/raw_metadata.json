@@ -5,12 +5,14 @@
     "forks": 6,
     "open_issues": 8,
     "last_update": "2025-11-18",
+    "code_accessible": true,
     "has_license": true,
     "has_readme": true,
     "has_requirements": true,
     "has_tests": true,
     "mentions_dataset": true,
-    "example_usage": true
+    "example_usage": true,
+    "recently_updated": true
   },
   "P02": {
     "repo_name": "openai/human-eval",
@@ -18,12 +20,14 @@
     "forks": 422,
     "open_issues": 42,
     "last_update": "2025-11-18",
+    "code_accessible": true,
     "has_license": true,
     "has_readme": true,
     "has_requirements": true,
     "has_tests": false,
     "mentions_dataset": true,
-    "example_usage": true
+    "example_usage": true,
+    "recently_updated": true
   },
   "P03": {
     "repo_name": "google-research/google-research",
@@ -31,12 +35,14 @@
     "forks": 8240,
     "open_issues": 1677,
     "last_update": "2025-11-18",
+    "code_accessible": true,
     "has_license": true,
     "has_readme": true,
     "has_requirements": false,
     "has_tests": true,
     "mentions_dataset": true,
-    "example_usage": false
+    "example_usage": false,
+    "recently_updated": true
   },
   "P04": {
     "repo_name": "swe-bench/swe-bench",
@@ -44,12 +50,14 @@
     "forks": 693,
     "open_issues": 72,
     "last_update": "2025-11-18",
+    "code_accessible": true,
     "has_license": true,
     "has_readme": true,
     "has_requirements": false,
     "has_tests": true,
     "mentions_dataset": true,
-    "example_usage": true
+    "example_usage": true,
+    "recently_updated": true
   },
   "P05": {
     "repo_name": "bigcode-project/starcoder",
@@ -57,12 +65,14 @@
     "forks": 531,
     "open_issues": 102,
     "last_update": "2025-11-17",
+    "code_accessible": true,
     "has_license": true,
     "has_readme": true,
     "has_requirements": true,
     "has_tests": false,
     "mentions_dataset": true,
-    "example_usage": true
+    "example_usage": true,
+    "recently_updated": true
   },
   "P06": {
     "repo_name": "salesforce/CodeT5",
@@ -70,12 +80,14 @@
     "forks": 487,
     "open_issues": 86,
     "last_update": "2025-11-18",
+    "code_accessible": true,
     "has_license": true,
     "has_readme": true,
     "has_requirements": false,
     "has_tests": false,
     "mentions_dataset": false,
-    "example_usage": false
+    "example_usage": false,
+    "recently_updated": true
   },
   "P07": {
     "repo_name": "code-rag-bench/code-rag-bench",
@@ -83,11 +95,13 @@
     "forks": 17,
     "open_issues": 10,
     "last_update": "2025-11-14",
+    "code_accessible": true,
     "has_license": false,
     "has_readme": true,
     "has_requirements": true,
     "has_tests": false,
     "mentions_dataset": true,
-    "example_usage": true
+    "example_usage": true,
+    "recently_updated": true
   }
 }
