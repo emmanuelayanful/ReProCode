@@ -1,0 +1,8 @@
+pandas
+requests
+PyGithub
+pyyaml
+python-dotenv
+tqdm
+scikit-learn
+joblib

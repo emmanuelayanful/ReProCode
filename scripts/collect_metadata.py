@@ -14,8 +14,8 @@ DATA_PATH = "data/papers_list.csv"
 OUT_PATH = "data/raw_metadata.json"
 
 # --- SETUP ---
-g = Github(GITHUB_TOKEN)
-# g = github.Auth.Token(GITHUB_TOKEN)
+auth = github.Auth.Token(GITHUB_TOKEN)
+g = Github(auth=auth)
 papers = pd.read_csv(DATA_PATH)
 metadata = {}
 
