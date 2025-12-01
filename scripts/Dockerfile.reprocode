@@ -1,0 +1,18 @@
+# scripts/Dockerfile.reprocode
+FROM mambaorg/micromamba:1.5.8
+
+RUN apt-get update && apt-get install -y \
+    git build-essential curl wget \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN useradd -m runner
+USER runner
+WORKDIR /workspace
+
+# NOTE: run_plan.py is in scripts/ in the build context
+COPY scripts/run_plan.py /workspace/run_plan.py
+
+ENV MAMBA_ROOT_PREFIX=/opt/conda
+ENV PATH=/opt/conda/bin:$PATH
+
+CMD ["bash"]
