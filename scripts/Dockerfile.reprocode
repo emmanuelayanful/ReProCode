@@ -1,10 +1,21 @@
 # scripts/Dockerfile.reprocode
 FROM mambaorg/micromamba:1.5.8
 
-RUN apt-get update && apt-get install -y \
-    git build-essential curl wget \
+# RUN apt-get update && apt-get install -y \
+#     git build-essential curl wget \
+#     && rm -rf /var/lib/apt/lists/*
+
+FROM mambaorg/micromamba:1.5.8
+
+# Switch to root so we can use apt-get
+USER root
+
+RUN mkdir -p /var/lib/apt/lists/partial && \
+    apt-get update && apt-get install -y \
+        git build-essential curl wget \
     && rm -rf /var/lib/apt/lists/*
 
+# Add and switch to runner as user
 RUN useradd -m runner
 USER runner
 WORKDIR /workspace
