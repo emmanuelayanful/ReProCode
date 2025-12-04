@@ -78,5 +78,4 @@ def generate_completion(prompt: str) -> str:
     generated_ids = outputs[0][inputs["input_ids"].shape[1]:]
     out = tokenizer.decode(generated_ids, skip_special_tokens=True)
 
-    print("[LLM] Decoded output (first 200 chars):", repr(out[:200]))
     return out.strip()
