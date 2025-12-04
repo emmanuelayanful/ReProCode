@@ -21,8 +21,8 @@ RAW_LLM_DIR = DATA_DIR / "llm_raw_outputs"
 RAW_LLM_DIR.mkdir(parents=True, exist_ok=True)
 
 # Aggressive truncation
-MAX_README_CHARS = 15000
-MAX_TREE_CHARS = 6000
+MAX_README_CHARS = 50000
+MAX_TREE_CHARS = 10000
 
 
 PLAN_SCHEMA = r"""
@@ -109,6 +109,93 @@ def build_prompt(paper_id: str, repo_name: str, readme: str, file_tree: str) -> 
         Only raw JSON.
         """
 
+def clean_raw_output(raw: str) -> str:
+    """
+    Remove common LLM wrappers (```json, ```), intro phrases,
+    markdown formatting, and whitespace around JSON.
+    Leaves only the raw JSON-like string.
+    """
+    if not raw:
+        return ""
+
+    text = raw.strip()
+
+    # Remove common markdown code fences
+    fences = ["```json", "```JSON", "```", "```python", "```js"]
+    for f in fences:
+        text = text.replace(f, "")
+
+    # Remove typical explanation prefixes
+    prefixes = [
+        "Here is the JSON object:",
+        "Here is the JSON:",
+        "Here is the plan:",
+        "JSON:",
+        "Json:",
+        "json:",
+        "The JSON object is:",
+    ]
+    for p in prefixes:
+        if text.startswith(p):
+            text = text[len(p):].strip()
+
+    return text.strip()
+
+
+def attempt_repair_json(paper_id: str, repo_name: str, broken_json: str) -> dict | None:
+    """
+    Ask the LLM to fix invalid JSON (syntax only).
+    Returns a parsed dict if successful, otherwise None.
+    """
+    from .llm_local import generate_completion  # local import to avoid cycles
+
+    repair_prompt = (
+        "You previously produced this JSON-like text, but it has a small syntax error:\n\n"
+        "```json\n"
+        + broken_json +
+        "\n```\n\n"
+        "Your task: output the same JSON object, but with correct JSON syntax.\n"
+        "- Do not change any keys or values.\n"
+        "- Only fix commas, quotes, brackets, or other syntax issues.\n"
+        "- Return ONLY the corrected JSON object, no explanation, no code fences.\n"
+    )
+
+    repaired_raw = generate_completion(repair_prompt)
+
+    # Save repaired text for debugging
+    repair_path = RAW_LLM_DIR / f"{paper_id}_repaired.txt"
+    with repair_path.open("w") as f:
+        f.write(repaired_raw)
+
+    cleaned = clean_raw_output(repaired_raw)
+
+    first = cleaned.find("{")
+    last = cleaned.rfind("}")
+    if first == -1 or last == -1 or last <= first:
+        print(
+            f"[WARN] Repair LLM output still not JSON-like for {paper_id}. "
+            f"See {repair_path}"
+        )
+        return None
+
+    json_str = cleaned[first : last + 1]
+
+    try:
+        plan = json.loads(json_str)
+    except json.JSONDecodeError as e:
+        print(
+            f"[WARN] Repair JSON decode failed for {paper_id}: {e}. "
+            f"See {repair_path}"
+        )
+        return None
+
+    # Ensure minimal fields
+    plan.setdefault("paper_id", paper_id)
+    plan.setdefault("repo_name", repo_name)
+    plan.setdefault("env", {"type": "conda", "setup_commands": []})
+    plan.setdefault("steps", [])
+    return plan
+
 
 def call_llm_to_plan(paper_id: str, repo_name: str, readme: str, file_tree: str) -> dict:
     prompt = build_prompt(paper_id, repo_name, readme, file_tree)
@@ -146,6 +233,7 @@ def call_llm_to_plan(paper_id: str, repo_name: str, readme: str, file_tree: str)
         }
 
     json_str = raw[first : last + 1]
+
     try:
         plan = json.loads(json_str)
     except json.JSONDecodeError as e:
@@ -153,24 +241,30 @@ def call_llm_to_plan(paper_id: str, repo_name: str, readme: str, file_tree: str)
             f"[WARN] JSON decode failed for {paper_id}: {e}. "
             f"Raw output saved to {RAW_LLM_DIR / (paper_id + '.txt')}"
         )
-        # Same fallback
+
+        # Second LLM call: try to repair the JSON
+        repaired_plan = attempt_repair_json(paper_id, repo_name, json_str)
+        if repaired_plan is not None:
+            print(f"[INFO] Successfully repaired JSON for {paper_id}.")
+            return repaired_plan
+
+        # If repair also fails, final fallback
+        print(f"[WARN] Falling back to dummy plan for {paper_id} after failed repair.")
         return {
             "paper_id": paper_id,
             "repo_name": repo_name,
-            "env": {
-                "type": "conda",
-                "setup_commands": []
-            },
+            "env": {"type": "conda", "setup_commands": []},
             "steps": [
                 {
-                    "id": "fallback-list-files",
-                    "description": "Fallback step because LLM output was invalid; just list files.",
+                    "id": "fallback-json-error",
+                    "description": "Fallback step because JSON decoding failed, and repair also failed.",
                     "working_dir": ".",
                     "commands": ["ls"],
-                    "expected_artifacts": []
+                    "expected_artifacts": [],
                 }
             ],
         }
+
 
     # Minimal defaults
     plan.setdefault("paper_id", paper_id)
