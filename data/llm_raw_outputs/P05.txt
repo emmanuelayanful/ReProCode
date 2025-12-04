@@ -1,0 +1,44 @@
+{
+"paper_id": "P05",
+"repo_name": "bigcode-project/starcoder",
+"env": {
+"type": "conda",
+"setup_commands": [
+"conda create -n starcoder_env python=3.9",
+"conda activate starcoder_env",
+"conda install -c huggingface transformers pytorch torchvision torchaudio bitsandbytes wandb",
+"pip install git+https://github.com/huggingface/peft.git"
+]
+},
+"steps": [
+{
+"id": "install_dependencies",
+"description": "Install required libraries",
+"working_dir": ".",
+"commands": [
+"conda env update",
+"pip install -r requirements.txt"
+],
+"expected_artifacts": []
+},
+{
+"id": "download_data",
+"description": "Download Stack Exchange instruction dataset (if not present)",
+"working_dir": "finetune",
+"commands": [
+"python finetune/download_data.py" if not exists("data/finetune/stack_exchange_instruction.zip") else "",
+"unzip data/finetune/stack_exchange_inference.zip -d data/finetune"
+],
+"expected_artifacts": ["data/finetune/stack_exchange_instruction.zip", "data/finetune/stack_exchange_inference"]
+},
+{
+"id": "fine_tune",
+"description": "Fine-tune StarCoder on Stack Exchange instructions",
+"working_dir": "finetune",
+"commands": [
+"python finetune/finetune.py --... (use the provided command from the README)"
+],
+"expected_artifacts": ["checkpoints"]
+}
+]
+}

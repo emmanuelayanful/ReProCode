@@ -1,0 +1,48 @@
+```json
+{
+    "paper_id": "P07",
+    "repo_name": "code-rag-bench/code-rag-bench",
+    "env": {
+        "type": "conda",
+        "setup_commands": [
+            "conda create -n crag python=3.10 -y",
+            "conda activate crag",
+            "pip install -r requirements.txt"
+        ]
+    },
+    "steps": [
+        {
+            "id": "Retrieval",
+            "description": "Dataset preprocessing",
+            "working_dir": "retrieval",
+            "commands": [
+                "python create/${data_name}.py" if '${data_name}' in ['humaneval', 'mbpp', 'live_code_bench', 'ds1000', 'odex', 'repoeval_repo', 'swebench_repo']
+            ],
+            "expected_artifacts": [
+                "retrieval/datasets/canonical/humaneval_solutions.json",
+                "retrieval/datasets/canonical/odex_docs.json",
+                "retrieval/datasets/canonical/mbpp_solutions.json",
+                "retrieval/datasets/canonical/ds1000_docs.json"
+            ]
+        },
+        {
+            "id": "BM25 Retrieval",
+            "description": "Open retrieval with BM25",
+            "working_dir": "retrieval",
+            "commands": [
+                "python3 modify_corpus_for_bm25.py --dataset DATASET --output_metadir OUTPUT_DIR --index_dir INDEX_DIR --top_k TOP_K --k1 K1 --b B --stage search"
+            ],
+            "expected_artifacts": [
+                "results/{DATASET}_k1={K1}_b={B}_pyserini_bm25_output.jsonl",
+                "results/{DATASET}_k1={K1}_b={B}_pyserini_bm25.jsonl"
+            ]
+        },
+        {
+            "id": "API Retrieval",
+            "description": "API-based retrieval (voyage.ai or openai)",
+            "working_dir": "retrieval",
+            "commands": [
+                "python3 eval_voyage.py" if dataset == 'voyage' else "python3 eval_openai.py"
+            ],
+            "expected_artifacts": [
+                "results/{dataset}_k1={K1}_b={B}_pyserini_bm25_output.json
