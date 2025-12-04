@@ -1,0 +1,19 @@
+{
+  "paper_id": "P06",
+  "repo_name": "salesforce/CodeT5",
+  "env": {
+    "type": "conda",
+    "setup_commands": []
+  },
+  "steps": [
+    {
+      "id": "fallback-list-files",
+      "description": "Fallback step because LLM output was invalid; just list files.",
+      "working_dir": ".",
+      "commands": [
+        "ls"
+      ],
+      "expected_artifacts": []
+    }
+  ]
+}

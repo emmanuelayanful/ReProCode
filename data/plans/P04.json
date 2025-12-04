@@ -1,0 +1,19 @@
+{
+  "paper_id": "P04",
+  "repo_name": "swe-bench/swe-bench",
+  "env": {
+    "type": "conda",
+    "setup_commands": []
+  },
+  "steps": [
+    {
+      "id": "fallback-list-files",
+      "description": "Fallback step because LLM output was invalid; just list files.",
+      "working_dir": ".",
+      "commands": [
+        "ls"
+      ],
+      "expected_artifacts": []
+    }
+  ]
+}
