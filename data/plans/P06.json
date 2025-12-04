@@ -3,17 +3,44 @@
   "repo_name": "salesforce/CodeT5",
   "env": {
     "type": "conda",
-    "setup_commands": []
+    "setup_commands": [
+      "conda create -n codet5-environment python=3.8",
+      "conda activate codet5-environment",
+      "conda install -c conda-forge transformers torch numpy pandas scikit-learn"
+    ]
   },
   "steps": [
     {
-      "id": "fallback-list-files",
-      "description": "Fallback step because LLM output was invalid; just list files.",
-      "working_dir": ".",
+      "id": "install_dependencies",
+      "description": "Install required dependencies",
+      "working_dir": "/path/to/repo",
       "commands": [
-        "ls"
+        "pip install -r requirements.txt"
       ],
       "expected_artifacts": []
+    },
+    {
+      "id": "download_data",
+      "description": "Download data (if applicable)",
+      "working_dir": "/path/to/repo",
+      "commands": [
+        "python scripts/download_data.py"
+      ],
+      "expected_artifacts": [
+        "data.zip"
+      ]
+    },
+    {
+      "id": "run_main_experiment",
+      "description": "Run the main experiment (CodeGen)",
+      "working_dir": "/path/to/repo",
+      "commands": [
+        "python scripts/run_gen.py --config path/to/config.yaml"
+      ],
+      "expected_artifacts": [
+        "output.txt",
+        "predictions.json"
+      ]
     }
   ]
 }
