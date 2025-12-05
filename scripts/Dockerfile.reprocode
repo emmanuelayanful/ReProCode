@@ -1,16 +1,17 @@
 # scripts/Dockerfile.reprocode
-FROM mambaorg/micromamba:1.5.8
-
-# RUN apt-get update && apt-get install -y \
-#     git build-essential curl wget \
-#     && rm -rf /var/lib/apt/lists/*
 
 FROM mambaorg/micromamba:1.5.8
+
+# Make sure we can use micromamba to install packages into the base env
+ARG MAMBA_DOCKERFILE_ACTIVATE=1
 
 # Switch to root so we can use apt-get
 USER root
 
-RUN mkdir -p /var/lib/apt/lists/partial && \
+# Install Python into the base micromamba environment
+RUN micromamba install -y -n base -c conda-forge python=3.11 pip && \
+    micromamba clean --all --yes && \
+    mkdir -p /var/lib/apt/lists/partial && \
     apt-get update && apt-get install -y \
         git build-essential curl wget \
     && rm -rf /var/lib/apt/lists/*
