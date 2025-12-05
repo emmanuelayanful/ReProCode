@@ -1,30 +1,33 @@
 # scripts/Dockerfile.reprocode
 
-FROM mambaorg/micromamba:1.5.8
+FROM condaforge/mambaforge:latest
 
-# Make sure we can use micromamba to install packages into the base env
-ARG MAMBA_DOCKERFILE_ACTIVATE=1
-
-# Switch to root so we can use apt-get
+# Switch to root for apt
 USER root
 
-# Install Python into the base micromamba environment
-RUN micromamba install -y -n base -c conda-forge python=3.11 pip && \
-    micromamba clean --all --yes && \
-    mkdir -p /var/lib/apt/lists/partial && \
-    apt-get update && apt-get install -y \
+# Install system deps
+RUN apt-get update && apt-get install -y \
         git build-essential curl wget \
     && rm -rf /var/lib/apt/lists/*
 
-# Add and switch to runner as user
-RUN useradd -m runner
+# Create your main env "reprocode"
+RUN conda create -y -n reprocode -c conda-forge python=3.11 pip && \
+    conda clean -afy
+
+# Optional: install any global tools you want into the env
+# RUN conda run -n reprocode pip install whatever
+
+# Add non-root user
+RUN useradd -m runner && chown -R runner:runner /opt/conda
 USER runner
 WORKDIR /workspace
 
-# NOTE: run_plan.py is in scripts/ in the build context
+# Copy your controller script
 COPY scripts/run_plan.py /workspace/run_plan.py
 
-ENV MAMBA_ROOT_PREFIX=/opt/conda
-ENV PATH=/opt/conda/bin:$PATH
+# Make sure env is on PATH (helpful inside ENTRYPOINT'd shell)
+ENV PATH=/opt/conda/envs/reprocode/bin:/opt/conda/bin:$PATH
 
+# Always run commands inside reprocode env
+# ENTRYPOINT ["conda", "run", "-n", "reprocode", "--"]
 CMD ["bash"]
