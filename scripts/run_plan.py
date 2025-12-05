@@ -72,14 +72,26 @@ def main():
     for step in plan.get("steps", []):
         step_id = step.get("id")
         step_desc = step.get("description")
-        workdir = repo_root / step.get("working_dir", ".")
-        step_cmd_logs = []
+        rel_workdir = step.get("working_dir", ".") or "."
 
+        # Build candidate working dir and fall back if it doesn't exist
+        candidate_dir = (repo_root / rel_workdir).resolve()
+        if not candidate_dir.exists():
+            print(
+                f"[WARN] working_dir '{rel_workdir}' does not exist for step '{step_id}'. "
+                f"Falling back to repo root '{repo_root}'.",
+                flush=True,
+            )
+            candidate_dir = repo_root
+
+        step_cmd_logs = []
         for cmd in step.get("commands", []):
-            entry = run_command(cmd, cwd=workdir, timeout=3600)
+            if not cmd:
+                continue
+            entry = run_command(cmd, cwd=candidate_dir, timeout=3600)
             step_cmd_logs.append(entry)
 
-        # Check artifacts existence
+        # Check artifacts existence (still relative to repo root for now)
         artifacts = {}
         for relpath in step.get("expected_artifacts", []):
             p = repo_root / relpath
