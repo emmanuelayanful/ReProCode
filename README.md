@@ -31,18 +31,42 @@ This project includes:
 
 ```
 ReProCode/
-├── checklist.yaml          # Weighted checklist for computing scores
-├── data/
-│   ├── papers_list.csv     # List of repos we evaluate
-│   ├── raw_metadata.json   # GitHub metadata
-│   └── repro_scores.csv    # RDS (difficulty scores)
-├── models/
-│   └── rds_regressor.pkl   # Trained Random Forest Regressor model
-├── scripts/
-│   ├── collect_metadata.py # GitHub scraper
-│   ├── compute_score.py    # Score calculator
-│   └── train_model.py      # Model training script
-└── requirements.txt # Contains dependencies required to run the code
+├── checklist.yaml                      # Weighted checklist for computing scores
+├── data
+│   ├── llm_raw_outputs                 # Folder containing LLM raw outputs
+│   ├── papers_list.csv                 # List of repos we evaluate
+│   ├── plans                           # Folder containg LLM json plans
+│   ├── raw_metadata.json               # GitHub metadata
+│   ├── repro_scores.csv                # RDS (difficulty scores)
+│   └── runtime_logs                    # Folder containing runtime logs from the docker implementation
+├── environment.yaml                    # Environment dependencies for reproducibility
+├── models
+│   └── rds_regressor.pkl               # Trained Random Forest Regressor model
+├── README.md
+├── repos                               # Cloned GitHub repos corresponding to papers in papers_list.csv
+│   ├── bigcode-project__starcoder
+│   ├── code-rag-bench__code-rag-bench
+│   ├── google-research__google-research
+│   ├── openai__human-eval
+│   ├── salesforce__CodeT5
+│   ├── siegelz__core-bench
+│   └── swe-bench__swe-bench
+├── requirements.txt
+├── results
+│   ├── feature_importances.csv
+│   ├── model_metrics.json
+│   └── test_predictions.csv
+└── scripts
+    ├── clone_repos.py
+    ├── collect_metadata.py             # GitHub scraper
+    ├── compute_score.py                # Score calculator
+    ├── docker_plan.json                # Plan sample to be followed by LLM
+    ├── Dockerfile.reprocode            # Setup docker environment
+    ├── llm_local.py                    # HugginFace LLM run locally
+    ├── plan_with_llm.py                # Generate docker plans using thr LLM
+    ├── run_all_in_docker.py            # Run all docker plans in the docker environment
+    ├── run_plan.py                     # Run a given docker plan in the docker environment
+    └── train_model.py                  # Model training script
 ```
 
 
