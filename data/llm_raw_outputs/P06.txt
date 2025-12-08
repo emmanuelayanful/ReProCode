@@ -1,0 +1,43 @@
+```json
+{
+    "paper_id": "P06",
+    "repo_name": "salesforce/CodeT5",
+    "env": {
+        "type": "conda",
+        "setup_commands": [
+            "conda create -n codet5-environment python=3.8",
+            "conda activate codet5-environment",
+            "conda install -c conda-forge transformers torch numpy pandas scikit-learn"
+        ]
+    },
+    "steps": [
+        {
+            "id": "install_dependencies",
+            "description": "Install required dependencies",
+            "working_dir": "/path/to/repo",
+            "commands": [
+                "pip install -r requirements.txt"
+            ],
+            "expected_artifacts": []
+        },
+        {
+            "id": "download_data",
+            "description": "Download data (if applicable)",
+            "working_dir": "/path/to/repo",
+            "commands": [
+                "python scripts/download_data.py"  # Assuming a script exists for data download
+            ],
+            "expected_artifacts": ["data.zip"]
+        },
+        {
+            "id": "run_main_experiment",
+            "description": "Run the main experiment (CodeGen)",
+            "working_dir": "/path/to/repo",
+            "commands": [
+                "python scripts/run_gen.py --config path/to/config.yaml"
+            ],
+            "expected_artifacts": ["output.txt", "predictions.json"]
+        }
+    ]
+}
+```

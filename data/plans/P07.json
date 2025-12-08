@@ -1,0 +1,19 @@
+{
+  "paper_id": "P07",
+  "repo_name": "code-rag-bench/code-rag-bench",
+  "env": {
+    "type": "conda",
+    "setup_commands": []
+  },
+  "steps": [
+    {
+      "id": "fallback-json-error",
+      "description": "Fallback step because JSON decoding failed, and repair also failed.",
+      "working_dir": ".",
+      "commands": [
+        "ls"
+      ],
+      "expected_artifacts": []
+    }
+  ]
+}

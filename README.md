@@ -163,6 +163,27 @@ Create a `.env` file:
 GITHUB_TOKEN=ghp_yourtokenhere
 ```
 
+### 5. How to run the Docker part
+Build the docker image with
+```bash
+docker build -f scripts/Dockerfile.reprocode -t reprocode-base .
+```
+Create a directory called repo to clone all ppaer repositories from the root directory with
+```bash
+mkdir repo
+python -m scripts.clone_repos
+```
+
+Generate execution plans using an LLM with
+```bash
+python -m scripts.plan_with_llm
+```
+
+Executge all the plans in the docker with
+```bash
+python -m scripts.run_all_in_docker
+```
+
 
 ## Example Results
 

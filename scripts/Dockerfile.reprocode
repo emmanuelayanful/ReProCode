@@ -1,0 +1,33 @@
+# scripts/Dockerfile.reprocode
+
+FROM condaforge/mambaforge:latest
+
+# Switch to root for apt
+USER root
+
+# Install system deps
+RUN apt-get update && apt-get install -y \
+        git build-essential curl wget \
+    && rm -rf /var/lib/apt/lists/*
+
+# Create your main env "reprocode"
+RUN conda create -y -n reprocode -c conda-forge python=3.11 pip && \
+    conda clean -afy
+
+# Optional: install any global tools you want into the env
+# RUN conda run -n reprocode pip install whatever
+
+# Add non-root user
+RUN useradd -m runner && chown -R runner:runner /opt/conda
+USER runner
+WORKDIR /workspace
+
+# Copy your controller script
+COPY scripts/run_plan.py /workspace/run_plan.py
+
+# Make sure env is on PATH (helpful inside ENTRYPOINT'd shell)
+ENV PATH=/opt/conda/envs/reprocode/bin:/opt/conda/bin:$PATH
+
+# Always run commands inside reprocode env
+# ENTRYPOINT ["conda", "run", "-n", "reprocode", "--"]
+CMD ["bash"]

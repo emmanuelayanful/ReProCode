@@ -6,3 +6,4 @@ python-dotenv
 tqdm
 scikit-learn
 joblib
+transformers

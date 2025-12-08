@@ -1,0 +1,34 @@
+{
+  "paper_id": "P01",
+  "repo_name": "siegelz/core-bench",
+  "env": {
+    "type": "conda",
+    "setup_commands": [
+      "micromamba create -y -n repro-env python=3.10",
+      "micromamba run -n repro-env pip install -r requirements.txt"
+    ]
+  },
+  "steps": [
+    {
+      "id": "prepare-data",
+      "description": "Prepare or download data.",
+      "working_dir": ".",
+      "commands": [
+        "micromamba run -n repro-env python scripts/download_data.py --out data/"
+      ],
+      "expected_artifacts": ["data/"]
+    },
+    {
+      "id": "run-main-experiment",
+      "description": "Run the main experiment from the README.",
+      "working_dir": ".",
+      "commands": [
+        "micromamba run -n repro-env python train.py --config configs/default.yaml"
+      ],
+      "expected_artifacts": [
+        "outputs/model.ckpt",
+        "logs/train.log"
+      ]
+    }
+  ]
+}

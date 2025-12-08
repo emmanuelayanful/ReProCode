@@ -1,0 +1,22 @@
+{
+  "paper_id": "P04",
+  "repo_name": "swe-bench/swe-bench",
+  "env_logs": [],
+  "step_logs": [
+    {
+      "id": "fallback-json-error",
+      "description": "Fallback step because JSON decoding failed, and repair also failed.",
+      "commands": [
+        {
+          "command": "ls",
+          "cwd": "/workspace/repo",
+          "returncode": 0,
+          "stdout": "CHANGELOG.md\nLICENSE\nREADME.md\ncodecov.yml\ndocs\nmkdocs.yml\npyproject.toml\nswebench\ntests\n",
+          "stderr": "",
+          "duration_sec": 0.012302398681640625
+        }
+      ],
+      "artifacts": {}
+    }
+  ]
+}
