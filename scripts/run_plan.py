@@ -43,12 +43,34 @@ def run_command(cmd, cwd, timeout=3600, env=None):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--plan", required=True)
-    parser.add_argument("--repo", required=True)
+    parser.add_argument("--repo_source", required=True, help="Read-only source of the repo")
+    parser.add_argument("--repo_dest", required=True, help="Writable destination for the repo")
     parser.add_argument("--log_out", default="/workspace/reprocode_log.json")
     args = parser.parse_args()
 
     plan_path = Path(args.plan)
-    repo_root = Path(args.repo).resolve()
+    repo_source = Path(args.repo_source).resolve()
+    repo_dest = Path(args.repo_dest).resolve()
+
+    # 0) Copy files
+    print(f"[SETUP] Copying {repo_source} -> {repo_dest}...", flush=True)
+    if repo_dest.exists():
+        import shutil
+        shutil.rmtree(repo_dest)
+    
+    # We use cp -r equivalent to ensure we get a fresh copy
+    # shutil.copytree is the standard way
+    import shutil
+    try:
+        shutil.copytree(repo_source, repo_dest, symlinks=True)
+        print("[SETUP] Copy complete.", flush=True)
+    except Exception as e:
+        print(f"[ERROR] Failed to copy repo: {e}", flush=True)
+        # We might want to abort or log this failure
+        # For now, let's just proceed but it will likely fail if dir is missing
+
+    # Set root to dest
+    repo_root = repo_dest
 
     with plan_path.open() as f:
         plan = json.load(f)

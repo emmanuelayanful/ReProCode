@@ -45,21 +45,26 @@ def main():
             "docker",
             "run",
             "--rm",
-            # mount repo as /workspace/repo inside container
+            # mount repo as /mnt/repo_source inside container (read-only)
             "-v",
-            f"{repo_dir}:/workspace/repo",
+            f"{repo_dir}:/mnt/repo_source:ro",
             # mount plan as /workspace/plan.json (read-only)
             "-v",
             f"{plan_path}:/workspace/plan.json:ro",
             # mount runtime logs dir so container can write logs visible on host
             "-v",
             f"{RUNTIME_LOGS_DIR}:/workspace/logs",
+            # Resource limits
+            "--memory=4g",
+            "--cpus=2",
             IMAGE_NAME,
             "python",
             "/workspace/run_plan.py",
             "--plan",
             "/workspace/plan.json",
-            "--repo",
+            "--repo_source",
+            "/mnt/repo_source",
+            "--repo_dest",
             "/workspace/repo",
             "--log_out",
             f"/workspace/logs/{paper_id}.json",

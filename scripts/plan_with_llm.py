@@ -2,6 +2,10 @@
 import json
 import os
 from pathlib import Path
+from dotenv import load_dotenv
+
+load_dotenv()  # Load .env file
+
 
 import pandas as pd
 from tqdm import tqdm
@@ -11,6 +15,7 @@ from .llm_local import generate_completion  # used with: python -m scripts.plan_
 BASE_DIR = Path(__file__).resolve().parents[1]
 DATA_DIR = BASE_DIR / "data"
 REPOS_DIR = BASE_DIR / "repos"
+REPOS_DIR.mkdir(parents=True, exist_ok=True)
 
 PAPERS_CSV = DATA_DIR / "papers_list.csv"
 PLANS_DIR = DATA_DIR / "plans"
@@ -97,7 +102,14 @@ def build_prompt(paper_id: str, repo_name: str, readme: str, file_tree: str) -> 
         - install dependencies
         - prepare/download data (if clearly documented)
         - run the main experiment.
-        4. Use micromamba/conda and python, do not use sudo or destructive commands.
+        
+        CRITICAL INSTRUCTIONS FOR COMMANDS:
+        - Before running `conda activate`, you MUST source the conda profile script. Assume it is at `$CONDA_PREFIX/etc/profile.d/conda.sh`.
+        - Example: `source $CONDA_PREFIX/etc/profile.d/conda.sh && conda activate myenv`
+        - Always use `-y` for `conda create` or `conda install`.
+        - Do not use `sudo`.
+        - If a step requires a long-running training, try to find a "demo" or "test" mode if available, or run it as is if that's the only option.
+        - Ensure all commands are non-interactive.
 
         {PLAN_SCHEMA}
 

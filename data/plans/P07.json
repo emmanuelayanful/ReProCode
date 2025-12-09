@@ -7,8 +7,8 @@
   },
   "steps": [
     {
-      "id": "fallback-json-error",
-      "description": "Fallback step because JSON decoding failed, and repair also failed.",
+      "id": "fallback-list-files",
+      "description": "Fallback step because LLM output was invalid; just list files.",
       "working_dir": ".",
       "commands": [
         "ls"

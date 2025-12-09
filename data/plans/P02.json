@@ -3,48 +3,17 @@
   "repo_name": "openai/human-eval",
   "env": {
     "type": "conda",
-    "setup_commands": [
-      "conda create -n codex python=3.7",
-      "conda activate codex",
-      "git clone https://github.com/openai/human-eval",
-      "pip install -e human-eval"
-    ]
+    "setup_commands": []
   },
   "steps": [
     {
-      "id": "Install and Set Up",
-      "description": "Environment setup for HumanEval",
+      "id": "fallback-list-files",
+      "description": "Fallback step because LLM output was invalid; just list files.",
       "working_dir": ".",
       "commands": [
-        "conda create -n codex python=3.7",
-        "conda activate codex",
-        "git clone https://github.com/openai/human-eval",
-        "pip install -e human-eval"
+        "ls"
       ],
       "expected_artifacts": []
-    },
-    {
-      "id": "Prepare Data",
-      "description": "Download example data",
-      "working_dir": "human-eval",
-      "commands": [
-        "cp data/example_problem.jsonl data/example_samples.jsonl"
-      ],
-      "expected_artifacts": [
-        "example_problem.jsonl",
-        "example_samples.jsonl"
-      ]
-    },
-    {
-      "id": "Run Main Experiment",
-      "description": "Evaluate generated samples",
-      "working_dir": "human-eval",
-      "commands": [
-        "python execution.py --problem_file=data/example_problem.jsonl --generate_samples data/example_samples.jsonl --evaluate_functional_correctness samples.jsonl"
-      ],
-      "expected_artifacts": [
-        "samples.jsonl_results.jsonl"
-      ]
     }
   ]
 }
