@@ -106,8 +106,13 @@ def build_prompt(paper_id: str, repo_name: str, readme: str, file_tree: str) -> 
         CRITICAL INSTRUCTIONS FOR COMMANDS:
         - Always use `-y` for `conda create` or `conda install`.
         - Do not use `sudo`.
+        - If using micromamba:
+          - Do NOT use `micromamba activate`. It requires shell initialization which is fragile in scripts.
+          - Instead, use `micromamba run -n <env_name> <command>` for every command that needs the environment.
+          - Example: `micromamba run -n myenv python main.py`
         - If a step requires a long-running training, try to find a "demo" or "test" mode if available, or run it as is if that's the only option.
-        - Ensure all commands are non-interactive.
+        - The repository is ALREADY cloned and set as the current working directory. DO NOT include a `git clone` command for the main repository.
+        - Only use `git clone` if you need an *external* dependency not present in the file list.
 
         {PLAN_SCHEMA}
 
