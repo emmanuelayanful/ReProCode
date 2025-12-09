@@ -1,0 +1,44 @@
+{
+  "paper_id": "P03",
+  "repo_name": "google-research/google-research",
+  "env": {
+    "type": "conda",
+    "setup_commands": [
+      "source $CONDA_PREFIX/etc/profile.d/conda.sh && conda create -n gr_env -y --file speculative_kd/requirements.txt",
+      "source $CONDA_PREFIX/etc/profile.d/conda.sh && conda activate gr_env",
+      "source $CONDA_PREFIX/etc/profile.d/conda.sh && conda install -y -c pytorch pytorch torchvision",
+      "source $CONDA_PREFIX/etc/profile.d/conda.sh && conda install -y -c conda-forge deepspeed"
+    ]
+  },
+  "steps": [
+    {
+      "id": "install_dependencies",
+      "description": "Install dependencies",
+      "working_dir": ".",
+      "commands": [
+        "source $CONDA_PREFIX/etc/profile.d/conda.sh && conda install -y --file speculative_kd/requirements.txt",
+        "source $CONDA_PREFIX/etc/profile.d/conda.sh && conda install -y -c pytorch pytorch torchvision",
+        "source $CONDA_PREFIX/etc/profile.d/conda.sh && conda install -y -c conda-forge deepspeed"
+      ],
+      "expected_artifacts": ["conda environment with installed dependencies"]
+    },
+    {
+      "id": "prepare_data",
+      "description": "Prepare data",
+      "working_dir": "speculative_kd",
+      "commands": [
+        "./run.sh download_data"
+      ],
+      "expected_artifacts": ["downloaded data"]
+    },
+    {
+      "id": "run_experiment",
+      "description": "Run the main experiment",
+      "working_dir": "speculative_kd",
+      "commands": [
+        "./run.sh train_kd"
+      ],
+      "expected_artifacts": ["trained model"]
+    }
+  ]
+}

@@ -1,0 +1,51 @@
+{
+    "paper_id": "P04",
+    "repo_name": "swe-bench/swe-bench",
+    "env": {
+        "type": "conda",
+        "setup_commands": [
+            "source $CONDA_PREFIX/etc/profile.d/conda.sh",
+            "conda create -n swe-bench python=3.8 -y",
+            "conda activate swe-bench",
+            "conda install -c conda-forge gitpython -y",
+            "conda install -c conda-forge docker -y",
+            "conda install -c conda-forge pytest -y",
+            "conda install -c conda-forge pytest-cov -y",
+            "conda install -c conda-forge pytest-mock -y",
+            "conda install -c conda-forge pytest-xdist -y",
+            "pip install ."
+        ]
+    },
+    "steps": [
+        {
+            "id": "install_dependencies",
+            "description": "Install dependencies",
+            "working_dir": ".",
+            "commands": [
+                "conda activate swe-bench",
+                "pip install -r requirements.txt"
+            ],
+            "expected_artifacts": ["activated conda environment", "installed dependencies"]
+        },
+        {
+            "id": "download_data",
+            "description": "Download data",
+            "working_dir": ".",
+            "commands": [
+                "conda activate swe-bench",
+                "python -m swebench.collect.build_dataset"
+            ],
+            "expected_artifacts": ["downloaded data"]
+        },
+        {
+            "id": "run_main_experiment",
+            "description": "Run main experiment",
+            "working_dir": ".",
+            "commands": [
+                "conda activate swe-bench",
+                "python -m swebench.harness.run_evaluation --predictions_path gold --max_workers 1 --instance_ids sympy__sympy-20590 --run_id validate-gold"
+            ],
+            "expected_artifacts": ["evaluation results"]
+        }
+    ]
+}
