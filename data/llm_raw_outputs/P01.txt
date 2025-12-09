@@ -4,9 +4,10 @@
     "env": {
         "type": "conda",
         "setup_commands": [
-            "source $CONDA_PREFIX/etc/profile.d/conda.sh",
-            "conda create --name core-bench python=3.9 -y",
-            "conda activate core-bench"
+            "git clone https://github.com/siegelz/core-bench.git",
+            "cd core-bench",
+            "micromamba create --name core-bench python=3.9",
+            "micromamba activate core-bench"
         ]
     },
     "steps": [
@@ -15,13 +16,9 @@
             "description": "Install dependencies",
             "working_dir": "core-bench",
             "commands": [
-                "pip3 install -r requirements.txt"
+                "micromamba install -y -f requirements.txt"
             ],
-            "expected_artifacts": [
-                "requirements.txt",
-                "README.md",
-                "LICENSE"
-            ]
+            "expected_artifacts": ["core-bench directory with installed dependencies"]
         },
         {
             "id": "decrypt_dataset",
@@ -30,21 +27,16 @@
             "commands": [
                 "gpg --output benchmark/dataset/core_test.json --decrypt benchmark/dataset/core_test.json.gpg"
             ],
-            "expected_artifacts": [
-                "benchmark/dataset/core_test.json"
-            ]
+            "expected_artifacts": ["Decrypted core_test.json file in benchmark/dataset directory"]
         },
         {
-            "id": "run_main",
+            "id": "run_main_experiment",
             "description": "Run main experiment",
             "working_dir": "core-bench",
             "commands": [
                 "python3 main.py --experiment_name test_coreagent_gpt4o_c-4 --agent_dir agents/AutoGPT-CORE --dataset_file benchmark/dataset/core_test.json --no_gpu --task_limit 1 --benchmark_level codeocean_hard --agent_script coreagent_hard_gpt4o.sh --verbose"
             ],
-            "expected_artifacts": [
-                "agents/AutoGPT-CORE/report.json",
-                "agents/AutoGPT-CORE/agent_trace.log"
-            ]
+            "expected_artifacts": ["Report.json files in the environment directories of each task"]
         }
     ]
 }

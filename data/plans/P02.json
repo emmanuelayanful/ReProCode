@@ -4,42 +4,40 @@
   "env": {
     "type": "conda",
     "setup_commands": [
-      "source $CONDA_PREFIX/etc/profile.d/conda.sh && conda create -n codex python=3.7 -y",
-      "source $CONDA_PREFIX/etc/profile.d/conda.sh && conda activate codex",
-      "pip install -e human-eval"
+      "micromamba create -n codex python=3.7 -y",
+      "micromamba activate codex"
     ]
   },
   "steps": [
     {
       "id": "installation",
-      "description": "Installation of the repository",
+      "description": "Install the repository",
       "working_dir": "~",
       "commands": [
         "git clone https://github.com/openai/human-eval",
         "pip install -e human-eval"
       ],
       "expected_artifacts": [
-        "human-eval directory in the current directory"
+        "human-eval/LICENSE",
+        "human-eval/README.md",
+        "human-eval/requirements.txt",
+        "human-eval/setup.py",
+        "human-eval/data/example_problem.jsonl",
+        "human-eval/data/example_samples.jsonl",
+        "human-eval/data/HumanEval.jsonl.gz",
+        "human-eval/human_eval/__init__.py",
+        "human-eval/human_eval/execution.py",
+        "human-eval/human_eval/evaluation.py",
+        "human-eval/human_eval/evaluate_functional_correctness.py",
+        "human-eval/human_eval/data.py"
       ]
     },
     {
-      "id": "data_download",
-      "description": "Downloading and preparing data",
+      "id": "usage",
+      "description": "Run the main experiment",
       "working_dir": "human-eval",
       "commands": [
-        "wget https://path-to-data-file.com/HumanEval.jsonl.gz",
-        "gunzip HumanEval.jsonl.gz"
-      ],
-      "expected_artifacts": [
-        "human-eval/HumanEval.jsonl"
-      ]
-    },
-    {
-      "id": "main_experiment",
-      "description": "Running the main experiment",
-      "working_dir": "human-eval",
-      "commands": [
-        "python -m human_eval.evaluate_functional_correctness data/example_samples.jsonl --problem_file=data/example_problem.jsonl"
+        "evaluate_functional_correctness data/example_samples.jsonl --problem_file=data/example_problem.jsonl"
       ],
       "expected_artifacts": [
         "human-eval/data/example_samples.jsonl_results.jsonl"

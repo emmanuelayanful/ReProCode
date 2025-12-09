@@ -4,10 +4,9 @@
   "env": {
     "type": "conda",
     "setup_commands": [
-      "source $CONDA_PREFIX/etc/profile.d/conda.sh && conda create -n gr_env -y --file speculative_kd/requirements.txt",
-      "source $CONDA_PREFIX/etc/profile.d/conda.sh && conda activate gr_env",
-      "source $CONDA_PREFIX/etc/profile.d/conda.sh && conda install -y -c pytorch pytorch torchvision",
-      "source $CONDA_PREFIX/etc/profile.d/conda.sh && conda install -y -c conda-forge deepspeed"
+      "micromamba create -n gr-env python=3.8 -y",
+      "micromamba activate gr-env",
+      "micromamba install -c conda-forge -c pytorch -c nvidia -c defaults -y pytorch torchvision torchaudio pytorch-cuda=11.7 cudatoolkit=11.3 pip"
     ]
   },
   "steps": [
@@ -16,34 +15,42 @@
       "description": "Install dependencies",
       "working_dir": ".",
       "commands": [
-        "source $CONDA_PREFIX/etc/profile.d/conda.sh && conda install -y --file speculative_kd/requirements.txt",
-        "source $CONDA_PREFIX/etc/profile.d/conda.sh && conda install -y -c pytorch pytorch torchvision",
-        "source $CONDA_PREFIX/etc/profile.d/conda.sh && conda install -y -c conda-forge deepspeed"
+        "pip install -r speculative_kd/requirements.txt",
+        "pip install -r action_gap_rl/requirements.txt",
+        "pip install -r multi_annotator/requirements.txt",
+        "pip install -r tip/requirements.txt",
+        "pip install -r camp_zipnerf/requirements.txt"
       ],
       "expected_artifacts": [
-        "conda environment with installed dependencies"
+        "speculative_kd",
+        "action_gap_rl",
+        "multi_annotator",
+        "tip",
+        "camp_zipnerf"
       ]
     },
     {
-      "id": "prepare_data",
-      "description": "Prepare data",
-      "working_dir": "speculative_kd",
+      "id": "download_data",
+      "description": "Download data",
+      "working_dir": ".",
       "commands": [
-        "./run.sh download_data"
+        "wget https://github.com/google-research/google-research/archive/refs/heads/main.zip",
+        "unzip main.zip"
       ],
       "expected_artifacts": [
-        "downloaded data"
+        "google-research-main.zip",
+        "google-research-main"
       ]
     },
     {
-      "id": "run_experiment",
-      "description": "Run the main experiment",
-      "working_dir": "speculative_kd",
+      "id": "run_main_experiment",
+      "description": "Run main experiment",
+      "working_dir": "google-research-main/speculative_kd",
       "commands": [
-        "./run.sh train_kd"
+        "bash run.sh"
       ],
       "expected_artifacts": [
-        "trained model"
+        "main experiment output"
       ]
     }
   ]

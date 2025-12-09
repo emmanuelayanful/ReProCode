@@ -4,62 +4,47 @@
     "env": {
         "type": "conda",
         "setup_commands": [
-            "source $CONDA_PREFIX/etc/profile.d/conda.sh && conda create -n crag python=3.10 -y",
-            "source $CONDA_PREFIX/etc/profile.d/conda.sh && conda activate crag",
-            "pip install -r requirements.txt"
+            "micromamba create -n crag python=3.10 -y",
+            "micromamba activate crag",
+            "micromamba install -r requirements.txt -y"
         ]
     },
     "steps": [
         {
             "id": "installation",
-            "description": "Installation of the required dependencies",
-            "working_dir": ".",
+            "description": "Install the necessary libraries",
+            "working_dir": "",
             "commands": [
-                "conda create -n crag python=3.10 -y",
-                "conda activate crag",
-                "pip install -r requirements.txt"
+                "micromamba install -r requirements.txt -y"
             ],
-            "expected_artifacts": ["active conda environment 'crag'", "installed python packages"]
+            "expected_artifacts": []
         },
         {
-            "id": "data_preprocessing",
-            "description": "Preprocessing of the datasets",
+            "id": "retrieval",
+            "description": "Run dense embedding models",
             "working_dir": "retrieval/",
             "commands": [
-                "python -m create/${data_name}.py"
-            ],
-            "expected_artifacts": ["preprocessed datasets"]
-        },
-        {
-            "id": "dense_embedding_models",
-            "description": "Running dense embedding models",
-            "working_dir": "retrieval/",
-            "commands": [
-                "python generate_embeddings.py --model YOUR_MODEL_NAME_OR_PATH --output_dir OUTPUT_EMBEDDING_DIR --hf_datasets HF_DATASET_NAME --shard_id 0 --num_shards 1",
                 "python eval_beir_sbert_canonical.py --model YOUR_MODEL_NAME_OR_PATH --dataset TASK_NAME --output_file PATH_TO_YOUR_SCORE_FILE --results_file PATH_TO_YOUR_RETRIEVAL_RESULTS_FILE"
             ],
-            "expected_artifacts": ["embeddings", "retrieval results"]
-        },
-        {
-            "id": "bm25",
-            "description": "Running BM25",
-            "working_dir": "retrieval/",
-            "commands": [
-                "python modify_corpus_for_bm25.py --dataset DATASET_NAME --output_metadir OUTPUT_DIR --index_dir INDEX_DIR --stage preprocess",
-                "python modify_corpus_for_bm25.py --dataset DATASET_NAME --output_metadir OUTPUT_DIR --index_dir INDEX_DIR --stage index",
-                "python modify_corpus_for_bm25.py --dataset DATASET_NAME --output_metadir OUTPUT_DIR --index_dir INDEX_DIR --top_k TOP_K --k1 K1 --b B --stage search"
-            ],
-            "expected_artifacts": ["indexed corpus", "search results"]
-        },
-        {
-            "id": "api_based_models",
-            "description": "Running API-based models",
-            "working_dir": "retrieval/",
-            "commands": [
-                "python eval_voyage.py --dataset TASK_NAME --model MODEL_NAME --api_key_fp PATH_TO_YOUR_API_KEY_FILE --batch_size YOUR_BATCH_SIZE --output_file PATH_TO_YOUR_SCORE_FILE --results_file PATH_TO_YOUR_RETRIEVAL_RESULTS_FILE",
-                "python eval_openai.py --dataset TASK_NAME --model MODEL_NAME --api_key_fp PATH_TO_YOUR_API_KEY_FILE --batch_size YOUR_BATCH_SIZE --output_file PATH_TO_YOUR_SCORE_FILE --results_file PATH_TO_YOUR_RETRIEVAL_RESULTS_FILE"
-            ],
-            "expected_artifacts": ["retrieval results"]
+            "expected_artifacts": ["retrieval_results_file"]
         },
         {
             "id": "generation",
+            "description": "Run code generation",
+            "working_dir": "generation/",
+            "commands": [
+                "python main.py --task TASK_NAME --model MODEL_NAME --dataset_path DATASET_PATH --allow_code_execution"
+            ],
+            "expected_artifacts": ["generation_outputs"]
+        },
+        {
+            "id": "execution_evaluation",
+            "description": "Run execution-based evaluation",
+            "working_dir": "generation/",
+            "commands": [
+                "python main.py --task TASK_NAME --model MODEL_NAME --dataset_path 'json' --data_files_test RETRIEVAL_RESULTS_FILE --metric_output_path results/evaluation_results.json --max_length_input 3596 --max_length_generation 4096 --precision auto --save_every_k_tasks 100 --ignore_eos --model_backend vllm --new_tokens_only --topk_docs 5 --allow_code_execution --load_generations_path GENERATION_OUTPUTS"
+            ],
+            "expected_artifacts": ["execution_evaluation_results"]
+        }
+    ]
+}

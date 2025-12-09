@@ -4,10 +4,9 @@
   "env": {
     "type": "conda",
     "setup_commands": [
-      "source $CONDA_PREFIX/etc/profile.d/conda.sh",
-      "conda create -n starcoder python=3.8 -y",
-      "conda activate starcoder",
-      "conda install -c huggingface -c conda-forge transformers=4.26.1 datasets=2.6.1 accelerate=0.17.0 huggingface_hub=0.10.0 peft=0.2.0 bitsandbytes=0.35.0 -y"
+      "micromamba create -n starcoder python=3.8",
+      "micromamba activate starcoder",
+      "micromamba install -c conda-forge transformers=4.22.2 datasets=2.3.0 accelerate=0.12.0 huggingface_hub=0.10.0 peft=0.2.0 bitsandbytes=0.35.0"
     ]
   },
   "steps": [
@@ -16,10 +15,15 @@
       "description": "Install the required dependencies",
       "working_dir": ".",
       "commands": [
-        "conda install pytorch torchvision torchaudio cudatoolkit=11.3 -c pytorch -y"
+        "micromamba install -c conda-forge transformers=4.22.2 datasets=2.3.0 accelerate=0.12.0 huggingface_hub=0.10.0 peft=0.2.0 bitsandbytes=0.35.0"
       ],
       "expected_artifacts": [
-        "conda environment 'starcoder'"
+        "transformers",
+        "datasets",
+        "accelerate",
+        "huggingface_hub",
+        "peft",
+        "bitsandbytes"
       ]
     },
     {
@@ -31,7 +35,7 @@
         "huggingface-cli dataset create bigcode-project/starcoder"
       ],
       "expected_artifacts": [
-        "bigcode-project/starcoder dataset"
+        "bigcode-project/starcoder"
       ]
     },
     {

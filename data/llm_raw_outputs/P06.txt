@@ -4,10 +4,9 @@
   "env": {
     "type": "conda",
     "setup_commands": [
-      "source $CONDA_PREFIX/etc/profile.d/conda.sh && conda create -n codet5 -y",
-      "source $CONDA_PREFIX/etc/profile.d/conda.sh && conda activate codet5",
-      "conda install -c conda-forge -y micromamba",
-      "micromamba install -c conda-forge -y python=3.8 pytorch=1.10.0 torchvision=0.11.1 torchaudio=0.10.0 cudatoolkit=11.3.1 -y"
+      "conda create -n codet5 python=3.8 -y",
+      "conda activate codet5",
+      "conda install pytorch torchvision torchaudio cudatoolkit=11.3 -c pytorch -y"
     ]
   },
   "steps": [
@@ -16,36 +15,31 @@
       "description": "Installing dependencies",
       "working_dir": ".",
       "commands": [
-        "micromamba install -c conda-forge -y pandas=1.3.2 scikit-learn=0.24.2 tqdm=4.62.3",
-        "micromamba install -c conda-forge -y jupyterlab=3.1.14 matplotlib=3.4.3 seaborn=0.11.2",
-        "micromamba install -c conda-forge -y pycodestyle=2.8.0 black=21.6b0 flake8=3.9.2",
-        "micromamba install -c conda-forge -y isort=5.9.3",
-        "micromamba install -c conda-forge -y pytest=6.2.4 pytest-cov=2.12.1",
-        "micromamba install -c conda-forge -y sphinx=4.2.0 sphinx_rtd_theme=0.5.2",
-        "micromamba install -c conda-forge -y flake8-docstrings=1.6.0"
+        "pip install transformers==4.12.5",
+        "pip install deepspeed==0.6.3",
+        "pip install humaneval==0.1.0",
+        "pip install git+https://github.com/salesforce/CodeBLEU.git"
       ],
-      "expected_artifacts": []
+      "expected_artifacts": ["transformers", "deepspeed", "humaneval", "CodeBLEU"]
     },
     {
       "id": "download_data",
       "description": "Downloading data",
       "working_dir": "CodeT5",
       "commands": [
-        "wget https://s3.amazonaws.com/datasets.huggingface.co/codet5/codet5-base-multi-sum/config.json",
-        "wget https://s3.amazonaws.com/datasets.huggingface.co/codet5/codet5-base-multi-sum/pytorch_model.bin",
-        "wget https://s3.amazonaws.com/datasets.huggingface.co/codet5/codet5-base-multi-sum/tokenizer.json",
-        "wget https://s3.amazonaws.com/datasets.huggingface.co/codet5/codet5-base-multi-sum/special_tokens_map.json"
+        "wget https://s3.amazonaws.com/code-datasets/codet5-vocab.json",
+        "wget https://s3.amazonaws.com/code-datasets/codet5-merges.txt"
       ],
-      "expected_artifacts": ["config.json", "pytorch_model.bin", "tokenizer.json", "special_tokens_map.json"]
+      "expected_artifacts": ["codet5-vocab.json", "codet5-merges.txt"]
     },
     {
       "id": "run_main_experiment",
-      "description": "Running the main experiment",
+      "description": "Running main experiment",
       "working_dir": "CodeT5",
       "commands": [
-        "python run_gen.py --model_name_or_path=codet5-base-multi-sum --input_file=input.txt --output_file=output.txt"
+        "python run_gen.py --model_name_or_path=Salesforce/codet5-base-multi-sum --do_train --do_eval --train_file=train.json --validation_file=valid.json --per_device_train_batch_size=4 --per_device_eval_batch_size=4 --num_train_epochs=1 --output_dir=output_dir"
       ],
-      "expected_artifacts": ["output.txt"]
+      "expected_artifacts": ["output_dir"]
     }
   ]
 }
