@@ -104,8 +104,6 @@ def build_prompt(paper_id: str, repo_name: str, readme: str, file_tree: str) -> 
         - run the main experiment.
         
         CRITICAL INSTRUCTIONS FOR COMMANDS:
-        - Before running `conda activate`, you MUST source the conda profile script. Assume it is at `$CONDA_PREFIX/etc/profile.d/conda.sh`.
-        - Example: `source $CONDA_PREFIX/etc/profile.d/conda.sh && conda activate myenv`
         - Always use `-y` for `conda create` or `conda install`.
         - Do not use `sudo`.
         - If a step requires a long-running training, try to find a "demo" or "test" mode if available, or run it as is if that's the only option.
