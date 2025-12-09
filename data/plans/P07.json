@@ -6,18 +6,20 @@
     "setup_commands": [
       "micromamba create -n crag python=3.10 -y",
       "micromamba activate crag",
-      "micromamba install -r requirements.txt -y"
+      "pip install -r requirements.txt"
     ]
   },
   "steps": [
     {
       "id": "installation",
-      "description": "Install the necessary libraries",
-      "working_dir": "",
+      "description": "Installation of the necessary libraries",
+      "working_dir": ".",
       "commands": [
-        "micromamba install -r requirements.txt -y"
+        "pip install -r requirements.txt"
       ],
-      "expected_artifacts": []
+      "expected_artifacts": [
+        "requirements.txt"
+      ]
     },
     {
       "id": "retrieval",
@@ -27,7 +29,10 @@
         "python eval_beir_sbert_canonical.py --model YOUR_MODEL_NAME_OR_PATH --dataset TASK_NAME --output_file PATH_TO_YOUR_SCORE_FILE --results_file PATH_TO_YOUR_RETRIEVAL_RESULTS_FILE"
       ],
       "expected_artifacts": [
-        "retrieval_results_file"
+        "YOUR_MODEL_NAME_OR_PATH",
+        "TASK_NAME",
+        "PATH_TO_YOUR_SCORE_FILE",
+        "PATH_TO_YOUR_RETRIEVAL_RESULTS_FILE"
       ]
     },
     {
@@ -35,21 +40,23 @@
       "description": "Run code generation",
       "working_dir": "generation/",
       "commands": [
-        "python main.py --task TASK_NAME --model MODEL_NAME --dataset_path DATASET_PATH --allow_code_execution"
+        "python main.py --task \"humaneval\" --model \"bigcode/starcoder2-7b\" --dataset_path \"openai_humaneval\" --allow_code_execution"
       ],
       "expected_artifacts": [
-        "generation_outputs"
+        "humaneval",
+        "bigcode/starcoder2-7b",
+        "openai_humaneval"
       ]
     },
     {
-      "id": "execution_evaluation",
-      "description": "Run execution-based evaluation",
-      "working_dir": "generation/",
+      "id": "preprocessing",
+      "description": "Preprocessing of raw data for retrieval pool construction",
+      "working_dir": "preprocessor/",
       "commands": [
-        "python main.py --task TASK_NAME --model MODEL_NAME --dataset_path 'json' --data_files_test RETRIEVAL_RESULTS_FILE --metric_output_path results/evaluation_results.json --max_length_input 3596 --max_length_generation 4096 --precision auto --save_every_k_tasks 100 --ignore_eos --model_backend vllm --new_tokens_only --topk_docs 5 --allow_code_execution --load_generations_path GENERATION_OUTPUTS"
+        "python tutorials/clean_tutorials.py"
       ],
       "expected_artifacts": [
-        "execution_evaluation_results"
+        "tutorials/clean_tutorials.py"
       ]
     }
   ]

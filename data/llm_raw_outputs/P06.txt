@@ -2,11 +2,12 @@
   "paper_id": "P06",
   "repo_name": "salesforce/CodeT5",
   "env": {
-    "type": "conda",
+    "type": "micromamba",
     "setup_commands": [
-      "conda create -n codet5 python=3.8 -y",
-      "conda activate codet5",
-      "conda install pytorch torchvision torchaudio cudatoolkit=11.3 -c pytorch -y"
+      "micromamba create -n codet5 python=3.8 -y",
+      "micromamba install pytorch torchvision torchaudio cudatoolkit=11.3 -c pytorch -y",
+      "micromamba install -c conda-forge transformers -y",
+      "micromamba install -c conda-forge git -y"
     ]
   },
   "steps": [
@@ -15,31 +16,28 @@
       "description": "Installing dependencies",
       "working_dir": ".",
       "commands": [
-        "pip install transformers==4.12.5",
-        "pip install deepspeed==0.6.3",
-        "pip install humaneval==0.1.0",
-        "pip install git+https://github.com/salesforce/CodeBLEU.git"
+        "micromamba run -n codet5 pip install -r requirements.txt"
       ],
-      "expected_artifacts": ["transformers", "deepspeed", "humaneval", "CodeBLEU"]
+      "expected_artifacts": ["requirements.txt"]
     },
     {
       "id": "download_data",
       "description": "Downloading data",
-      "working_dir": "CodeT5",
+      "working_dir": ".",
       "commands": [
-        "wget https://s3.amazonaws.com/code-datasets/codet5-vocab.json",
-        "wget https://s3.amazonaws.com/code-datasets/codet5-merges.txt"
+        "micromamba run -n codet5 git clone https://huggingface.co/Salesforce/codet5-base-mono-fn",
+        "micromamba run -n codet5 git clone https://huggingface.co/Salesforce/codet5-base-multi-sum"
       ],
-      "expected_artifacts": ["codet5-vocab.json", "codet5-merges.txt"]
+      "expected_artifacts": ["Salesforce/codet5-base-mono-fn", "Salesforce/codet5-base-multi-sum"]
     },
     {
       "id": "run_main_experiment",
       "description": "Running main experiment",
-      "working_dir": "CodeT5",
+      "working_dir": "CodeT5/",
       "commands": [
-        "python run_gen.py --model_name_or_path=Salesforce/codet5-base-multi-sum --do_train --do_eval --train_file=train.json --validation_file=valid.json --per_device_train_batch_size=4 --per_device_eval_batch_size=4 --num_train_epochs=1 --output_dir=output_dir"
+        "micromamba run -n codet5 python run_gen.py --model_name Salesforce/codet5-base-mono-fn --mode generate"
       ],
-      "expected_artifacts": ["output_dir"]
+      "expected_artifacts": ["run_gen.py", "Salesforce/codet5-base-mono-fn"]
     }
   ]
 }

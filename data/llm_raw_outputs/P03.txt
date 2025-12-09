@@ -4,9 +4,12 @@
   "env": {
     "type": "conda",
     "setup_commands": [
-      "micromamba create -n gr-env python=3.8 -y",
-      "micromamba activate gr-env",
-      "micromamba install -c conda-forge -c pytorch -c nvidia -c defaults -y pytorch torchvision torchaudio pytorch-cuda=11.7 cudatoolkit=11.3 pip"
+      "micromamba create -n gr_env -y",
+      "micromamba activate gr_env",
+      "micromamba install -c conda-forge python=3.8 -y",
+      "micromamba install -c conda-forge pytorch torchvision torchaudio -c pytorch -y",
+      "micromamba install -c conda-forge cudatoolkit=11.3 -y",
+      "pip install git+https://github.com/NVIDIA/apex.git"
     ]
   },
   "steps": [
@@ -15,32 +18,31 @@
       "description": "Install dependencies",
       "working_dir": ".",
       "commands": [
-        "pip install -r speculative_kd/requirements.txt",
-        "pip install -r action_gap_rl/requirements.txt",
-        "pip install -r multi_annotator/requirements.txt",
-        "pip install -r tip/requirements.txt",
-        "pip install -r camp_zipnerf/requirements.txt"
+        "micromamba run -n gr_env pip install -r speculative_kd/requirements.txt",
+        "micromamba run -n gr_env pip install -r action_gap_rl/requirements.txt",
+        "micromamba run -n gr_env pip install -r multi_annotator/requirements.txt",
+        "micromamba run -n gr_env pip install -r camp_zipnerf/requirements.txt"
       ],
-      "expected_artifacts": ["speculative_kd", "action_gap_rl", "multi_annotator", "tip", "camp_zipnerf"]
+      "expected_artifacts": ["gr_env"]
     },
     {
       "id": "download_data",
       "description": "Download data",
       "working_dir": ".",
       "commands": [
-        "wget https://github.com/google-research/google-research/archive/refs/heads/main.zip",
-        "unzip main.zip"
+        "git clone https://github.com/google-research-datasets/Google-Lens-Dataset.git",
+        "git clone https://github.com/google-research-datasets/Action-Gap-Dataset.git",
+        "git clone https://github.com/google-research-datasets/Multi-Annotator-Dataset.git",
+        "git clone https://github.com/google-research-datasets/Camp-ZipNerf-Dataset.git"
       ],
-      "expected_artifacts": ["google-research-main.zip", "google-research-main"]
+      "expected_artifacts": ["Google-Lens-Dataset", "Action-Gap-Dataset", "Multi-Annotator-Dataset", "Camp-ZipNerf-Dataset"]
     },
     {
-      "id": "run_main_experiment",
-      "description": "Run main experiment",
-      "working_dir": "google-research-main/speculative_kd",
-      "commands": [
-        "bash run.sh"
-      ],
-      "expected_artifacts": ["main experiment output"]
+      "id": "run_experiment",
+      "description": "Run the main experiment",
+      "working_dir": "speculative_kd",
+      "commands": ["bash run.sh"],
+      "expected_artifacts": ["experiment_results"]
     }
   ]
 }

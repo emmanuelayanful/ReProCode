@@ -4,39 +4,38 @@
     "env": {
         "type": "conda",
         "setup_commands": [
-            "git clone https://github.com/siegelz/core-bench.git",
-            "cd core-bench",
-            "micromamba create --name core-bench python=3.9",
-            "micromamba activate core-bench"
+            "micromamba create -n core-bench python=3.9",
+            "micromamba activate core-bench",
+            "micromamba install -c conda-forge -y --file requirements.txt"
         ]
     },
     "steps": [
         {
             "id": "install_dependencies",
             "description": "Install dependencies",
-            "working_dir": "core-bench",
+            "working_dir": ".",
             "commands": [
-                "micromamba install -y -f requirements.txt"
+                "micromamba install -c conda-forge -y --file requirements.txt"
             ],
-            "expected_artifacts": ["core-bench directory with installed dependencies"]
+            "expected_artifacts": ["All dependencies installed"]
         },
         {
             "id": "decrypt_dataset",
             "description": "Decrypt dataset",
-            "working_dir": "core-bench",
+            "working_dir": "benchmark/dataset",
             "commands": [
-                "gpg --output benchmark/dataset/core_test.json --decrypt benchmark/dataset/core_test.json.gpg"
+                "gpg --output core_test.json --decrypt core_test.json.gpg"
             ],
-            "expected_artifacts": ["Decrypted core_test.json file in benchmark/dataset directory"]
+            "expected_artifacts": ["core_test.json"]
         },
         {
-            "id": "run_main_experiment",
-            "description": "Run main experiment",
-            "working_dir": "core-bench",
+            "id": "run_benchmark",
+            "description": "Run benchmark",
+            "working_dir": ".",
             "commands": [
                 "python3 main.py --experiment_name test_coreagent_gpt4o_c-4 --agent_dir agents/AutoGPT-CORE --dataset_file benchmark/dataset/core_test.json --no_gpu --task_limit 1 --benchmark_level codeocean_hard --agent_script coreagent_hard_gpt4o.sh --verbose"
             ],
-            "expected_artifacts": ["Report.json files in the environment directories of each task"]
+            "expected_artifacts": ["report.json", "agent_trace.log"]
         }
     ]
 }

@@ -6,7 +6,7 @@
     "setup_commands": [
       "micromamba create -n swe-bench python=3.8 -y",
       "micromamba activate swe-bench",
-      "micromamba install -c conda-forge -c pytorch -c huggingface -c fastai -c pytorch-lts -c defaults -y pytorch torchvision torchaudio pytorch-cuda=11.7 fastai dvc gitpython pygit2 gitlfs huggingface_hub"
+      "micromamba install -c conda-forge -c pytorch -c huggingface -c fastai -c pytorch -c defaults -y pytorch torchvision torchaudio pytorch-lightning transformers datasets scikit-learn pandas jupyterlab"
     ]
   },
   "steps": [
@@ -15,44 +15,32 @@
       "description": "Install the required dependencies",
       "working_dir": ".",
       "commands": [
-        "micromamba install -c conda-forge -c pytorch -c huggingface -c fastai -c pytorch-lts -c defaults -y pytorch torchvision torchaudio pytorch-cuda=11.7 fastai dvc gitpython pygit2 gitlfs huggingface_hub"
+        "micromamba run -n swe-bench pip install -e ."
       ],
       "expected_artifacts": [
-        "activated conda environment 'swe-bench'",
-        "installed packages"
+        "swebench"
       ]
     },
     {
-      "id": "clone_repo",
-      "description": "Clone the repository",
+      "id": "download_data",
+      "description": "Download the SWE-bench dataset",
       "working_dir": ".",
       "commands": [
-        "git clone git@github.com:princeton-nlp/SWE-bench.git"
+        "micromamba run -n swe-bench python -m datasets.download.download_dataset 'princeton-nlp/SWE-bench'"
       ],
       "expected_artifacts": [
-        "cloned repository 'swe-bench/swe-bench'"
+        "princeton-nlp/SWE-bench"
       ]
     },
     {
-      "id": "install_repo",
-      "description": "Install the repository",
-      "working_dir": "SWE-bench",
-      "commands": [
-        "pip install -e ."
-      ],
-      "expected_artifacts": [
-        "installed package 'swe-bench'"
-      ]
-    },
-    {
-      "id": "run_main_experiment",
+      "id": "run_experiment",
       "description": "Run the main experiment",
-      "working_dir": "SWE-bench",
+      "working_dir": ".",
       "commands": [
-        "python -m swebench.harness.run_evaluation --predictions_path gold --max_workers 1 --instance_ids sympy__sympy-20590 --run_id validate-gold"
+        "micromamba run -n swe-bench python -m swebench.harness.run_evaluation --predictions_path gold --max_workers 1 --instance_ids sympy__sympy-20590 --run_id validate-gold"
       ],
       "expected_artifacts": [
-        "evaluation results"
+        "evaluation_results"
       ]
     }
   ]

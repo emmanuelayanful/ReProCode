@@ -2,11 +2,12 @@
   "paper_id": "P05",
   "repo_name": "bigcode-project/starcoder",
   "env": {
-    "type": "conda",
+    "type": "micromamba",
     "setup_commands": [
-      "micromamba create -n starcoder python=3.8",
+      "micromamba create -n starcoder python=3.8 -y",
       "micromamba activate starcoder",
-      "micromamba install -c conda-forge transformers=4.22.2 datasets=2.3.0 accelerate=0.12.0 huggingface_hub=0.10.0 peft=0.2.0 bitsandbytes=0.35.0"
+      "micromamba install -c conda-forge -y numpy scipy pandas scikit-learn",
+      "micromamba install -c huggingface -y transformers peft bitsandbytes"
     ]
   },
   "steps": [
@@ -15,38 +16,21 @@
       "description": "Install the required dependencies",
       "working_dir": ".",
       "commands": [
-        "micromamba install -c conda-forge transformers=4.22.2 datasets=2.3.0 accelerate=0.12.0 huggingface_hub=0.10.0 peft=0.2.0 bitsandbytes=0.35.0"
+        "micromamba run -n starcoder pip install -r requirements.txt"
       ],
       "expected_artifacts": [
-        "transformers",
-        "datasets",
-        "accelerate",
-        "huggingface_hub",
-        "peft",
-        "bitsandbytes"
-      ]
-    },
-    {
-      "id": "download_data",
-      "description": "Download the data",
-      "working_dir": ".",
-      "commands": [
-        "huggingface-cli login",
-        "huggingface-cli dataset create bigcode-project/starcoder"
-      ],
-      "expected_artifacts": [
-        "bigcode-project/starcoder"
+        "starcoder environment with installed dependencies"
       ]
     },
     {
       "id": "run_main_experiment",
       "description": "Run the main experiment",
-      "working_dir": "finetune",
+      "working_dir": "chat",
       "commands": [
-        "python finetune.py --model_path=\"bigcode/starcoder\" --dataset_name=\"ArmelR/stack-exchange-instruction\" --subset=\"data/finetune\" --split=\"train\" --size_valid_set 10000 --streaming --seq_length 2048 --max_steps 1000 --batch_size 1 --input_column_name=\"question\" --output_column_name=\"response\" --gradient_accumulation_steps 16 --learning_rate 1e-4 --lr_scheduler_type=\"cosine\" --num_warmup_steps 100 --weight_decay 0.05 --output_dir=\"./checkpoints\""
+        "micromamba run -n starcoder python train.py"
       ],
       "expected_artifacts": [
-        "fine-tuned model"
+        "Trained model"
       ]
     }
   ]
