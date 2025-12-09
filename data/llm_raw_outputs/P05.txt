@@ -1,44 +1,43 @@
 {
-"paper_id": "P05",
-"repo_name": "bigcode-project/starcoder",
-"env": {
-"type": "conda",
-"setup_commands": [
-"conda create -n starcoder_env python=3.9",
-"conda activate starcoder_env",
-"conda install -c huggingface transformers pytorch torchvision torchaudio bitsandbytes wandb",
-"pip install git+https://github.com/huggingface/peft.git"
-]
-},
-"steps": [
-{
-"id": "install_dependencies",
-"description": "Install required libraries",
-"working_dir": ".",
-"commands": [
-"conda env update",
-"pip install -r requirements.txt"
-],
-"expected_artifacts": []
-},
-{
-"id": "download_data",
-"description": "Download Stack Exchange instruction dataset (if not present)",
-"working_dir": "finetune",
-"commands": [
-"python finetune/download_data.py" if not exists("data/finetune/stack_exchange_instruction.zip") else "",
-"unzip data/finetune/stack_exchange_inference.zip -d data/finetune"
-],
-"expected_artifacts": ["data/finetune/stack_exchange_instruction.zip", "data/finetune/stack_exchange_inference"]
-},
-{
-"id": "fine_tune",
-"description": "Fine-tune StarCoder on Stack Exchange instructions",
-"working_dir": "finetune",
-"commands": [
-"python finetune/finetune.py --... (use the provided command from the README)"
-],
-"expected_artifacts": ["checkpoints"]
-}
-]
+    "paper_id": "P05",
+    "repo_name": "bigcode-project/starcoder",
+    "env": {
+        "type": "conda",
+        "setup_commands": [
+            "source $CONDA_PREFIX/etc/profile.d/conda.sh",
+            "conda create -n starcoder python=3.8 -y",
+            "conda activate starcoder",
+            "conda install -c huggingface -c conda-forge transformers=4.26.1 datasets=2.6.1 accelerate=0.17.0 huggingface_hub=0.10.0 peft=0.2.0 bitsandbytes=0.35.0 -y"
+        ]
+    },
+    "steps": [
+        {
+            "id": "install_dependencies",
+            "description": "Install the required dependencies",
+            "working_dir": ".",
+            "commands": [
+                "conda install pytorch torchvision torchaudio cudatoolkit=11.3 -c pytorch -y"
+            ],
+            "expected_artifacts": ["conda environment 'starcoder'"]
+        },
+        {
+            "id": "download_data",
+            "description": "Download the data",
+            "working_dir": ".",
+            "commands": [
+                "huggingface-cli login",
+                "huggingface-cli dataset create bigcode-project/starcoder"
+            ],
+            "expected_artifacts": ["bigcode-project/starcoder dataset"]
+        },
+        {
+            "id": "run_main_experiment",
+            "description": "Run the main experiment",
+            "working_dir": "finetune",
+            "commands": [
+                "python finetune.py --model_path=\"bigcode/starcoder\" --dataset_name=\"ArmelR/stack-exchange-instruction\" --subset=\"data/finetune\" --split=\"train\" --size_valid_set 10000 --streaming --seq_length 2048 --max_steps 1000 --batch_size 1 --input_column_name=\"question\" --output_column_name=\"response\" --gradient_accumulation_steps 16 --learning_rate 1e-4 --lr_scheduler_type=\"cosine\" --num_warmup_steps 100 --weight_decay 0.05 --output_dir=\"./checkpoints\""
+            ],
+            "expected_artifacts": ["fine-tuned model"]
+        }
+    ]
 }

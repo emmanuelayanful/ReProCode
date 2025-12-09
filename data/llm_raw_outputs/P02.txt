@@ -1,47 +1,49 @@
-```json
 {
     "paper_id": "P02",
     "repo_name": "openai/human-eval",
     "env": {
         "type": "conda",
         "setup_commands": [
-            "conda create -n codex python=3.7",
-            "conda activate codex",
-            "git clone https://github.com/openai/human-eval",
+            "source $CONDA_PREFIX/etc/profile.d/conda.sh && conda create -n codex python=3.7 -y",
+            "source $CONDA_PREFIX/etc/profile.d/conda.sh && conda activate codex",
             "pip install -e human-eval"
         ]
     },
     "steps": [
         {
-            "id": "Install and Set Up",
-            "description": "Environment setup for HumanEval",
-            "working_dir": ".",
+            "id": "installation",
+            "description": "Installation of the repository",
+            "working_dir": "~",
             "commands": [
-                "conda create -n codex python=3.7",
-                "conda activate codex",
                 "git clone https://github.com/openai/human-eval",
                 "pip install -e human-eval"
             ],
-            "expected_artifacts": []
+            "expected_artifacts": [
+                "human-eval directory in the current directory"
+            ]
         },
         {
-            "id": "Prepare Data",
-            "description": "Download example data",
+            "id": "data_download",
+            "description": "Downloading and preparing data",
             "working_dir": "human-eval",
             "commands": [
-                "cp data/example_problem.jsonl data/example_samples.jsonl"
+                "wget https://path-to-data-file.com/HumanEval.jsonl.gz",
+                "gunzip HumanEval.jsonl.gz"
             ],
-            "expected_artifacts": ["example_problem.jsonl", "example_samples.jsonl"]
+            "expected_artifacts": [
+                "human-eval/HumanEval.jsonl"
+            ]
         },
         {
-            "id": "Run Main Experiment",
-            "description": "Evaluate generated samples",
+            "id": "main_experiment",
+            "description": "Running the main experiment",
             "working_dir": "human-eval",
             "commands": [
-                "python execution.py --problem_file=data/example_problem.jsonl --generate_samples data/example_samples.jsonl --evaluate_functional_correctness samples.jsonl"
+                "python -m human_eval.evaluate_functional_correctness data/example_samples.jsonl --problem_file=data/example_problem.jsonl"
             ],
-            "expected_artifacts": ["samples.jsonl_results.jsonl"]
+            "expected_artifacts": [
+                "human-eval/data/example_samples.jsonl_results.jsonl"
+            ]
         }
     ]
 }
-```

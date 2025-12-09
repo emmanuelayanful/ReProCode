@@ -1,46 +1,51 @@
-```json
 {
     "paper_id": "P04",
     "repo_name": "swe-bench/swe-bench",
     "env": {
         "type": "conda",
         "setup_commands": [
-            "conda create -n swebench python=3.8",
-            "conda activate swebench",
-            "pip install -e .",
-            "pip install docker"
+            "source $CONDA_PREFIX/etc/profile.d/conda.sh",
+            "conda create -n swe-bench python=3.8 -y",
+            "conda activate swe-bench",
+            "conda install -c conda-forge gitpython -y",
+            "conda install -c conda-forge docker -y",
+            "conda install -c conda-forge pytest -y",
+            "conda install -c conda-forge pytest-cov -y",
+            "conda install -c conda-forge pytest-mock -y",
+            "conda install -c conda-forge pytest-xdist -y",
+            "pip install ."
         ]
     },
     "steps": [
         {
-            "id": "Install Dependencies",
-            "description": "Install required packages using Conda",
-            "working_dir": "/path/to/repo",
+            "id": "install_dependencies",
+            "description": "Install dependencies",
+            "working_dir": ".",
             "commands": [
-                "conda env update",
+                "conda activate swe-bench",
                 "pip install -r requirements.txt"
             ],
-            "expected_artifacts": []
+            "expected_artifacts": ["activated conda environment", "installed dependencies"]
         },
         {
-            "id": "Download Data (Optional)",
-            "description": "If data is not included, skip this step",
-            "working_dir": "/path/to/repo",
+            "id": "download_data",
+            "description": "Download data",
+            "working_dir": ".",
             "commands": [
-                "python scripts/download_data.py"  # Assuming a script exists for data download
+                "conda activate swe-bench",
+                "python -m swebench.collect.build_dataset"
             ],
-            "expected_artifacts": ["data.zip"]  # Assuming the downloaded data is zipped
+            "expected_artifacts": ["downloaded data"]
         },
         {
-            "id": "Run Main Experiment",
-            "description": "Evaluate patch predictions using the evaluation harness",
-            "working_dir": "/path/to/repo",
+            "id": "run_main_experiment",
+            "description": "Run main experiment",
+            "working_dir": ".",
             "commands": [
-                "python -m swebench.harness.run_evaluation --predictions_path <path_to_predictions> --max_workers <num_workers> --run_id <run_id>",
-                # Replace `<path_to_predictions>`, `<num_workers>`, and `<run_id>` with actual values
+                "conda activate swe-bench",
+                "python -m swebench.harness.run_evaluation --predictions_path gold --max_workers 1 --instance_ids sympy__sympy-20590 --run_id validate-gold"
             ],
-            "expected_artifacts": ["evaluation_results"]
+            "expected_artifacts": ["evaluation results"]
         }
     ]
 }
-```

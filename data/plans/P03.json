@@ -4,53 +4,46 @@
   "env": {
     "type": "conda",
     "setup_commands": [
-      "conda create -n reproducibility-environment python=3.9",
-      "conda activate reproducibility-environment",
-      "conda install -c conda-forge micromamba",
-      "micromamba install -c pytorch torchvision"
+      "source $CONDA_PREFIX/etc/profile.d/conda.sh && conda create -n gr_env -y --file speculative_kd/requirements.txt",
+      "source $CONDA_PREFIX/etc/profile.d/conda.sh && conda activate gr_env",
+      "source $CONDA_PREFIX/etc/profile.d/conda.sh && conda install -y -c pytorch pytorch torchvision",
+      "source $CONDA_PREFIX/etc/profile.d/conda.sh && conda install -y -c conda-forge deepspeed"
     ]
   },
   "steps": [
     {
-      "id": "Install Dependencies",
-      "description": "Install required packages using Conda",
+      "id": "install_dependencies",
+      "description": "Install dependencies",
       "working_dir": ".",
       "commands": [
-        "conda env update -n reproducibility-environment",
-        "pip install -r speculative_kd/requirements.txt",
-        "pip install -r action_gap_rl/requirements.txt"
-      ],
-      "expected_artifacts": []
-    },
-    {
-      "id": "Data Preparation",
-      "description": "Assuming data is downloaded, prepare the necessary directories",
-      "working_dir": "speculative_kd",
-      "commands": [
-        "mkdir -p data"
-      ],
-      "expected_artifacts": []
-    },
-    {
-      "id": "Train SpeculativeKD",
-      "description": "Run the SFT training script",
-      "working_dir": "speculative_kd/train",
-      "commands": [
-        "python run_kd_train.py --config config/sft/sft_config_gsm.yaml"
+        "source $CONDA_PREFIX/etc/profile.d/conda.sh && conda install -y --file speculative_kd/requirements.txt",
+        "source $CONDA_PREFIX/etc/profile.d/conda.sh && conda install -y -c pytorch pytorch torchvision",
+        "source $CONDA_PREFIX/etc/profile.d/conda.sh && conda install -y -c conda-forge deepspeed"
       ],
       "expected_artifacts": [
-        "modelCheckpoint"
+        "conda environment with installed dependencies"
       ]
     },
     {
-      "id": "Action Gap RL Demo",
-      "description": "Run the demo for Action Gap RL",
-      "working_dir": "action_gap_rl/demo.py",
+      "id": "prepare_data",
+      "description": "Prepare data",
+      "working_dir": "speculative_kd",
       "commands": [
-        "python demo.py"
+        "./run.sh download_data"
       ],
       "expected_artifacts": [
-        "results.csv"
+        "downloaded data"
+      ]
+    },
+    {
+      "id": "run_experiment",
+      "description": "Run the main experiment",
+      "working_dir": "speculative_kd",
+      "commands": [
+        "./run.sh train_kd"
+      ],
+      "expected_artifacts": [
+        "trained model"
       ]
     }
   ]
