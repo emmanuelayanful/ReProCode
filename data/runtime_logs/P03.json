@@ -1,0 +1,107 @@
+{
+  "paper_id": "P03",
+  "repo_name": "google-research/google-research",
+  "env_logs": [
+    {
+      "command": "source $CONDA_PREFIX/etc/profile.d/conda.sh && conda create -n gr_env -y --file speculative_kd/requirements.txt",
+      "cwd": "/workspace/repo",
+      "returncode": 127,
+      "stdout": "",
+      "stderr": "/bin/sh: 1: source: not found\n",
+      "duration_sec": 0.0051648616790771484
+    },
+    {
+      "command": "source $CONDA_PREFIX/etc/profile.d/conda.sh && conda activate gr_env",
+      "cwd": "/workspace/repo",
+      "returncode": 127,
+      "stdout": "",
+      "stderr": "/bin/sh: 1: source: not found\n",
+      "duration_sec": 0.0038623809814453125
+    },
+    {
+      "command": "source $CONDA_PREFIX/etc/profile.d/conda.sh && conda install -y -c pytorch pytorch torchvision",
+      "cwd": "/workspace/repo",
+      "returncode": 127,
+      "stdout": "",
+      "stderr": "/bin/sh: 1: source: not found\n",
+      "duration_sec": 0.002621173858642578
+    },
+    {
+      "command": "source $CONDA_PREFIX/etc/profile.d/conda.sh && conda install -y -c conda-forge deepspeed",
+      "cwd": "/workspace/repo",
+      "returncode": 127,
+      "stdout": "",
+      "stderr": "/bin/sh: 1: source: not found\n",
+      "duration_sec": 0.001791238784790039
+    }
+  ],
+  "step_logs": [
+    {
+      "id": "install_dependencies",
+      "description": "Install dependencies",
+      "commands": [
+        {
+          "command": "source $CONDA_PREFIX/etc/profile.d/conda.sh && conda install -y --file speculative_kd/requirements.txt",
+          "cwd": "/workspace/repo",
+          "returncode": 127,
+          "stdout": "",
+          "stderr": "/bin/sh: 1: source: not found\n",
+          "duration_sec": 0.0031061172485351562
+        },
+        {
+          "command": "source $CONDA_PREFIX/etc/profile.d/conda.sh && conda install -y -c pytorch pytorch torchvision",
+          "cwd": "/workspace/repo",
+          "returncode": 127,
+          "stdout": "",
+          "stderr": "/bin/sh: 1: source: not found\n",
+          "duration_sec": 0.0022919178009033203
+        },
+        {
+          "command": "source $CONDA_PREFIX/etc/profile.d/conda.sh && conda install -y -c conda-forge deepspeed",
+          "cwd": "/workspace/repo",
+          "returncode": 127,
+          "stdout": "",
+          "stderr": "/bin/sh: 1: source: not found\n",
+          "duration_sec": 0.0025954246520996094
+        }
+      ],
+      "artifacts": {
+        "conda environment with installed dependencies": false
+      }
+    },
+    {
+      "id": "prepare_data",
+      "description": "Prepare data",
+      "commands": [
+        {
+          "command": "./run.sh download_data",
+          "cwd": "/workspace/repo/speculative_kd",
+          "returncode": 1,
+          "stdout": "",
+          "stderr": "Traceback (most recent call last):\n  File \"/workspace/repo/speculative_kd/train/run_kd_train.py\", line 21, in <module>\n    import yaml\nModuleNotFoundError: No module named 'yaml'\n",
+          "duration_sec": 0.07817816734313965
+        }
+      ],
+      "artifacts": {
+        "downloaded data": false
+      }
+    },
+    {
+      "id": "run_experiment",
+      "description": "Run the main experiment",
+      "commands": [
+        {
+          "command": "./run.sh train_kd",
+          "cwd": "/workspace/repo/speculative_kd",
+          "returncode": 1,
+          "stdout": "",
+          "stderr": "Traceback (most recent call last):\n  File \"/workspace/repo/speculative_kd/train/run_kd_train.py\", line 21, in <module>\n    import yaml\nModuleNotFoundError: No module named 'yaml'\n",
+          "duration_sec": 0.08098721504211426
+        }
+      ],
+      "artifacts": {
+        "trained model": false
+      }
+    }
+  ]
+}

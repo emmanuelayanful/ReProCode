@@ -1,22 +1,168 @@
 {
   "paper_id": "P07",
   "repo_name": "code-rag-bench/code-rag-bench",
-  "env_logs": [],
+  "env_logs": [
+    {
+      "command": "source $CONDA_PREFIX/etc/profile.d/conda.sh && conda create -n crag python=3.10 -y",
+      "cwd": "/workspace/repo",
+      "returncode": 127,
+      "stdout": "",
+      "stderr": "/bin/sh: 1: source: not found\n",
+      "duration_sec": 0.005773782730102539
+    },
+    {
+      "command": "source $CONDA_PREFIX/etc/profile.d/conda.sh && conda activate crag",
+      "cwd": "/workspace/repo",
+      "returncode": 127,
+      "stdout": "",
+      "stderr": "/bin/sh: 1: source: not found\n",
+      "duration_sec": 0.003582477569580078
+    },
+    {
+      "command": "pip install -r requirements.txt",
+      "cwd": "/workspace/repo",
+      "returncode": 1,
+      "stdout": "Collecting beir (from -r requirements.txt (line 1))\n  Downloading beir-2.2.0-py3-none-any.whl.metadata (28 kB)\nCollecting html2text (from -r requirements.txt (line 2))\n  Downloading html2text-2025.4.15-py3-none-any.whl.metadata (4.1 kB)\nCollecting beautifulsoup4 (from -r requirements.txt (line 3))\n  Downloading beautifulsoup4-4.14.3-py3-none-any.whl.metadata (3.8 kB)\nCollecting voyageai (from -r requirements.txt (line 4))\n  Downloading voyageai-0.3.6-py3-none-any.whl.metadata (2.9 kB)\nCollecting pyext (from -r requirements.txt (line 5))\n  Downloading pyext-0.7.tar.gz (7.8 kB)\n  Installing build dependencies: started\n  Installing build dependencies: finished with status 'done'\n  Getting requirements to build wheel: started\n  Getting requirements to build wheel: finished with status 'error'\n",
+      "stderr": "  error: subprocess-exited-with-error\n  \n  \u00d7 Getting requirements to build wheel did not run successfully.\n  \u2502 exit code: 1\n  \u2570\u2500> [23 lines of output]\n      Traceback (most recent call last):\n        File \"/opt/conda/envs/reprocode/lib/python3.11/site-packages/pip/_vendor/pyproject_hooks/_in_process/_in_process.py\", line 389, in <module>\n          main()\n        File \"/opt/conda/envs/reprocode/lib/python3.11/site-packages/pip/_vendor/pyproject_hooks/_in_process/_in_process.py\", line 373, in main\n          json_out[\"return_val\"] = hook(**hook_input[\"kwargs\"])\n                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n        File \"/opt/conda/envs/reprocode/lib/python3.11/site-packages/pip/_vendor/pyproject_hooks/_in_process/_in_process.py\", line 143, in get_requires_for_build_wheel\n          return hook(config_settings)\n                 ^^^^^^^^^^^^^^^^^^^^^\n        File \"/tmp/pip-build-env-j99ldfo7/overlay/lib/python3.11/site-packages/setuptools/build_meta.py\", line 331, in get_requires_for_build_wheel\n          return self._get_build_requires(config_settings, requirements=[])\n                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n        File \"/tmp/pip-build-env-j99ldfo7/overlay/lib/python3.11/site-packages/setuptools/build_meta.py\", line 301, in _get_build_requires\n          self.run_setup()\n        File \"/tmp/pip-build-env-j99ldfo7/overlay/lib/python3.11/site-packages/setuptools/build_meta.py\", line 512, in run_setup\n          super().run_setup(setup_script=setup_script)\n        File \"/tmp/pip-build-env-j99ldfo7/overlay/lib/python3.11/site-packages/setuptools/build_meta.py\", line 317, in run_setup\n          exec(code, locals())\n        File \"<string>\", line 6, in <module>\n        File \"/tmp/pip-install-hh4qixz1/pyext_b78f2cbe736c41b88684d94f4f125c18/pyext.py\", line 117, in <module>\n          oargspec = inspect.getargspec\n                     ^^^^^^^^^^^^^^^^^^\n      AttributeError: module 'inspect' has no attribute 'getargspec'. Did you mean: 'getargs'?\n      [end of output]\n  \n  note: This error originates from a subprocess, and is likely not a problem with pip.\nERROR: Failed to build 'pyext' when getting requirements to build wheel\n",
+      "duration_sec": 6.646237850189209
+    }
+  ],
   "step_logs": [
     {
-      "id": "fallback-json-error",
-      "description": "Fallback step because JSON decoding failed, and repair also failed.",
+      "id": "installation",
+      "description": "Installation of the required dependencies",
       "commands": [
         {
-          "command": "ls",
+          "command": "conda create -n crag python=3.10 -y",
           "cwd": "/workspace/repo",
           "returncode": 0,
-          "stdout": "README.md\ngeneration\npreprocessor\nrequirements.txt\nretrieval\n",
-          "stderr": "",
-          "duration_sec": 0.009308815002441406
+          "stdout": "Channels:\n - conda-forge\nPlatform: linux-64\nCollecting package metadata (repodata.json): ...working... done\nSolving environment: ...working... done\n\n## Package Plan ##\n\n  environment location: /opt/conda/envs/crag\n\n  added / updated specs:\n    - python=3.10\n\n\nThe following packages will be downloaded:\n\n    package                    |            build\n    ---------------------------|-----------------\n    _libgcc_mutex-0.1          |      conda_forge           3 KB  conda-forge\n    _openmp_mutex-4.5          |            2_gnu          23 KB  conda-forge\n    bzip2-1.0.8                |       hda65f42_8         254 KB  conda-forge\n    ca-certificates-2025.11.12 |       hbd8a1cb_0         149 KB  conda-forge\n    ld_impl_linux-64-2.45      |default_hbd61a6d_104         709 KB  conda-forge\n    libexpat-2.7.3             |       hecca717_0          75 KB  conda-forge\n    libffi-3.5.2               |       h9ec8514_0          56 KB  conda-forge\n    libgcc-15.2.0              |      he0feb66_16        1018 KB  conda-forge\n    libgcc-ng-15.2.0           |      h69a702a_16          27 KB  conda-forge\n    libgomp-15.2.0             |      he0feb66_16         589 KB  conda-forge\n    liblzma-5.8.1              |       hb9d3cd8_2         110 KB  conda-forge\n    libnsl-2.0.1               |       hb9d3cd8_1          33 KB  conda-forge\n    libsqlite-3.51.1           |       h0c1763c_0         917 KB  conda-forge\n    libuuid-2.41.2             |       h5347b49_1          39 KB  conda-forge\n    libxcrypt-4.4.36           |       hd590300_1          98 KB  conda-forge\n    libzlib-1.3.1              |       hb9d3cd8_2          60 KB  conda-forge\n    ncurses-6.5                |       h2d0b736_3         871 KB  conda-forge\n    openssl-3.6.0              |       h26f9b46_0         3.0 MB  conda-forge\n    pip-25.3                   |     pyh8b19718_0         1.1 MB  conda-forge\n    python-3.10.19             |h3c07f61_2_cpython        24.1 MB  conda-forge\n    readline-8.2               |       h8c095d6_2         276 KB  conda-forge\n    setuptools-80.9.0          |     pyhff2d567_0         731 KB  conda-forge\n    tk-8.6.13                  |noxft_ha0e22de_103         3.1 MB  conda-forge\n    tzdata-2025b               |       h78e105d_0         120 KB  conda-forge\n    wheel-0.45.1               |     pyhd8ed1ab_1          61 KB  conda-forge\n    zstd-1.5.7                 |       hb78ec9c_6         587 KB  conda-forge\n    ------------------------------------------------------------\n                                           Total:        38.1 MB\n\nThe following NEW packages will be INSTALLED:\n\n  _libgcc_mutex      conda-forge/linux-64::_libgcc_mutex-0.1-conda_forge \n  _openmp_mutex      conda-forge/linux-64::_openmp_mutex-4.5-2_gnu \n  bzip2              conda-forge/linux-64::bzip2-1.0.8-hda65f42_8 \n  ca-certificates    conda-forge/noarch::ca-certificates-2025.11.12-hbd8a1cb_0 \n  ld_impl_linux-64   conda-forge/linux-64::ld_impl_linux-64-2.45-default_hbd61a6d_104 \n  libexpat           conda-forge/linux-64::libexpat-2.7.3-hecca717_0 \n  libffi             conda-forge/linux-64::libffi-3.5.2-h9ec8514_0 \n  libgcc             conda-forge/linux-64::libgcc-15.2.0-he0feb66_16 \n  libgcc-ng          conda-forge/linux-64::libgcc-ng-15.2.0-h69a702a_16 \n  libgomp            conda-forge/linux-64::libgomp-15.2.0-he0feb66_16 \n  liblzma            conda-forge/linux-64::liblzma-5.8.1-hb9d3cd8_2 \n  libnsl             conda-forge/linux-64::libnsl-2.0.1-hb9d3cd8_1 \n  libsqlite          conda-forge/linux-64::libsqlite-3.51.1-h0c1763c_0 \n  libuuid            conda-forge/linux-64::libuuid-2.41.2-h5347b49_1 \n  libxcrypt          conda-forge/linux-64::libxcrypt-4.4.36-hd590300_1 \n  libzlib            conda-forge/linux-64::libzlib-1.3.1-hb9d3cd8_2 \n  ncurses            conda-forge/linux-64::ncurses-6.5-h2d0b736_3 \n  openssl            conda-forge/linux-64::openssl-3.6.0-h26f9b46_0 \n  pip                conda-forge/noarch::pip-25.3-pyh8b19718_0 \n  python             conda-forge/linux-64::python-3.10.19-h3c07f61_2_cpython \n  readline           conda-forge/linux-64::readline-8.2-h8c095d6_2 \n  setuptools         conda-forge/noarch::setuptools-80.9.0-pyhff2d567_0 \n  tk                 conda-forge/linux-64::tk-8.6.13-noxft_ha0e22de_103 \n  tzdata             conda-forge/noarch::tzdata-2025b-h78e105d_0 \n  wheel              conda-forge/noarch::wheel-0.45.1-pyhd8ed1ab_1 \n  zstd               conda-forge/linux-64::zstd-1.5.7-hb78ec9c_6 \n\n\n\nDownloading and Extracting Packages: ...working... done\nPreparing transaction: ...working... done\nVerifying transaction: ...working... done\nExecuting transaction: ...working... done\n#\n# To activate this environment, use\n#\n#     $ conda activate crag\n#\n# To deactivate an active environment, use\n#\n#     $ conda deactivate\n\n",
+          "stderr": "\n\n==> WARNING: A newer version of conda exists. <==\n    current version: 24.9.2\n    latest version: 25.11.0\n\nPlease update conda by running\n\n    $ conda update -n base -c conda-forge conda\n\n\n",
+          "duration_sec": 72.9428927898407
+        },
+        {
+          "command": "conda activate crag",
+          "cwd": "/workspace/repo",
+          "returncode": 1,
+          "stdout": "",
+          "stderr": "\nCondaError: Run 'conda init' before 'conda activate'\n\n",
+          "duration_sec": 0.5574953556060791
+        },
+        {
+          "command": "pip install -r requirements.txt",
+          "cwd": "/workspace/repo",
+          "returncode": 1,
+          "stdout": "Collecting beir (from -r requirements.txt (line 1))\n  Using cached beir-2.2.0-py3-none-any.whl.metadata (28 kB)\nCollecting html2text (from -r requirements.txt (line 2))\n  Using cached html2text-2025.4.15-py3-none-any.whl.metadata (4.1 kB)\nCollecting beautifulsoup4 (from -r requirements.txt (line 3))\n  Using cached beautifulsoup4-4.14.3-py3-none-any.whl.metadata (3.8 kB)\nCollecting voyageai (from -r requirements.txt (line 4))\n  Using cached voyageai-0.3.6-py3-none-any.whl.metadata (2.9 kB)\nCollecting pyext (from -r requirements.txt (line 5))\n  Using cached pyext-0.7.tar.gz (7.8 kB)\n  Installing build dependencies: started\n  Installing build dependencies: finished with status 'done'\n  Getting requirements to build wheel: started\n  Getting requirements to build wheel: finished with status 'error'\n",
+          "stderr": "  error: subprocess-exited-with-error\n  \n  \u00d7 Getting requirements to build wheel did not run successfully.\n  \u2502 exit code: 1\n  \u2570\u2500> [23 lines of output]\n      Traceback (most recent call last):\n        File \"/opt/conda/envs/reprocode/lib/python3.11/site-packages/pip/_vendor/pyproject_hooks/_in_process/_in_process.py\", line 389, in <module>\n          main()\n        File \"/opt/conda/envs/reprocode/lib/python3.11/site-packages/pip/_vendor/pyproject_hooks/_in_process/_in_process.py\", line 373, in main\n          json_out[\"return_val\"] = hook(**hook_input[\"kwargs\"])\n                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n        File \"/opt/conda/envs/reprocode/lib/python3.11/site-packages/pip/_vendor/pyproject_hooks/_in_process/_in_process.py\", line 143, in get_requires_for_build_wheel\n          return hook(config_settings)\n                 ^^^^^^^^^^^^^^^^^^^^^\n        File \"/tmp/pip-build-env-f6j_tsi1/overlay/lib/python3.11/site-packages/setuptools/build_meta.py\", line 331, in get_requires_for_build_wheel\n          return self._get_build_requires(config_settings, requirements=[])\n                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n        File \"/tmp/pip-build-env-f6j_tsi1/overlay/lib/python3.11/site-packages/setuptools/build_meta.py\", line 301, in _get_build_requires\n          self.run_setup()\n        File \"/tmp/pip-build-env-f6j_tsi1/overlay/lib/python3.11/site-packages/setuptools/build_meta.py\", line 512, in run_setup\n          super().run_setup(setup_script=setup_script)\n        File \"/tmp/pip-build-env-f6j_tsi1/overlay/lib/python3.11/site-packages/setuptools/build_meta.py\", line 317, in run_setup\n          exec(code, locals())\n        File \"<string>\", line 6, in <module>\n        File \"/tmp/pip-install-naznu23r/pyext_b2d7b6d4e30a4005ad03a947bf9a3432/pyext.py\", line 117, in <module>\n          oargspec = inspect.getargspec\n                     ^^^^^^^^^^^^^^^^^^\n      AttributeError: module 'inspect' has no attribute 'getargspec'. Did you mean: 'getargs'?\n      [end of output]\n  \n  note: This error originates from a subprocess, and is likely not a problem with pip.\nERROR: Failed to build 'pyext' when getting requirements to build wheel\n",
+          "duration_sec": 2.9925549030303955
         }
       ],
-      "artifacts": {}
+      "artifacts": {
+        "active conda environment 'crag'": false,
+        "installed python packages": false
+      }
+    },
+    {
+      "id": "data_preprocessing",
+      "description": "Preprocessing of the datasets",
+      "commands": [
+        {
+          "command": "python -m create/${data_name}.py",
+          "cwd": "/workspace/repo/retrieval",
+          "returncode": 1,
+          "stdout": "",
+          "stderr": "/opt/conda/envs/reprocode/bin/python: Error while finding module specification for 'create/.py' (ModuleNotFoundError: No module named 'create/'). Try using 'create/' instead of 'create/.py' as the module name.\n",
+          "duration_sec": 0.028322935104370117
+        }
+      ],
+      "artifacts": {
+        "preprocessed datasets": false
+      }
+    },
+    {
+      "id": "dense_embedding_models",
+      "description": "Running dense embedding models",
+      "commands": [
+        {
+          "command": "python generate_embeddings.py --model YOUR_MODEL_NAME_OR_PATH --output_dir OUTPUT_EMBEDDING_DIR --hf_datasets HF_DATASET_NAME --shard_id 0 --num_shards 1",
+          "cwd": "/workspace/repo/retrieval",
+          "returncode": 1,
+          "stdout": "",
+          "stderr": "Traceback (most recent call last):\n  File \"/workspace/repo/retrieval/generate_embeddings.py\", line 8, in <module>\n    import numpy as np\nModuleNotFoundError: No module named 'numpy'\n",
+          "duration_sec": 0.05198955535888672
+        },
+        {
+          "command": "python eval_beir_sbert_canonical.py --model YOUR_MODEL_NAME_OR_PATH --dataset TASK_NAME --output_file PATH_TO_YOUR_SCORE_FILE --results_file PATH_TO_YOUR_RETRIEVAL_RESULTS_FILE",
+          "cwd": "/workspace/repo/retrieval",
+          "returncode": 1,
+          "stdout": "",
+          "stderr": "Traceback (most recent call last):\n  File \"/workspace/repo/retrieval/eval_beir_sbert_canonical.py\", line 8, in <module>\n    from datasets import load_dataset\nImportError: cannot import name 'load_dataset' from 'datasets' (unknown location)\n",
+          "duration_sec": 0.06467604637145996
+        }
+      ],
+      "artifacts": {
+        "embeddings": false,
+        "retrieval results": false
+      }
+    },
+    {
+      "id": "bm25",
+      "description": "Running BM25",
+      "commands": [
+        {
+          "command": "python modify_corpus_for_bm25.py --dataset DATASET_NAME --output_metadir OUTPUT_DIR --index_dir INDEX_DIR --stage preprocess",
+          "cwd": "/workspace/repo/retrieval",
+          "returncode": 1,
+          "stdout": "",
+          "stderr": "Traceback (most recent call last):\n  File \"/workspace/repo/retrieval/modify_corpus_for_bm25.py\", line 6, in <module>\n    from datasets import load_dataset\nImportError: cannot import name 'load_dataset' from 'datasets' (unknown location)\n",
+          "duration_sec": 0.08438825607299805
+        },
+        {
+          "command": "python modify_corpus_for_bm25.py --dataset DATASET_NAME --output_metadir OUTPUT_DIR --index_dir INDEX_DIR --stage index",
+          "cwd": "/workspace/repo/retrieval",
+          "returncode": 1,
+          "stdout": "",
+          "stderr": "Traceback (most recent call last):\n  File \"/workspace/repo/retrieval/modify_corpus_for_bm25.py\", line 6, in <module>\n    from datasets import load_dataset\nImportError: cannot import name 'load_dataset' from 'datasets' (unknown location)\n",
+          "duration_sec": 0.05428886413574219
+        },
+        {
+          "command": "python modify_corpus_for_bm25.py --dataset DATASET_NAME --output_metadir OUTPUT_DIR --index_dir INDEX_DIR --top_k TOP_K --k1 K1 --b B --stage search",
+          "cwd": "/workspace/repo/retrieval",
+          "returncode": 1,
+          "stdout": "",
+          "stderr": "Traceback (most recent call last):\n  File \"/workspace/repo/retrieval/modify_corpus_for_bm25.py\", line 6, in <module>\n    from datasets import load_dataset\nImportError: cannot import name 'load_dataset' from 'datasets' (unknown location)\n",
+          "duration_sec": 0.05453634262084961
+        }
+      ],
+      "artifacts": {
+        "indexed corpus": false,
+        "search results": false
+      }
+    },
+    {
+      "id": "api_based_models",
+      "description": "Running API-based models",
+      "commands": [
+        {
+          "command": "python eval_voyage.py --dataset TASK_NAME --model MODEL_NAME --api_key_fp PATH_TO_YOUR_API_KEY_FILE --batch_size YOUR_BATCH_SIZE --output_file PATH_TO_YOUR_SCORE_FILE --results_file PATH_TO_YOUR_RETRIEVAL_RESULTS_FILE",
+          "cwd": "/workspace/repo/retrieval",
+          "returncode": 1,
+          "stdout": "",
+          "stderr": "Traceback (most recent call last):\n  File \"/workspace/repo/retrieval/eval_voyage.py\", line 1, in <module>\n    from datasets import load_dataset\nImportError: cannot import name 'load_dataset' from 'datasets' (unknown location)\n",
+          "duration_sec": 0.030536651611328125
+        },
+        {
+          "command": "python eval_openai.py --dataset TASK_NAME --model MODEL_NAME --api_key_fp PATH_TO_YOUR_API_KEY_FILE --batch_size YOUR_BATCH_SIZE --output_file PATH_TO_YOUR_SCORE_FILE --results_file PATH_TO_YOUR_RETRIEVAL_RESULTS_FILE",
+          "cwd": "/workspace/repo/retrieval",
+          "returncode": 1,
+          "stdout": "",
+          "stderr": "Traceback (most recent call last):\n  File \"/workspace/repo/retrieval/eval_openai.py\", line 1, in <module>\n    from datasets import load_dataset\nImportError: cannot import name 'load_dataset' from 'datasets' (unknown location)\n",
+          "duration_sec": 0.030234575271606445
+        }
+      ],
+      "artifacts": {
+        "retrieval results": false
+      }
     }
   ]
 }

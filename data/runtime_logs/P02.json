@@ -3,111 +3,96 @@
   "repo_name": "openai/human-eval",
   "env_logs": [
     {
-      "command": "conda create -n codex python=3.7",
+      "command": "source $CONDA_PREFIX/etc/profile.d/conda.sh && conda create -n codex python=3.7 -y",
       "cwd": "/workspace/repo",
-      "returncode": 0,
-      "stdout": "Channels:\n - conda-forge\nPlatform: linux-64\nCollecting package metadata (repodata.json): ...working... done\nSolving environment: ...working... done\n\n## Package Plan ##\n\n  environment location: /opt/conda/envs/codex\n\n  added / updated specs:\n    - python=3.7\n\n\nThe following packages will be downloaded:\n\n    package                    |            build\n    ---------------------------|-----------------\n    _libgcc_mutex-0.1          |      conda_forge           3 KB  conda-forge\n    _openmp_mutex-4.5          |            2_gnu          23 KB  conda-forge\n    ca-certificates-2025.11.12 |       hbd8a1cb_0         149 KB  conda-forge\n    ld_impl_linux-64-2.45      |default_hbd61a6d_104         709 KB  conda-forge\n    libffi-3.4.6               |       h2dba641_1          56 KB  conda-forge\n    libgcc-15.2.0              |      he0feb66_15        1017 KB  conda-forge\n    libgcc-ng-15.2.0           |      h69a702a_15          26 KB  conda-forge\n    libgomp-15.2.0             |      he0feb66_15         589 KB  conda-forge\n    liblzma-5.8.1              |       hb9d3cd8_2         110 KB  conda-forge\n    liblzma-devel-5.8.1        |       hb9d3cd8_2         430 KB  conda-forge\n    libnsl-2.0.1               |       hb9d3cd8_1          33 KB  conda-forge\n    libsqlite-3.51.1           |       h0c1763c_0         917 KB  conda-forge\n    libstdcxx-15.2.0           |      h934c35e_15         5.6 MB  conda-forge\n    libstdcxx-ng-15.2.0        |      hdf11a46_15          26 KB  conda-forge\n    libzlib-1.3.1              |       hb9d3cd8_2          60 KB  conda-forge\n    ncurses-6.5                |       h2d0b736_3         871 KB  conda-forge\n    openssl-3.6.0              |       h26f9b46_0         3.0 MB  conda-forge\n    pip-24.0                   |     pyhd8ed1ab_0         1.3 MB  conda-forge\n    python-3.7.12              |hf930737_100_cpython        57.3 MB  conda-forge\n    readline-8.2               |       h8c095d6_2         276 KB  conda-forge\n    setuptools-69.0.3          |     pyhd8ed1ab_0         460 KB  conda-forge\n    sqlite-3.51.1              |       hbc0de68_0         179 KB  conda-forge\n    tk-8.6.13                  |noxft_ha0e22de_103         3.1 MB  conda-forge\n    wheel-0.42.0               |     pyhd8ed1ab_0          56 KB  conda-forge\n    xz-5.8.1                   |       hbcc6ac9_2          23 KB  conda-forge\n    xz-gpl-tools-5.8.1         |       hbcc6ac9_2          33 KB  conda-forge\n    xz-tools-5.8.1             |       hb9d3cd8_2          94 KB  conda-forge\n    zstd-1.5.7                 |       hb78ec9c_6         587 KB  conda-forge\n    ------------------------------------------------------------\n                                           Total:        77.0 MB\n\nThe following NEW packages will be INSTALLED:\n\n  _libgcc_mutex      conda-forge/linux-64::_libgcc_mutex-0.1-conda_forge \n  _openmp_mutex      conda-forge/linux-64::_openmp_mutex-4.5-2_gnu \n  ca-certificates    conda-forge/noarch::ca-certificates-2025.11.12-hbd8a1cb_0 \n  ld_impl_linux-64   conda-forge/linux-64::ld_impl_linux-64-2.45-default_hbd61a6d_104 \n  libffi             conda-forge/linux-64::libffi-3.4.6-h2dba641_1 \n  libgcc             conda-forge/linux-64::libgcc-15.2.0-he0feb66_15 \n  libgcc-ng          conda-forge/linux-64::libgcc-ng-15.2.0-h69a702a_15 \n  libgomp            conda-forge/linux-64::libgomp-15.2.0-he0feb66_15 \n  liblzma            conda-forge/linux-64::liblzma-5.8.1-hb9d3cd8_2 \n  liblzma-devel      conda-forge/linux-64::liblzma-devel-5.8.1-hb9d3cd8_2 \n  libnsl             conda-forge/linux-64::libnsl-2.0.1-hb9d3cd8_1 \n  libsqlite          conda-forge/linux-64::libsqlite-3.51.1-h0c1763c_0 \n  libstdcxx          conda-forge/linux-64::libstdcxx-15.2.0-h934c35e_15 \n  libstdcxx-ng       conda-forge/linux-64::libstdcxx-ng-15.2.0-hdf11a46_15 \n  libzlib            conda-forge/linux-64::libzlib-1.3.1-hb9d3cd8_2 \n  ncurses            conda-forge/linux-64::ncurses-6.5-h2d0b736_3 \n  openssl            conda-forge/linux-64::openssl-3.6.0-h26f9b46_0 \n  pip                conda-forge/noarch::pip-24.0-pyhd8ed1ab_0 \n  python             conda-forge/linux-64::python-3.7.12-hf930737_100_cpython \n  readline           conda-forge/linux-64::readline-8.2-h8c095d6_2 \n  setuptools         conda-forge/noarch::setuptools-69.0.3-pyhd8ed1ab_0 \n  sqlite             conda-forge/linux-64::sqlite-3.51.1-hbc0de68_0 \n  tk                 conda-forge/linux-64::tk-8.6.13-noxft_ha0e22de_103 \n  wheel              conda-forge/noarch::wheel-0.42.0-pyhd8ed1ab_0 \n  xz                 conda-forge/linux-64::xz-5.8.1-hbcc6ac9_2 \n  xz-gpl-tools       conda-forge/linux-64::xz-gpl-tools-5.8.1-hbcc6ac9_2 \n  xz-tools           conda-forge/linux-64::xz-tools-5.8.1-hb9d3cd8_2 \n  zstd               conda-forge/linux-64::zstd-1.5.7-hb78ec9c_6 \n\n\nProceed ([y]/n)? \n\nDownloading and Extracting Packages: ...working... done\nPreparing transaction: ...working... done\nVerifying transaction: ...working... done\nExecuting transaction: ...working... done\n#\n# To activate this environment, use\n#\n#     $ conda activate codex\n#\n# To deactivate an active environment, use\n#\n#     $ conda deactivate\n\n",
-      "stderr": "\n\n==> WARNING: A newer version of conda exists. <==\n    current version: 24.9.2\n    latest version: 25.11.0\n\nPlease update conda by running\n\n    $ conda update -n base -c conda-forge conda\n\n\n",
-      "duration_sec": 81.0930724143982
+      "returncode": 127,
+      "stdout": "",
+      "stderr": "/bin/sh: 1: source: not found\n",
+      "duration_sec": 0.0022125244140625
     },
     {
-      "command": "conda activate codex",
+      "command": "source $CONDA_PREFIX/etc/profile.d/conda.sh && conda activate codex",
       "cwd": "/workspace/repo",
-      "returncode": 1,
+      "returncode": 127,
       "stdout": "",
-      "stderr": "\nCondaError: Run 'conda init' before 'conda activate'\n\n",
-      "duration_sec": 0.4685194492340088
-    },
-    {
-      "command": "git clone https://github.com/openai/human-eval",
-      "cwd": "/workspace/repo",
-      "returncode": 128,
-      "stdout": "",
-      "stderr": "fatal: destination path 'human-eval' already exists and is not an empty directory.\n",
-      "duration_sec": 0.041106462478637695
+      "stderr": "/bin/sh: 1: source: not found\n",
+      "duration_sec": 0.0019788742065429688
     },
     {
       "command": "pip install -e human-eval",
       "cwd": "/workspace/repo",
       "returncode": 1,
-      "stdout": "Obtaining file:///workspace/repo/human-eval\n  Installing build dependencies: started\n  Installing build dependencies: finished with status 'done'\n  Checking if build backend supports build_editable: started\n  Checking if build backend supports build_editable: finished with status 'done'\n  Getting requirements to build editable: started\n  Getting requirements to build editable: finished with status 'done'\n  Preparing editable metadata (pyproject.toml): started\n  Preparing editable metadata (pyproject.toml): finished with status 'done'\nCollecting tqdm (from human-eval==1.0)\n  Downloading tqdm-4.67.1-py3-none-any.whl.metadata (57 kB)\nCollecting fire (from human-eval==1.0)\n  Downloading fire-0.7.1-py3-none-any.whl.metadata (5.8 kB)\nCollecting numpy (from human-eval==1.0)\n  Downloading numpy-2.3.5-cp311-cp311-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl.metadata (62 kB)\nCollecting termcolor (from fire->human-eval==1.0)\n  Downloading termcolor-3.2.0-py3-none-any.whl.metadata (6.4 kB)\nDownloading fire-0.7.1-py3-none-any.whl (115 kB)\nDownloading numpy-2.3.5-cp311-cp311-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl (16.9 MB)\n   \u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501 16.9/16.9 MB 22.6 MB/s  0:00:00\nDownloading termcolor-3.2.0-py3-none-any.whl (7.7 kB)\nDownloading tqdm-4.67.1-py3-none-any.whl (78 kB)\nBuilding wheels for collected packages: human-eval\n  Building editable for human-eval (pyproject.toml): started\n  Building editable for human-eval (pyproject.toml): finished with status 'done'\n  Created wheel for human-eval: filename=human_eval-1.0-0.editable-py3-none-any.whl size=3847 sha256=70b07c0c7e59ad7e9ca5869aa237fde45c6f95e48b18f6df0aa3994ad33ab6c5\n  Stored in directory: /tmp/pip-ephem-wheel-cache-qyfe3fkk/wheels/7e/d8/40/3a650200083cd97811daa2027f0436a995fa7fb2775787aa9b\nSuccessfully built human-eval\nInstalling collected packages: tqdm, termcolor, numpy, fire, human-eval\n\n",
+      "stdout": "Obtaining file:///workspace/repo/human-eval\n  Installing build dependencies: started\n  Installing build dependencies: finished with status 'done'\n  Checking if build backend supports build_editable: started\n  Checking if build backend supports build_editable: finished with status 'done'\n  Getting requirements to build editable: started\n  Getting requirements to build editable: finished with status 'done'\n  Preparing editable metadata (pyproject.toml): started\n  Preparing editable metadata (pyproject.toml): finished with status 'done'\nCollecting tqdm (from human-eval==1.0)\n  Downloading tqdm-4.67.1-py3-none-any.whl.metadata (57 kB)\nCollecting fire (from human-eval==1.0)\n  Downloading fire-0.7.1-py3-none-any.whl.metadata (5.8 kB)\nCollecting numpy (from human-eval==1.0)\n  Downloading numpy-2.3.5-cp311-cp311-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl.metadata (62 kB)\nCollecting termcolor (from fire->human-eval==1.0)\n  Downloading termcolor-3.2.0-py3-none-any.whl.metadata (6.4 kB)\nDownloading fire-0.7.1-py3-none-any.whl (115 kB)\nDownloading numpy-2.3.5-cp311-cp311-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl (16.9 MB)\n   \u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501 16.9/16.9 MB 16.0 MB/s  0:00:01\nDownloading termcolor-3.2.0-py3-none-any.whl (7.7 kB)\nDownloading tqdm-4.67.1-py3-none-any.whl (78 kB)\nBuilding wheels for collected packages: human-eval\n  Building editable for human-eval (pyproject.toml): started\n  Building editable for human-eval (pyproject.toml): finished with status 'done'\n  Created wheel for human-eval: filename=human_eval-1.0-0.editable-py3-none-any.whl size=3847 sha256=d155b8fa3a6581d30ece13d5a12e4f357a3fa7fdd8cfe2c417c070037fea2c4c\n  Stored in directory: /tmp/pip-ephem-wheel-cache-2iuyxsb0/wheels/7e/d8/40/3a650200083cd97811daa2027f0436a995fa7fb2775787aa9b\nSuccessfully built human-eval\nInstalling collected packages: tqdm, termcolor, numpy, fire, human-eval\n\n",
       "stderr": "ERROR: For req: human-eval==1.0. Invalid script entry point: <ExportEntry evaluate_functional_correctness = human_eval.evaluate_functional_correctness:None []> - A callable suffix is required. See https://packaging.python.org/specifications/entry-points/#use-for-scripts for more information.\n",
-      "duration_sec": 11.00268268585205
+      "duration_sec": 13.161671161651611
     }
   ],
   "step_logs": [
     {
-      "id": "Install and Set Up",
-      "description": "Environment setup for HumanEval",
+      "id": "installation",
+      "description": "Installation of the repository",
       "commands": [
-        {
-          "command": "conda create -n codex python=3.7",
-          "cwd": "/workspace/repo",
-          "returncode": 0,
-          "stdout": "WARNING: A conda environment already exists at '/opt/conda/envs/codex'\n\nRemove existing environment?\nThis will remove ALL directories contained within this specified prefix directory, including any other conda environments.\n\n (y/[n])? \n",
-          "stderr": "\nCondaSystemExit: Exiting.\n\n",
-          "duration_sec": 0.4933631420135498
-        },
-        {
-          "command": "conda activate codex",
-          "cwd": "/workspace/repo",
-          "returncode": 1,
-          "stdout": "",
-          "stderr": "\nCondaError: Run 'conda init' before 'conda activate'\n\n",
-          "duration_sec": 0.46317362785339355
-        },
         {
           "command": "git clone https://github.com/openai/human-eval",
           "cwd": "/workspace/repo",
           "returncode": 128,
           "stdout": "",
           "stderr": "fatal: destination path 'human-eval' already exists and is not an empty directory.\n",
-          "duration_sec": 0.00629878044128418
+          "duration_sec": 0.03555870056152344
         },
         {
           "command": "pip install -e human-eval",
           "cwd": "/workspace/repo",
           "returncode": 1,
-          "stdout": "Obtaining file:///workspace/repo/human-eval\n  Installing build dependencies: started\n  Installing build dependencies: finished with status 'done'\n  Checking if build backend supports build_editable: started\n  Checking if build backend supports build_editable: finished with status 'done'\n  Getting requirements to build editable: started\n  Getting requirements to build editable: finished with status 'done'\n  Preparing editable metadata (pyproject.toml): started\n  Preparing editable metadata (pyproject.toml): finished with status 'done'\nRequirement already satisfied: tqdm in /opt/conda/envs/reprocode/lib/python3.11/site-packages (from human-eval==1.0) (4.67.1)\nRequirement already satisfied: fire in /opt/conda/envs/reprocode/lib/python3.11/site-packages (from human-eval==1.0) (0.7.1)\nRequirement already satisfied: numpy in /opt/conda/envs/reprocode/lib/python3.11/site-packages (from human-eval==1.0) (2.3.5)\nRequirement already satisfied: termcolor in /opt/conda/envs/reprocode/lib/python3.11/site-packages (from fire->human-eval==1.0) (3.2.0)\nBuilding wheels for collected packages: human-eval\n  Building editable for human-eval (pyproject.toml): started\n  Building editable for human-eval (pyproject.toml): finished with status 'done'\n  Created wheel for human-eval: filename=human_eval-1.0-0.editable-py3-none-any.whl size=3847 sha256=a2a391b99f5b3f57012f3e49a7b40c02f20408c990be40421e03a8d7d2118bec\n  Stored in directory: /tmp/pip-ephem-wheel-cache-tm2z0_g_/wheels/7e/d8/40/3a650200083cd97811daa2027f0436a995fa7fb2775787aa9b\nSuccessfully built human-eval\nInstalling collected packages: human-eval\n  Attempting uninstall: human-eval\n    Found existing installation: human-eval 1.0\n    Uninstalling human-eval-1.0:\n      Successfully uninstalled human-eval-1.0\n  Rolling back uninstall of human-eval\n  Moving to /opt/conda/envs/reprocode/lib/python3.11/site-packages/__editable__.human_eval-1.0.pth\n   from /tmp/pip-uninstall-nnjofg5x/__editable__.human_eval-1.0.pth\n  Moving to /opt/conda/envs/reprocode/lib/python3.11/site-packages/__editable___human_eval_1_0_finder.py\n   from /tmp/pip-uninstall-nnjofg5x/__editable___human_eval_1_0_finder.py\n  Moving to /opt/conda/envs/reprocode/lib/python3.11/site-packages/__pycache__/\n   from /opt/conda/envs/reprocode/lib/python3.11/site-packages/~_pycache__\n  Moving to /opt/conda/envs/reprocode/lib/python3.11/site-packages/human_eval-1.0.dist-info/\n   from /opt/conda/envs/reprocode/lib/python3.11/site-packages/~uman_eval-1.0.dist-info\n",
+          "stdout": "Obtaining file:///workspace/repo/human-eval\n  Installing build dependencies: started\n  Installing build dependencies: finished with status 'done'\n  Checking if build backend supports build_editable: started\n  Checking if build backend supports build_editable: finished with status 'done'\n  Getting requirements to build editable: started\n  Getting requirements to build editable: finished with status 'done'\n  Preparing editable metadata (pyproject.toml): started\n  Preparing editable metadata (pyproject.toml): finished with status 'done'\nRequirement already satisfied: tqdm in /opt/conda/envs/reprocode/lib/python3.11/site-packages (from human-eval==1.0) (4.67.1)\nRequirement already satisfied: fire in /opt/conda/envs/reprocode/lib/python3.11/site-packages (from human-eval==1.0) (0.7.1)\nRequirement already satisfied: numpy in /opt/conda/envs/reprocode/lib/python3.11/site-packages (from human-eval==1.0) (2.3.5)\nRequirement already satisfied: termcolor in /opt/conda/envs/reprocode/lib/python3.11/site-packages (from fire->human-eval==1.0) (3.2.0)\nBuilding wheels for collected packages: human-eval\n  Building editable for human-eval (pyproject.toml): started\n  Building editable for human-eval (pyproject.toml): finished with status 'done'\n  Created wheel for human-eval: filename=human_eval-1.0-0.editable-py3-none-any.whl size=3847 sha256=eed7fe2c8d402d659d64c8bbf9c8f3849322c644ffa61b375b87c91a53c3b31b\n  Stored in directory: /tmp/pip-ephem-wheel-cache-5tzm1arc/wheels/7e/d8/40/3a650200083cd97811daa2027f0436a995fa7fb2775787aa9b\nSuccessfully built human-eval\nInstalling collected packages: human-eval\n  Attempting uninstall: human-eval\n    Found existing installation: human-eval 1.0\n    Uninstalling human-eval-1.0:\n      Successfully uninstalled human-eval-1.0\n  Rolling back uninstall of human-eval\n  Moving to /opt/conda/envs/reprocode/lib/python3.11/site-packages/__editable__.human_eval-1.0.pth\n   from /tmp/pip-uninstall-ejvk69gm/__editable__.human_eval-1.0.pth\n  Moving to /opt/conda/envs/reprocode/lib/python3.11/site-packages/__editable___human_eval_1_0_finder.py\n   from /tmp/pip-uninstall-ejvk69gm/__editable___human_eval_1_0_finder.py\n  Moving to /opt/conda/envs/reprocode/lib/python3.11/site-packages/__pycache__/\n   from /opt/conda/envs/reprocode/lib/python3.11/site-packages/~_pycache__\n  Moving to /opt/conda/envs/reprocode/lib/python3.11/site-packages/human_eval-1.0.dist-info/\n   from /opt/conda/envs/reprocode/lib/python3.11/site-packages/~uman_eval-1.0.dist-info\n",
           "stderr": "ERROR: For req: human-eval==1.0. Invalid script entry point: <ExportEntry evaluate_functional_correctness = human_eval.evaluate_functional_correctness:None []> - A callable suffix is required. See https://packaging.python.org/specifications/entry-points/#use-for-scripts for more information.\n",
-          "duration_sec": 3.512559652328491
-        }
-      ],
-      "artifacts": {}
-    },
-    {
-      "id": "Prepare Data",
-      "description": "Download example data",
-      "commands": [
-        {
-          "command": "cp data/example_problem.jsonl data/example_samples.jsonl",
-          "cwd": "/workspace/repo/human-eval",
-          "returncode": 0,
-          "stdout": "",
-          "stderr": "",
-          "duration_sec": 0.01996755599975586
+          "duration_sec": 4.977422475814819
         }
       ],
       "artifacts": {
-        "example_problem.jsonl": false,
-        "example_samples.jsonl": false
+        "human-eval directory in the current directory": false
       }
     },
     {
-      "id": "Run Main Experiment",
-      "description": "Evaluate generated samples",
+      "id": "data_download",
+      "description": "Downloading and preparing data",
       "commands": [
         {
-          "command": "python execution.py --problem_file=data/example_problem.jsonl --generate_samples data/example_samples.jsonl --evaluate_functional_correctness samples.jsonl",
+          "command": "wget https://path-to-data-file.com/HumanEval.jsonl.gz",
           "cwd": "/workspace/repo/human-eval",
-          "returncode": 2,
+          "returncode": 4,
           "stdout": "",
-          "stderr": "python: can't open file '/workspace/repo/human-eval/execution.py': [Errno 2] No such file or directory\n",
-          "duration_sec": 0.058545827865600586
+          "stderr": "--2025-12-09 22:14:36--  https://path-to-data-file.com/HumanEval.jsonl.gz\nResolving path-to-data-file.com (path-to-data-file.com)... failed: Name or service not known.\nwget: unable to resolve host address \u2018path-to-data-file.com\u2019\n",
+          "duration_sec": 0.11430907249450684
+        },
+        {
+          "command": "gunzip HumanEval.jsonl.gz",
+          "cwd": "/workspace/repo/human-eval",
+          "returncode": 1,
+          "stdout": "",
+          "stderr": "gzip: HumanEval.jsonl.gz: No such file or directory\n",
+          "duration_sec": 0.00861501693725586
         }
       ],
       "artifacts": {
-        "samples.jsonl_results.jsonl": false
+        "human-eval/HumanEval.jsonl": false
+      }
+    },
+    {
+      "id": "main_experiment",
+      "description": "Running the main experiment",
+      "commands": [
+        {
+          "command": "python -m human_eval.evaluate_functional_correctness data/example_samples.jsonl --problem_file=data/example_problem.jsonl",
+          "cwd": "/workspace/repo/human-eval",
+          "returncode": 1,
+          "stdout": "Reading samples...\n",
+          "stderr": "\n0it [00:00, ?it/s]\n0it [00:00, ?it/s]\nTraceback (most recent call last):\n  File \"<frozen runpy>\", line 198, in _run_module_as_main\n  File \"<frozen runpy>\", line 88, in _run_code\n  File \"/workspace/repo/human-eval/human_eval/evaluate_functional_correctness.py\", line 28, in <module>\n    sys.exit(main())\n             ^^^^^^\n  File \"/workspace/repo/human-eval/human_eval/evaluate_functional_correctness.py\", line 25, in main\n    fire.Fire(entry_point)\n  File \"/opt/conda/envs/reprocode/lib/python3.11/site-packages/fire/core.py\", line 135, in Fire\n    component_trace = _Fire(component, args, parsed_flag_args, context, name)\n                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/conda/envs/reprocode/lib/python3.11/site-packages/fire/core.py\", line 468, in _Fire\n    component, remaining_args = _CallAndUpdateTrace(\n                                ^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/conda/envs/reprocode/lib/python3.11/site-packages/fire/core.py\", line 684, in _CallAndUpdateTrace\n    component = fn(*varargs, **kwargs)\n                ^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/repo/human-eval/human_eval/evaluate_functional_correctness.py\", line 20, in entry_point\n    results = evaluate_functional_correctness(sample_file, k, n_workers, timeout, problem_file)\n              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/repo/human-eval/human_eval/evaluation.py\", line 64, in evaluate_functional_correctness\n    completion = sample[\"completion\"]\n                 ~~~~~~^^^^^^^^^^^^^^\nKeyError: 'completion'\n",
+          "duration_sec": 0.6302585601806641
+        }
+      ],
+      "artifacts": {
+        "human-eval/data/example_samples.jsonl_results.jsonl": false
       }
     }
   ]
