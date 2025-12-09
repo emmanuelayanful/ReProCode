@@ -19,7 +19,8 @@ def _load_local_model():
     import torch
     from transformers import AutoTokenizer, AutoModelForCausalLM
 
-    MODEL_NAME = "Qwen/Qwen1.5-7B-Chat"
+    # Default to Qwen, but allow override (e.g., "meta-llama/Meta-Llama-3-8B-Instruct")
+    MODEL_NAME = os.getenv("HF_MODEL_NAME", "Qwen/Qwen1.5-7B-Chat")
     print(f"[LLM] Loading local model: {MODEL_NAME} ...")
 
     if torch.cuda.is_available():
