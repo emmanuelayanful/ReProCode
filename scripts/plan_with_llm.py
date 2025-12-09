@@ -104,15 +104,17 @@ def build_prompt(paper_id: str, repo_name: str, readme: str, file_tree: str) -> 
         - run the main experiment.
         
         CRITICAL INSTRUCTIONS FOR COMMANDS:
-        - Always use `-y` for `conda create` or `conda install`.
-        - Do not use `sudo`.
-        - If using micromamba:
-          - Do NOT use `micromamba activate`. It requires shell initialization which is fragile in scripts.
-          - Instead, use `micromamba run -n <env_name> <command>` for every command that needs the environment.
-          - Example: `micromamba run -n myenv python main.py`
-        - If a step requires a long-running training, try to find a "demo" or "test" mode if available, or run it as is if that's the only option.
-        - The repository is ALREADY cloned and set as the current working directory. DO NOT include a `git clone` command for the main repository.
-        - Only use `git clone` if you need an *external* dependency not present in the file list.
+        - Use `micromamba` for all environment operations if possible.
+          - `micromamba create -n <env> python=<version> -y`
+          - `micromamba install -n <env> <deps> -y`
+          - `micromamba run -n <env> <command>`
+        - Do NOT use `conda activate` or `micromamba activate`.
+        - For Python dependencies (`requirements.txt` or `setup.py`), prefer using `pip install`. 
+           - Example: `micromamba run -n <env> pip install -r requirements.txt`
+           - Do NOT try to install `requirements.txt` using `conda install` or `micromamba install`.
+        - Legacy Compatibility:
+           - If the repository appears to be older (e.g., uses Python <= 3.9), strictly enforce older build tools to avoid 'Invalid script entry point' errors.
+           - Add this command: `micromamba run -n <env> pip install "setuptools<60.0.0" "wheel<0.37.0"` BEFORE installing the package/requirements.
 
         {PLAN_SCHEMA}
 
