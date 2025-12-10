@@ -6,3 +6,18 @@ P04,SWE-Bench,https://github.com/swe-bench/swe-bench
 P05,StarCoder,https://github.com/bigcode-project/starcoder
 P06,CodeT5,https://github.com/salesforce/CodeT5
 P07,CodeRAG-Bench,https://github.com/code-rag-bench/code-rag-bench
+P08,Whisper ASR (OpenAI),https://github.com/openai/whisper
+P09,CLIP (OpenAI),https://github.com/openai/CLIP
+P10,Simple Transformers,https://github.com/ThilinaRajapakse/simpletransformers
+P11,FastAI,https://github.com/fastai/fastai
+P12,SentenceTransformers,https://github.com/UKPLab/sentence-transformers
+P13,LlamaIndex (Simple LLM Apps),https://github.com/run-llama/llama_index
+P14,HuggingFace Datasets,https://github.com/huggingface/datasets
+P15,HuggingFace Evaluate,https://github.com/huggingface/evaluate
+P16,Gradio (Web UI Library),https://github.com/gradio-app/gradio
+P17,Lit-GPT (Modular Training Framework),https://github.com/Lightning-AI/lit-gpt
+P18,Diffusers (HF Diffusion Library),https://github.com/huggingface/diffusers
+P19,Pytorch Lightning (Simple Training),https://github.com/Lightning-AI/lightning
+P20,Scikit-Learn,https://github.com/scikit-learn/scikit-learn
+P21,OpenAI Triton Examples,https://github.com/openai/triton/tree/master/python/tutorials
+P22,Streamlit (Simple ML App Deployments),https://github.com/streamlit/streamlit
