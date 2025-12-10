@@ -1,0 +1,26 @@
+[
+  {
+    "model": "extra_trees",
+    "mae": 0.0513,
+    "r2": 0.8264,
+    "n_train": 14,
+    "n_test": 7,
+    "model_path": "/Users/munibahmed/Desktop/AI_final_project/ReProCode/models/extra_trees.pkl"
+  },
+  {
+    "model": "random_forest",
+    "mae": 0.1337,
+    "r2": 0.2549,
+    "n_train": 14,
+    "n_test": 7,
+    "model_path": "/Users/munibahmed/Desktop/AI_final_project/ReProCode/models/random_forest.pkl"
+  },
+  {
+    "model": "hist_gb",
+    "mae": 0.1745,
+    "r2": -0.0013,
+    "n_train": 14,
+    "n_test": 7,
+    "model_path": "/Users/munibahmed/Desktop/AI_final_project/ReProCode/models/hist_gb.pkl"
+  }
+]
