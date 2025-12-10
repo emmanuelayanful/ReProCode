@@ -1,0 +1,44 @@
+{
+  "paper_id": "P09",
+  "repo_name": "Kinto/kinto",
+  "env": {
+    "type": "conda",
+    "setup_commands": [
+      "micromamba create -n kinto_dev python=3.10 -y",
+      "micromamba install -n kinto_dev -c conda-forge numpy pandas psycopg2-binary -y",
+      "micromamba run -n kinto_dev pip install -r requirements.txt --upgrade"
+    ]
+  },
+  "steps": [
+    {
+      "id": "Install Dependencies",
+      "description": "Set up the development environment with required packages",
+      "working_dir": ".",
+      "commands": [
+        "source activate kinto_dev",
+        "pip install -r requirements.txt"
+      ],
+      "expected_artifacts": []
+    },
+    {
+      "id": "Prepare Data (if applicable)",
+      "description": "If data is provided, download or prepare it in the kinto_dev environment",
+      "working_dir": "./",
+      "commands": [
+        "if exists data.csv; then cp data.csv kinto_dev/data.csv; fi"
+      ],
+      "expected_artifacts": [
+        "data.csv"
+      ]
+    },
+    {
+      "id": "Run Experiment",
+      "description": "Execute the main experiment using the Kinto server",
+      "working_dir": "./",
+      "commands": [
+        "python app.wsgi"
+      ],
+      "expected_artifacts": []
+    }
+  ]
+}

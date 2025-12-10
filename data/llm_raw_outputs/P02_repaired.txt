@@ -19,9 +19,7 @@
             "commands": [
                 "source activate codex",
                 "pip install -r human-eval/requirements.txt",
-                "pip install " +
-                    "setuptools<60.0.0" +
-                    " wheel<0.37.0"
+                "pip install \"setuptools<60.0.0\" \"wheel<0.37.0\"",
             ],
             "expected_artifacts": []
         },

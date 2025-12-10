@@ -5,38 +5,42 @@
     "env": {
         "type": "conda",
         "setup_commands": [
-            "conda create -n codet5-environment python=3.8",
-            "conda activate codet5-environment",
-            "conda install -c conda-forge transformers torch numpy pandas scikit-learn"
+            "micromamba create -n codet5_env python=3.9 -y",
+            "micromamba install -n codet5_env pip>=21.3.1",
+            "micromamba install -n codet5_env torch torchvision transformers scikit-learn numpy pandas",
+            "micromamba install -n codet5_env git",
+            "pip install --upgrade setuptools wheel"
         ]
     },
     "steps": [
         {
-            "id": "install_dependencies",
-            "description": "Install required dependencies",
+            "id": "Install Dependencies",
+            "description": "Install required packages using Conda",
             "working_dir": "/path/to/repo",
             "commands": [
+                "source activate codet5_env",
                 "pip install -r requirements.txt"
             ],
-            "expected_artifacts": []
+            "expected_artifacts": ["dependency_package_list.txt"]
         },
         {
-            "id": "download_data",
-            "description": "Download data (if applicable)",
+            "id": "Prepare Data (if applicable)",
+            "description": "Download or preprocess data (if not provided)",
             "working_dir": "/path/to/repo",
             "commands": [
-                "python scripts/download_data.py"
+                "python CodeT5/run_download_data.py"
             ],
-            "expected_artifacts": ["data.zip"]
+            "expected_artifacts": ["data_downloaded.zip"]
         },
         {
-            "id": "run_main_experiment",
-            "description": "Run the main experiment (CodeGen)",
+            "id": "Run Main Experiment",
+            "description": "Execute the main experiment using run_multi_gen.py",
             "working_dir": "/path/to/repo",
             "commands": [
-                "python scripts/run_gen.py --config path/to/config.yaml"
+                "source activate codet5_env",
+                "python CodeT5/run_multi_gen.py --config path/to/config/file"
             ],
-            "expected_artifacts": ["output.txt", "predictions.json"]
+            "expected_artifacts": ["output_files.tar.gz"]
         }
     ]
 }

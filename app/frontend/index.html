@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ReProCode Scoring</title>
+  <style>
+    :root {
+      --bg: #0b1021;
+      --card: #11162a;
+      --text: #e7ecff;
+      --muted: #9aa7c7;
+      --accent: #5dd1ff;
+      --accent-2: #9d7bff;
+      --border: #1e2740;
+      --success: #5dd19f;
+      --error: #ff6b7a;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Inter", system-ui, -apple-system, sans-serif;
+      background: radial-gradient(circle at 20% 20%, rgba(93,209,255,0.08), transparent 25%),
+                  radial-gradient(circle at 80% 10%, rgba(157,123,255,0.10), transparent 25%),
+                  radial-gradient(circle at 50% 80%, rgba(93,209,255,0.05), transparent 30%),
+                  var(--bg);
+      color: var(--text);
+    }
+    .shell {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 32px 24px 48px;
+    }
+    h1 { margin: 0 0 8px; letter-spacing: -0.02em; }
+    p.lead { margin: 0 0 24px; color: var(--muted); }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+    }
+    label { display: block; margin-bottom: 6px; color: var(--muted); font-size: 0.95rem; }
+    input, button {
+      font-size: 1rem;
+      padding: 12px 14px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: #0f1526;
+      color: var(--text);
+      width: 100%;
+    }
+    input:focus { outline: 2px solid var(--accent); }
+    .row { margin-bottom: 16px; }
+    .actions { display: flex; gap: 12px; flex-wrap: wrap; }
+    .btn {
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: all 0.2s ease;
+      width: auto;
+    }
+    .btn-primary { background: linear-gradient(120deg, var(--accent), var(--accent-2)); color: #0b1021; font-weight: 600; }
+    .btn-ghost { background: transparent; border-color: var(--border); }
+    .btn:hover { transform: translateY(-1px); }
+    .pill { display: inline-flex; align-items: center; gap: 6px; padding: 6px 10px; border-radius: 999px; font-size: 0.9rem; }
+    .pill.status { background: rgba(93,209,255,0.12); color: var(--accent); }
+    .pill.fail { background: rgba(255,107,122,0.12); color: var(--error); }
+    .grid { display: grid; gap: 12px; }
+    .grid.two { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+    .panel { border: 1px solid var(--border); border-radius: 12px; padding: 14px; background: #0f1526; }
+    .panel h3 { margin: 0 0 6px; font-size: 1rem; }
+    .panel .value { font-size: 1.4rem; font-weight: 700; }
+    .muted { color: var(--muted); font-size: 0.95rem; }
+    .logs { white-space: pre-wrap; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; background: #0c1221; border: 1px solid var(--border); border-radius: 12px; padding: 14px; max-height: 320px; overflow: auto; }
+    .progress {
+      position: relative;
+      height: 10px;
+      width: 100%;
+      background: var(--border);
+      border-radius: 999px;
+      overflow: hidden;
+      margin-top: 8px;
+      display: none;
+    }
+    .progress .bar {
+      position: absolute;
+      height: 100%;
+      width: 20%;
+      background: linear-gradient(120deg, var(--accent), var(--accent-2));
+      border-radius: 999px;
+      animation: load 1.6s ease-in-out infinite;
+    }
+    @keyframes load {
+      0% { left: -25%; width: 20%; }
+      50% { left: 40%; width: 35%; }
+      100% { left: 105%; width: 20%; }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <h1>ReProCode Scoring</h1>
+    <p class="lead">Get a quick static score or run an advanced (LLM + Docker) reproducibility check on a GitHub repo.</p>
+
+    <div class="card">
+      <div class="row">
+        <label>GitHub URL</label>
+        <input id="repo" type="text" placeholder="https://github.com/owner/repo" />
+      </div>
+      <div class="row">
+        <label>LLM Model (advanced)</label>
+        <input id="model" type="text" value="Qwen/Qwen1.5-1.8B-Chat" />
+      </div>
+      <div class="row actions">
+        <button class="btn btn-primary" onclick="quickScore()">Quick Score</button>
+        <button class="btn btn-ghost" onclick="advancedScore()">Advanced Score</button>
+      </div>
+      <div class="row" id="status"></div>
+      <div class="progress" id="progress"><div class="bar"></div></div>
+    </div>
+
+    <div style="height:12px;"></div>
+
+    <div class="grid two" id="metrics" style="display:none;">
+      <div class="panel">
+        <h3>Static Score</h3>
+        <div class="value" id="static-score">–</div>
+        <div class="muted">Computed from metadata checklist.</div>
+      </div>
+      <div class="panel">
+        <h3>Dynamic Score</h3>
+        <div class="value" id="dynamic-score">–</div>
+        <div class="muted">From execution logs (advanced only).</div>
+      </div>
+      <div class="panel">
+        <h3>Hybrid Score</h3>
+        <div class="value" id="hybrid-score">–</div>
+        <div class="muted">Weighted static + dynamic.</div>
+      </div>
+      <div class="panel">
+        <h3>Paper ID</h3>
+        <div class="value" id="paper-id">–</div>
+        <div class="muted">Identifier for this run.</div>
+      </div>
+    </div>
+
+    <div style="height:12px;"></div>
+
+    <div class="card">
+      <div class="row" id="pill-row" style="margin-bottom:12px; display:none;"></div>
+      <div class="logs" id="output"></div>
+    </div>
+  </div>
+
+<script>
+async function quickScore() {
+  const repo = document.getElementById('repo').value.trim();
+  if (!repo) return alert('Enter a GitHub URL');
+  setStatus('Running quick score...');
+  showProgress(true);
+  const res = await fetch('/score/quick', {
+    method: 'POST', headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({ github_url: repo })
+  });
+  const data = await res.json();
+  renderResult(data, 'completed');
+  setStatus('Done');
+  showProgress(false);
+}
+
+async function advancedScore() {
+  const repo = document.getElementById('repo').value.trim();
+  const model = document.getElementById('model').value.trim();
+  if (!repo) return alert('Enter a GitHub URL');
+  setStatus('Queued advanced score...');
+  showProgress(true);
+  const res = await fetch('/score/advanced', {
+    method: 'POST', headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({ github_url: repo, model_name: model })
+  });
+  const data = await res.json();
+  renderResult(data, data.status || 'queued');
+  if (data.job_id) pollJob(data.job_id);
+}
+
+async function pollJob(jobId) {
+  setStatus('Running advanced score...');
+  const res = await fetch(`/jobs/${jobId}`);
+  const data = await res.json();
+  renderResult(data, data.status || 'running');
+  if (data.status === 'completed' || data.status === 'failed') {
+    setStatus(`Job ${data.status}`);
+    showProgress(false);
+  } else {
+    setTimeout(() => pollJob(jobId), 5000);
+  }
+}
+
+function setStatus(msg) {
+  document.getElementById('status').innerText = msg;
+}
+
+function renderResult(obj, status) {
+  // Pills
+  const pillRow = document.getElementById('pill-row');
+  pillRow.style.display = 'block';
+  pillRow.innerHTML = '';
+  const pill = document.createElement('div');
+  pill.className = 'pill status';
+  pill.innerText = status;
+  if (status === 'failed') pill.className = 'pill fail';
+  pillRow.appendChild(pill);
+
+  // Metrics
+  const metrics = document.getElementById('metrics');
+  metrics.style.display = 'grid';
+  document.getElementById('paper-id').innerText = obj.paper_id || '–';
+  document.getElementById('static-score').innerText = formatScore(obj.static_score);
+  document.getElementById('dynamic-score').innerText = formatScore(obj.dynamic_score);
+  document.getElementById('hybrid-score').innerText = formatScore(obj.final_score);
+
+  // Raw JSON
+  document.getElementById('output').textContent = JSON.stringify(obj, null, 2);
+}
+
+function showProgress(show) {
+  const p = document.getElementById('progress');
+  p.style.display = show ? 'block' : 'none';
+}
+
+function formatScore(x) {
+  if (x === null || x === undefined || Number.isNaN(x)) return '–';
+  return Number(x).toFixed(2);
+}
+</script>
+</body>
+</html>
