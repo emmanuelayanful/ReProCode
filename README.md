@@ -112,7 +112,7 @@ We extract GitHub metadata such as:
 To run:
 
 ```bash
-python scripts/collect_metadata.py
+python -m scripts.collect_metadata
 ```
 
 Output = `data/raw_metadata.json`

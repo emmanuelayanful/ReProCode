@@ -1,46 +1,60 @@
-```json
 {
-    "paper_id": "P04",
-    "repo_name": "swe-bench/swe-bench",
-    "env": {
-        "type": "conda",
-        "setup_commands": [
-            "micromamba create -n swe-bench python=3.8 -y",
-            "micromamba install -n swe-bench -c conda-forge numpy pandas scikit-learn matplotlib pyyaml huggingface transformers==4.21.0 -y",
-            "micromamba run -n swe-bench pip install " +
-                "setuptools<60.0.0 wheel<0.37.0" +
-                " -r requirements.txt"
-        ]
-    },
-    "steps": [
-        {
-            "id": "Install dependencies",
-            "description": "Set up the environment with required packages",
-            "working_dir": ".",
-            "commands": [
-                "source activate swe-bench",
-                "pip install -r requirements.txt"
-            ],
-            "expected_artifacts": []
-        },
-        {
-            "id": "Prepare dataset (optional)",
-            "description": "Download SWE-bench data if not present",
-            "working_dir": "swebench",
-            "commands": [
-                "python -m swebench.collect/download_data"
-            ],
-            "expected_artifacts": ["swe-bench_dataset.zip"]
-        },
-        {
-            "id": "Run evaluation",
-            "description": "Evaluate a model on SWE-bench Lite",
-            "working_dir": "swebench",
-            "commands": [
-                "python -m swebench.harness.run_evaluation --dataset_name princeton-nlp/SWE-bench_Lite --predictions_path <path_to_predictions> --max_workers <num_workers> --run_id <run_id>"
-            ],
-            "expected_artifacts": ["evaluation_results"]
-        }
+  "paper_id": "P04",
+  "repo_name": "swe-bench/swe-bench",
+  "env": {
+    "type": "conda",
+    "setup_commands": [
+      "micromamba create -n swe-bench python=3.8 -y",
+      "micromamba install -n swe-bench pip -y",
+      "micromamba install -n swe-bench -c conda-forge -y pytest",
+      "micromamba install -n swe-bench -c conda-forge -y black",
+      "micromamba install -n swe-bench -c conda-forge -y flake8",
+      "micromamba install -n swe-bench -c conda-forge -y mypy",
+      "micromamba install -n swe-bench -c conda-forge -y pre-commit",
+      "micromamba install -n swe-bench -c conda-forge -y pytest-cov",
+      "micromamba install -n swe-bench -c conda-forge -y pytest-xdist",
+      "micromamba install -n swe-bench -c conda-forge -y pytest-mock",
+      "micromamba install -n swe-bench -c conda-forge -y pytest-black",
+      "micromamba install -n swe-bench -c conda-forge -y pytest-flake8",
+      "micromamba install -n swe-bench -c conda-forge -y pytest-mypy",
+      "micromamba install -n swe-bench -c conda-forge -y pytest-isort",
+      "micromamba install -n swe-bench -c conda-forge -y pytest-cov",
+      "micromamba install -n swe-bench -c conda-forge -y pytest-xdist",
+      "micromamba install -n swe-bench -c conda-forge -y pytest-mock",
+      "micromamba install -n swe-bench -c conda-forge -y pytest-black",
+      "micromamba install -n swe-bench -c conda-forge -y pytest-flake8",
+      "micromamba install -n swe-bench -c conda-forge -y pytest-mypy",
+      "micromamba install -n swe-bench -c conda-forge -y pytest-isort",
+      "micromamba run -n swe-bench pip install -e ."
     ]
+  },
+  "steps": [
+    {
+      "id": "install_dependencies",
+      "description": "Install dependencies",
+      "working_dir": ".",
+      "commands": [
+        "micromamba run -n swe-bench pip install -r requirements.txt"
+      ],
+      "expected_artifacts": ["requirements.txt"]
+    },
+    {
+      "id": "prepare_data",
+      "description": "Prepare data",
+      "working_dir": ".",
+      "commands": [
+        "micromamba run -n swe-bench python swebench/collect/build_dataset.py"
+      ],
+      "expected_artifacts": ["swebench/collect/build_dataset.py"]
+    },
+    {
+      "id": "run_main_experiment",
+      "description": "Run main experiment",
+      "working_dir": ".",
+      "commands": [
+        "micromamba run -n swe-bench pytest tests"
+      ],
+      "expected_artifacts": ["tests"]
+    }
+  ]
 }
-```

@@ -1,0 +1,68 @@
+{
+  "paper_id": "P16",
+  "repo_name": "emmanuelayanful/ReProCode",
+  "env": {
+    "type": "conda",
+    "setup_commands": [
+      "micromamba create -n reprocode python=3.9 -y",
+      "micromamba install -n reprocode pip -y",
+      "micromamba run -n reprocode pip install -r requirements.txt",
+      "micromamba run -n reprocode pip install git+https://github.com/huggingface/transformers.git",
+      "micromamba run -n reprocode pip install git+https://github.com/huggingface/datasets.git",
+      "micromamba run -n reprocode pip install git+https://github.com/huggingface/accelerate.git",
+      "micromamba run -n reprocode pip install git+https://github.com/huggingface/optimum.git"
+    ]
+  },
+  "steps": [
+    {
+      "id": "install_dependencies",
+      "description": "Install the project dependencies",
+      "working_dir": ".",
+      "commands": [
+        "micromamba run -n reprocode pip install -r requirements.txt"
+      ],
+      "expected_artifacts": ["requirements.txt"]
+    },
+    {
+      "id": "collect_metadata",
+      "description": "Collect metadata from the GitHub repositories",
+      "working_dir": "scripts",
+      "commands": [
+        "micromamba run -n reprocode python collect_metadata.py"
+      ],
+      "expected_artifacts": ["data/raw_metadata.json"]
+    },
+    {
+      "id": "compute_score",
+      "description": "Compute the reproducibility difficulty score",
+      "working_dir": "scripts",
+      "commands": [
+        "micromamba run -n reprocode python compute_score.py"
+      ],
+      "expected_artifacts": ["data/repro_scores.csv"]
+    },
+    {
+      "id": "train_model",
+      "description": "Train the regression model",
+      "working_dir": "scripts",
+      "commands": [
+        "micromamba run -n reprocode python train_model.py"
+      ],
+      "expected_artifacts": ["models/rds_regressor.pkl"]
+    },
+    {
+      "id": "run_docker",
+      "description": "Run the project in Docker",
+      "working_dir": "scripts",
+      "commands": [
+        "docker build -f Dockerfile.reprocode -t reprocode-base .",
+        "mkdir repo",
+        "micromamba run -n reprocode python clone_repos.py",
+        "micromamba run -n reprocode python plan_with_llm.py",
+        "micromamba run -n reprocode python run_all_in_docker.py",
+        "micromamba run -n reprocode python compute_hybrid_score.py"
+      ],
+      "expected_artifacts": ["results/top_models_metrics.json", "results/feature_importances.csv", "results/model_comparison.csv", "results/model_metrics.json", "results/top_models_metrics.csv", "results/test_predictions.csv"]
+    }
+  ]
+}

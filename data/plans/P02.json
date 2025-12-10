@@ -3,17 +3,35 @@
   "repo_name": "openai/human-eval",
   "env": {
     "type": "conda",
-    "setup_commands": []
+    "setup_commands": [
+      "micromamba create -n codex python=3.7 -y",
+      "micromamba install -n codex pip -y",
+      "micromamba run -n codex pip install setuptools<60.0.0 wheel<0.37.0 -y"
+    ]
   },
   "steps": [
     {
-      "id": "fallback-json-error",
-      "description": "Fallback step because JSON decoding failed, and repair also failed.",
-      "working_dir": ".",
+      "id": "installation",
+      "description": "Install the repository and its dependencies",
+      "working_dir": "~",
       "commands": [
-        "ls"
+        "git clone https://github.com/openai/human-eval",
+        "micromamba run -n codex pip install -e human-eval"
       ],
-      "expected_artifacts": []
+      "expected_artifacts": [
+        "human-eval"
+      ]
+    },
+    {
+      "id": "usage",
+      "description": "Run the main experiment",
+      "working_dir": "human-eval",
+      "commands": [
+        "micromamba run -n codex python generate_samples.py"
+      ],
+      "expected_artifacts": [
+        "samples.jsonl"
+      ]
     }
   ]
 }

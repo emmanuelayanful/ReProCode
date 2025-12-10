@@ -1,0 +1,47 @@
+{
+  "paper_id": "P15",
+  "repo_name": "habeeb3579/Spectoprep",
+  "env": {
+    "type": "micromamba",
+    "setup_commands": [
+      "micromamba create -n spectoprep python=3.9 -y",
+      "micromamba install -n spectoprep pip -y",
+      "micromamba run -n spectoprep pip install -r requirements_dev.txt"
+    ]
+  },
+  "steps": [
+    {
+      "id": "install_dependencies",
+      "description": "Installing dependencies",
+      "working_dir": "",
+      "commands": [
+        "micromamba run -n spectoprep pip install -r requirements_dev.txt"
+      ],
+      "expected_artifacts": [
+        "spectoprep environment with installed dependencies"
+      ]
+    },
+    {
+      "id": "prepare_data",
+      "description": "Preparing data",
+      "working_dir": "",
+      "commands": [
+        "micromamba run -n spectoprep pip install -r requirements_dev.txt"
+      ],
+      "expected_artifacts": [
+        "spectoprep environment with prepared data"
+      ]
+    },
+    {
+      "id": "run_main_experiment",
+      "description": "Running main experiment",
+      "working_dir": "",
+      "commands": [
+        "micromamba run -n spectoprep python -m spectoprep.cli"
+      ],
+      "expected_artifacts": [
+        "Results of the main experiment"
+      ]
+    }
+  ]
+}

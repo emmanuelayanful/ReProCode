@@ -1,51 +1,33 @@
-```json
 {
-    "paper_id": "P02",
-    "repo_name": "openai/human-eval",
-    "env": {
-        "type": "conda",
-        "setup_commands": [
-            "micromamba create -n codex python=3.7 -y",
-            "micromamba install -n codex numpy pandas torch>=1.7.1 transformers>=4.11.3 -y",
-            "micromamba run -n codex pip install -r human-eval/requirements.txt --ignore-installed setuptools wheel<0.37.0",
-            "conda install -n codex -c conda-forge git"
-        ]
-    },
-    "steps": [
-        {
-            "id": "Install Dependencies",
-            "description": "Install required packages and set up the environment",
-            "working_dir": ".",
-            "commands": [
-                "source activate codex",
-                "pip install -r human-eval/requirements.txt",
-                "pip install " +
-                    "setuptools<60.0.0" +
-                    " wheel<0.37.0"
-            ],
-            "expected_artifacts": []
-        },
-        {
-            "id": "Prepare Data",
-            "description": "Download example data (if not present)",
-            "working_dir": "human-eval",
-            "commands": [
-                "if ! test -f data/example_samples.jsonl; then",
-                "    git clone https://github.com/openai/human-eval.git .",
-                "fi",
-            ],
-            "expected_artifacts": ["data/example_samples.jsonl"]
-        },
-        {
-            "id": "Run Main Experiment",
-            "description": "Evaluate functional correctness with provided example code",
-            "working_dir": "human-eval",
-            "commands": [
-                "python execution.py --problem_file=data/example_problem.jsonl --generate_samples True --save_samples samples.jsonl",
-                "python evaluate_functional_correctness samples.jsonl --problem_file=data/example_problem.jsonl --result_file samples.jsonl_results.jsonl"
-            ],
-            "expected_artifacts": ["samples.jsonl", "samples.jsonl_results.jsonl"]
-        }
+  "paper_id": "P02",
+  "repo_name": "openai/human-eval",
+  "env": {
+    "type": "conda",
+    "setup_commands": [
+      "micromamba create -n codex python=3.7 -y",
+      "micromamba install -n codex pip -y",
+      "micromamba run -n codex pip install setuptools<60.0.0 wheel<0.37.0 -y"
     ]
+  },
+  "steps": [
+    {
+      "id": "installation",
+      "description": "Install the repository and its dependencies",
+      "working_dir": "~",
+      "commands": [
+        "git clone https://github.com/openai/human-eval",
+        "micromamba run -n codex pip install -e human-eval"
+      ],
+      "expected_artifacts": ["human-eval"]
+    },
+    {
+      "id": "usage",
+      "description": "Run the main experiment",
+      "working_dir": "human-eval",
+      "commands": [
+        "micromamba run -n codex python generate_samples.py"
+      ],
+      "expected_artifacts": ["samples.jsonl"]
+    }
+  ]
 }
-```

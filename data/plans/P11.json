@@ -1,0 +1,47 @@
+{
+  "paper_id": "P11",
+  "repo_name": "activist-org/activist",
+  "env": {
+    "type": "conda",
+    "setup_commands": [
+      "micromamba create -n activist python=3.11 -y",
+      "micromamba install -n activist pip -y",
+      "micromamba run -n activist pip install -r backend/requirements-dev.txt"
+    ]
+  },
+  "steps": [
+    {
+      "id": "install_dependencies",
+      "description": "Installing dependencies",
+      "working_dir": ".",
+      "commands": [
+        "micromamba run -n activist pip install -r backend/requirements-dev.txt"
+      ],
+      "expected_artifacts": [
+        "backend/requirements-dev.txt"
+      ]
+    },
+    {
+      "id": "prepare_data",
+      "description": "Preparing data",
+      "working_dir": ".",
+      "commands": [
+        "micromamba run -n activist python manage.py migrate"
+      ],
+      "expected_artifacts": [
+        "backend/db.sqlite3"
+      ]
+    },
+    {
+      "id": "run_experiment",
+      "description": "Running the main experiment",
+      "working_dir": ".",
+      "commands": [
+        "micromamba run -n activist python manage.py runserver"
+      ],
+      "expected_artifacts": [
+        "Server logs"
+      ]
+    }
+  ]
+}
