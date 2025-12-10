@@ -1,3 +1,5 @@
+# scripts/compute_hybrid_score.py
+
 import yaml
 import json
 import pandas as pd
@@ -50,25 +52,31 @@ def compute_dynamic_score(paper_id):
         print(f"[ERR] Invalid JSON for {paper_id}. Defaulting dynamic score to 1.0")
         return 1.0
 
-    # 1. Environment Penalty
-    # If any environment setup command failed (returncode != 0), it's a critical failure.
+    # 1. Environment Penalty (20% weight)
     env_logs = log.get("env_logs", [])
-    for entry in env_logs:
-        if entry.get("returncode", 0) != 0:
-            return 1.0  # Critical failure
+    total_env_cmds = len(env_logs)
+    if total_env_cmds > 0:
+        failed_env_cmds = sum(1 for entry in env_logs if entry.get("returncode", 0) != 0 and entry.get("stderr", "").strip())
+        env_penalty = failed_env_cmds / total_env_cmds
+    else:
+        env_penalty = 0.0
 
-    # 2. Step Execution Penalty (60% weight of dynamic score)
+    # 2. Step Execution Penalty (40% weight)
     step_logs = log.get("step_logs", [])
     total_steps = len(step_logs)
-    if total_steps == 0:
-        return 1.0 # No steps executed is a failure
-
-    failed_steps = sum(1 for step in step_logs 
-                       if any(c.get("returncode", 0) != 0 for c in step.get("commands", [])))
     
-    step_penalty = failed_steps / total_steps
+    if total_steps > 0:
+        failed_steps = sum(1 for step in step_logs 
+                           if any(c.get("returncode", 0) != 0 and c.get("stderr", "").strip() for c in step.get("commands", [])))
+        step_penalty = failed_steps / total_steps
+    else:
+        # If no steps were executed but env succeeded (or partially succeeded), 
+        # it might mean there were simply no steps defined. 
+        # However, usually no steps means nothing happened.
+        # Let's assume if 0 steps, full penalty for step portion.
+        step_penalty = 1.0
 
-    # 3. Artifact Penalty (40% weight of dynamic score)
+    # 3. Artifact Penalty (40% weight)
     total_artifacts = 0
     missing_artifacts = 0
     
@@ -84,8 +92,10 @@ def compute_dynamic_score(paper_id):
         artifact_penalty = 0.0 # No artifacts expected, so no penalty
 
     # Dynamic Raw Score = Weighted sum of penalties
-    # If env passed, score is mix of step failures and missing artifacts
-    dynamic_score = (0.6 * step_penalty) + (0.4 * artifact_penalty)
+    # Env (20%) + Steps (40%) + Artifacts (40%)
+    dynamic_score = (0.2 * env_penalty) + (0.4 * step_penalty) + (0.4 * artifact_penalty)
+    
+    print(f"DEBUG {paper_id}: Env={env_penalty:.2f} ({failed_env_cmds if 'failed_env_cmds' in locals() else '?'}/{total_env_cmds if 'total_env_cmds' in locals() else '?'}), Steps={step_penalty:.2f} ({failed_steps if 'failed_steps' in locals() else '?'}/{total_steps if 'total_steps' in locals() else '?'}), Artifacts={artifact_penalty:.2f}")
     
     return max(0.0, min(1.0, dynamic_score))
 
