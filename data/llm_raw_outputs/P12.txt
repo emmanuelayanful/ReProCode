@@ -1,0 +1,33 @@
+{
+  "paper_id": "P12",
+  "repo_name": "borgbackup/borg",
+  "env": {
+    "type": "micromamba",
+    "setup_commands": [
+      "micromamba create -n borg_env python=3.9 -y",
+      "micromamba install -n borg_env pip -y",
+      "micromamba run -n borg_env pip install setuptools<60.0.0",
+      "micromamba run -n borg_env pip install wheel<0.37.0"
+    ]
+  },
+  "steps": [
+    {
+      "id": "install_dependencies",
+      "description": "Installing dependencies",
+      "working_dir": ".",
+      "commands": [
+        "micromamba run -n borg_env pip install -r requirements.txt"
+      ],
+      "expected_artifacts": ["borgbackup/borg"]
+    },
+    {
+      "id": "run_main_experiment",
+      "description": "Running the main experiment",
+      "working_dir": ".",
+      "commands": [
+        "micromamba run -n borg_env python src/borg/__main__.py"
+      ],
+      "expected_artifacts": ["output of the main experiment"]
+    }
+  ]
+}

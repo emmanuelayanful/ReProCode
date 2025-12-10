@@ -4,41 +4,33 @@
   "env": {
     "type": "conda",
     "setup_commands": [
-      "micromamba create -n mem0_dev python=3.9 -y",
-      "micromamba install -n mem0_dev -c conda-forge numpy pandas torch transformers scikit-learn"
+      "micromamba create -n mem0 python=3.9 -y",
+      "micromamba install -n mem0 pip -y",
+      "micromamba run -n mem0 pip install -U pip setuptools wheel -y",
+      "micromamba run -n mem0 pip install -r requirements.txt"
     ]
   },
   "steps": [
     {
-      "id": "Install Dependencies",
-      "description": "Install required packages for the project",
+      "id": "install_dependencies",
+      "description": "Install the project dependencies",
       "working_dir": ".",
       "commands": [
-        "micromamba run -n mem0_dev pip install -r poetry.lock"
-      ],
-      "expected_artifacts": []
-    },
-    {
-      "id": "Prepare Data (if applicable)",
-      "description": "Download or preprocess data if not included in the repo",
-      "working_dir": "data",
-      "commands": [
-        "<!-- Add commands for downloading or preprocessing data if needed -->"
+        "micromamba run -n mem0 pip install -r requirements.txt"
       ],
       "expected_artifacts": [
-        "data.zip",
-        "processed_data.csv"
+        "requirements.txt"
       ]
     },
     {
-      "id": "Run Main Experiment",
-      "description": "Execute the main experiment using Mem0",
-      "working_dir": "src",
+      "id": "run_main_experiment",
+      "description": "Run the main experiment",
+      "working_dir": ".",
       "commands": [
-        "micromamba run -n mem0_dev python tests/test_memory.py"
+        "micromamba run -n mem0 python main.py"
       ],
       "expected_artifacts": [
-        "results.csv"
+        "main.py"
       ]
     }
   ]

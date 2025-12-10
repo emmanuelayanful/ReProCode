@@ -1,0 +1,51 @@
+{
+  "paper_id": "P13",
+  "repo_name": "arviz-devs/arviz",
+  "env": {
+    "type": "micromamba",
+    "setup_commands": [
+      "micromamba create -n arviz python=3.10 -y",
+      "micromamba install -n arviz pip -y",
+      "micromamba run -n arviz pip install -U pip setuptools wheel -y",
+      "micromamba run -n arviz pip install -r requirements.txt"
+    ]
+  },
+  "steps": [
+    {
+      "id": "install_dependencies",
+      "description": "Installing dependencies",
+      "working_dir": ".",
+      "commands": [
+        "micromamba run -n arviz pip install -r requirements.txt"
+      ],
+      "expected_artifacts": [
+        "arviz package installed in the environment"
+      ]
+    },
+    {
+      "id": "download_data",
+      "description": "Downloading data",
+      "working_dir": "arviz/data/example_data",
+      "commands": [
+        "micromamba run -n arviz pip install -r requirements.txt",
+        "wget https://raw.githubusercontent.com/arviz-devs/arviz/main/arviz/data/example_data/data_local.json",
+        "wget https://raw.githubusercontent.com/arviz-devs/arviz/main/arviz/data/example_data/data_remote.json"
+      ],
+      "expected_artifacts": [
+        "data_local.json",
+        "data_remote.json"
+      ]
+    },
+    {
+      "id": "run_main_experiment",
+      "description": "Running main experiment",
+      "working_dir": ".",
+      "commands": [
+        "micromamba run -n arviz python -m arviz.tests.run_tests"
+      ],
+      "expected_artifacts": [
+        "Test results"
+      ]
+    }
+  ]
+}
