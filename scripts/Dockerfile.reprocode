@@ -10,8 +10,9 @@ RUN apt-get update && apt-get install -y \
         git build-essential curl wget \
     && rm -rf /var/lib/apt/lists/*
 
-# Create your main env "reprocode"
-RUN conda create -y -n reprocode -c conda-forge python=3.11 pip && \
+# Create your main env "reprocode" and ensure micromamba is available
+RUN conda install -y -n base -c conda-forge micromamba && \
+    conda create -y -n reprocode -c conda-forge python=3.11 pip && \
     conda clean -afy
 
 # Optional: install any global tools you want into the env

@@ -26,7 +26,7 @@ RAW_LLM_DIR = DATA_DIR / "llm_raw_outputs"
 RAW_LLM_DIR.mkdir(parents=True, exist_ok=True)
 
 # Aggressive truncation
-MAX_README_CHARS = 50000
+MAX_README_CHARS = 100000
 MAX_TREE_CHARS = 10000
 
 
@@ -104,12 +104,17 @@ def build_prompt(paper_id: str, repo_name: str, readme: str, file_tree: str) -> 
         - run the main experiment.
         
         CRITICAL INSTRUCTIONS FOR COMMANDS:
-        - Before running `conda activate`, you MUST source the conda profile script. Assume it is at `$CONDA_PREFIX/etc/profile.d/conda.sh`.
-        - Example: `source $CONDA_PREFIX/etc/profile.d/conda.sh && conda activate myenv`
-        - Always use `-y` for `conda create` or `conda install`.
-        - Do not use `sudo`.
-        - If a step requires a long-running training, try to find a "demo" or "test" mode if available, or run it as is if that's the only option.
-        - Ensure all commands are non-interactive.
+        - Use `micromamba` for all environment operations if possible.
+          - `micromamba create -n <env> python=<version> -y`
+          - `micromamba install -n <env> <deps> -y`
+          - `micromamba run -n <env> <command>`
+        - Do NOT use `conda activate` or `micromamba activate`.
+        - For Python dependencies (`requirements.txt` or `setup.py`), prefer using `pip install`. 
+           - Example: `micromamba run -n <env> pip install -r requirements.txt`
+           - Do NOT try to install `requirements.txt` using `conda install` or `micromamba install`.
+        - Legacy Compatibility:
+           - If the repository appears to be older (e.g., uses Python <= 3.9), strictly enforce older build tools to avoid 'Invalid script entry point' errors.
+           - Add this command: `micromamba run -n <env> pip install "setuptools<60.0.0" "wheel<0.37.0"` BEFORE installing the package/requirements.
 
         {PLAN_SCHEMA}
 

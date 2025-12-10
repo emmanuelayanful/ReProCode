@@ -1,49 +1,33 @@
 {
-    "paper_id": "P02",
-    "repo_name": "openai/human-eval",
-    "env": {
-        "type": "conda",
-        "setup_commands": [
-            "source $CONDA_PREFIX/etc/profile.d/conda.sh && conda create -n codex python=3.7 -y",
-            "source $CONDA_PREFIX/etc/profile.d/conda.sh && conda activate codex",
-            "pip install -e human-eval"
-        ]
-    },
-    "steps": [
-        {
-            "id": "installation",
-            "description": "Installation of the repository",
-            "working_dir": "~",
-            "commands": [
-                "git clone https://github.com/openai/human-eval",
-                "pip install -e human-eval"
-            ],
-            "expected_artifacts": [
-                "human-eval directory in the current directory"
-            ]
-        },
-        {
-            "id": "data_download",
-            "description": "Downloading and preparing data",
-            "working_dir": "human-eval",
-            "commands": [
-                "wget https://path-to-data-file.com/HumanEval.jsonl.gz",
-                "gunzip HumanEval.jsonl.gz"
-            ],
-            "expected_artifacts": [
-                "human-eval/HumanEval.jsonl"
-            ]
-        },
-        {
-            "id": "main_experiment",
-            "description": "Running the main experiment",
-            "working_dir": "human-eval",
-            "commands": [
-                "python -m human_eval.evaluate_functional_correctness data/example_samples.jsonl --problem_file=data/example_problem.jsonl"
-            ],
-            "expected_artifacts": [
-                "human-eval/data/example_samples.jsonl_results.jsonl"
-            ]
-        }
+  "paper_id": "P02",
+  "repo_name": "openai/human-eval",
+  "env": {
+    "type": "conda",
+    "setup_commands": [
+      "micromamba create -n codex python=3.7 -y",
+      "micromamba install -n codex pip -y",
+      "micromamba run -n codex pip install setuptools<60.0.0 wheel<0.37.0 -y"
     ]
+  },
+  "steps": [
+    {
+      "id": "installation",
+      "description": "Install the repository and its dependencies",
+      "working_dir": "~",
+      "commands": [
+        "git clone https://github.com/openai/human-eval",
+        "micromamba run -n codex pip install -e human-eval"
+      ],
+      "expected_artifacts": ["human-eval"]
+    },
+    {
+      "id": "usage",
+      "description": "Run the main experiment",
+      "working_dir": "human-eval",
+      "commands": [
+        "micromamba run -n codex python generate_samples.py"
+      ],
+      "expected_artifacts": ["samples.jsonl"]
+    }
+  ]
 }

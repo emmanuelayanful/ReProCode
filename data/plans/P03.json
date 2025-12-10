@@ -4,10 +4,9 @@
   "env": {
     "type": "conda",
     "setup_commands": [
-      "source $CONDA_PREFIX/etc/profile.d/conda.sh && conda create -n gr_env -y --file speculative_kd/requirements.txt",
-      "source $CONDA_PREFIX/etc/profile.d/conda.sh && conda activate gr_env",
-      "source $CONDA_PREFIX/etc/profile.d/conda.sh && conda install -y -c pytorch pytorch torchvision",
-      "source $CONDA_PREFIX/etc/profile.d/conda.sh && conda install -y -c conda-forge deepspeed"
+      "micromamba create -n gr_env python=3.9 -y",
+      "micromamba install -n gr_env pip -y",
+      "micromamba run -n gr_env pip install setuptools<60.0.0 wheel<0.37.0"
     ]
   },
   "steps": [
@@ -16,23 +15,28 @@
       "description": "Install dependencies",
       "working_dir": ".",
       "commands": [
-        "source $CONDA_PREFIX/etc/profile.d/conda.sh && conda install -y --file speculative_kd/requirements.txt",
-        "source $CONDA_PREFIX/etc/profile.d/conda.sh && conda install -y -c pytorch pytorch torchvision",
-        "source $CONDA_PREFIX/etc/profile.d/conda.sh && conda install -y -c conda-forge deepspeed"
+        "micromamba run -n gr_env pip install -r speculative_kd/requirements.txt",
+        "micromamba run -n gr_env pip install -r action_gap_rl/requirements.txt",
+        "micromamba run -n gr_env pip install -r multi_annotator/requirements.txt",
+        "micromamba run -n gr_env pip install -r camp_zipnerf/requirements.txt"
       ],
       "expected_artifacts": [
-        "conda environment with installed dependencies"
+        "speculative_kd",
+        "action_gap_rl",
+        "multi_annotator",
+        "camp_zipnerf"
       ]
     },
     {
-      "id": "prepare_data",
-      "description": "Prepare data",
-      "working_dir": "speculative_kd",
+      "id": "download_data",
+      "description": "Prepare/download data",
+      "working_dir": ".",
       "commands": [
-        "./run.sh download_data"
+        "git lfs install",
+        "git lfs fetch --all"
       ],
       "expected_artifacts": [
-        "downloaded data"
+        "data files"
       ]
     },
     {
@@ -40,10 +44,10 @@
       "description": "Run the main experiment",
       "working_dir": "speculative_kd",
       "commands": [
-        "./run.sh train_kd"
+        "./run.sh"
       ],
       "expected_artifacts": [
-        "trained model"
+        "experiment results"
       ]
     }
   ]

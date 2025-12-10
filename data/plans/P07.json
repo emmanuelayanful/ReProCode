@@ -4,9 +4,10 @@
   "env": {
     "type": "conda",
     "setup_commands": [
-      "source $CONDA_PREFIX/etc/profile.d/conda.sh && conda create -n crag python=3.10 -y",
-      "source $CONDA_PREFIX/etc/profile.d/conda.sh && conda activate crag",
-      "pip install -r requirements.txt"
+      "micromamba create -n crag python=3.10 -y",
+      "micromamba activate crag",
+      "micromamba install -n crag pip -y",
+      "micromamba run -n crag pip install -r requirements.txt"
     ]
   },
   "steps": [
@@ -15,63 +16,65 @@
       "description": "Installation of the required dependencies",
       "working_dir": ".",
       "commands": [
-        "conda create -n crag python=3.10 -y",
-        "conda activate crag",
-        "pip install -r requirements.txt"
+        "micromamba run -n crag pip install -r requirements.txt"
       ],
       "expected_artifacts": [
-        "active conda environment 'crag'",
-        "installed python packages"
+        "requirements.txt"
       ]
     },
     {
-      "id": "data_preprocessing",
-      "description": "Preprocessing of the datasets",
+      "id": "retrieval_dense_embeddings",
+      "description": "Run dense embedding models",
       "working_dir": "retrieval/",
       "commands": [
-        "python -m create/${data_name}.py"
-      ],
-      "expected_artifacts": [
-        "preprocessed datasets"
-      ]
-    },
-    {
-      "id": "dense_embedding_models",
-      "description": "Running dense embedding models",
-      "working_dir": "retrieval/",
-      "commands": [
-        "python generate_embeddings.py --model YOUR_MODEL_NAME_OR_PATH --output_dir OUTPUT_EMBEDDING_DIR --hf_datasets HF_DATASET_NAME --shard_id 0 --num_shards 1",
         "python eval_beir_sbert_canonical.py --model YOUR_MODEL_NAME_OR_PATH --dataset TASK_NAME --output_file PATH_TO_YOUR_SCORE_FILE --results_file PATH_TO_YOUR_RETRIEVAL_RESULTS_FILE"
       ],
       "expected_artifacts": [
-        "embeddings",
-        "retrieval results"
+        "YOUR_MODEL_NAME_OR_PATH",
+        "TASK_NAME"
       ]
     },
     {
-      "id": "bm25",
-      "description": "Running BM25",
+      "id": "retrieval_bm25",
+      "description": "Run BM25 retrieval",
       "working_dir": "retrieval/",
       "commands": [
-        "python modify_corpus_for_bm25.py --dataset DATASET_NAME --output_metadir OUTPUT_DIR --index_dir INDEX_DIR --stage preprocess",
-        "python modify_corpus_for_bm25.py --dataset DATASET_NAME --output_metadir OUTPUT_DIR --index_dir INDEX_DIR --stage index",
-        "python modify_corpus_for_bm25.py --dataset DATASET_NAME --output_metadir OUTPUT_DIR --index_dir INDEX_DIR --top_k TOP_K --k1 K1 --b B --stage search"
+        "python modify_corpus_for_bm25.py --dataset DATASET_NAME --output_metadir OUTPUT_DIR --index_dir INDEX_DIR --top_k TOP_K --k1 K1 --b B --stage all"
       ],
       "expected_artifacts": [
-        "indexed corpus",
-        "search results"
+        "DATASET_NAME",
+        "OUTPUT_DIR",
+        "INDEX_DIR",
+        "TOP_K",
+        "K1",
+        "B"
       ]
     },
     {
-      "id": "api_based_models",
-      "description": "Running API-based models",
+      "id": "retrieval_api",
+      "description": "Run API-based models",
       "working_dir": "retrieval/",
       "commands": [
-        "python eval_voyage.py --dataset TASK_NAME --model MODEL_NAME --api_key_fp PATH_TO_YOUR_API_KEY_FILE --batch_size YOUR_BATCH_SIZE --output_file PATH_TO_YOUR_SCORE_FILE --results_file PATH_TO_YOUR_RETRIEVAL_RESULTS_FILE",
-        "python eval_openai.py --dataset TASK_NAME --model MODEL_NAME --api_key_fp PATH_TO_YOUR_API_KEY_FILE --batch_size YOUR_BATCH_SIZE --output_file PATH_TO_YOUR_SCORE_FILE --results_file PATH_TO_YOUR_RETRIEVAL_RESULTS_FILE"
+        "python eval_voyage.py --dataset TASK_NAME --model MODEL_NAME --api_key_fp PATH_TO_YOUR_API_KEY_FILE --batch_size YOUR_BATCH_SIZE --output_file PATH_TO_YOUR_SCORE_FILE --results_file PATH_TO_YOUR_RETRIEVAL_RESULTS_FILE"
       ],
       "expected_artifacts": [
-        "retrieval results"
+        "TASK_NAME",
+        "MODEL_NAME",
+        "PATH_TO_YOUR_API_KEY_FILE",
+        "YOUR_BATCH_SIZE"
+      ]
+    },
+    {
+      "id": "generation",
+      "description": "Run code generation",
+      "working_dir": "generation/",
+      "commands": [
+        "python main.py --task TASK_NAME --model MODEL_NAME --dataset_path DATASET_PATH --allow_code_execution"
+      ],
+      "expected_artifacts": [
+        "TASK_NAME",
+        "MODEL_NAME",
+        "DATASET_PATH"
       ]
     }
   ]

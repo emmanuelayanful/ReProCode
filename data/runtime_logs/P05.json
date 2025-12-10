@@ -1,22 +1,96 @@
 {
   "paper_id": "P05",
   "repo_name": "bigcode-project/starcoder",
-  "env_logs": [],
+  "env_logs": [
+    {
+      "command": "micromamba create -n starcoder python=3.8",
+      "cwd": "/workspace/repo",
+      "returncode": 127,
+      "stdout": "",
+      "stderr": "/bin/sh: 1: micromamba: not found\n",
+      "duration_sec": 0.0038576126098632812
+    },
+    {
+      "command": "micromamba activate starcoder",
+      "cwd": "/workspace/repo",
+      "returncode": 127,
+      "stdout": "",
+      "stderr": "/bin/sh: 1: micromamba: not found\n",
+      "duration_sec": 0.0031299591064453125
+    },
+    {
+      "command": "micromamba install -c conda-forge transformers=4.22.2 datasets=2.3.0 accelerate=0.12.0 huggingface_hub=0.10.0 peft=0.2.0 bitsandbytes=0.35.0",
+      "cwd": "/workspace/repo",
+      "returncode": 127,
+      "stdout": "",
+      "stderr": "/bin/sh: 1: micromamba: not found\n",
+      "duration_sec": 0.0034863948822021484
+    }
+  ],
   "step_logs": [
     {
-      "id": "fallback-json-error",
-      "description": "Fallback step because JSON decoding failed, and repair also failed.",
+      "id": "install_dependencies",
+      "description": "Install the required dependencies",
       "commands": [
         {
-          "command": "ls",
+          "command": "micromamba install -c conda-forge transformers=4.22.2 datasets=2.3.0 accelerate=0.12.0 huggingface_hub=0.10.0 peft=0.2.0 bitsandbytes=0.35.0",
           "cwd": "/workspace/repo",
-          "returncode": 0,
-          "stdout": "LICENSE\nREADME.md\nchat\nfinetune\nrequirements.txt\n",
-          "stderr": "",
-          "duration_sec": 0.009087562561035156
+          "returncode": 127,
+          "stdout": "",
+          "stderr": "/bin/sh: 1: micromamba: not found\n",
+          "duration_sec": 0.00279998779296875
         }
       ],
-      "artifacts": {}
+      "artifacts": {
+        "transformers": false,
+        "datasets": false,
+        "accelerate": false,
+        "huggingface_hub": false,
+        "peft": false,
+        "bitsandbytes": false
+      }
+    },
+    {
+      "id": "download_data",
+      "description": "Download the data",
+      "commands": [
+        {
+          "command": "huggingface-cli login",
+          "cwd": "/workspace/repo",
+          "returncode": 127,
+          "stdout": "",
+          "stderr": "/bin/sh: 1: huggingface-cli: not found\n",
+          "duration_sec": 0.0032510757446289062
+        },
+        {
+          "command": "huggingface-cli dataset create bigcode-project/starcoder",
+          "cwd": "/workspace/repo",
+          "returncode": 127,
+          "stdout": "",
+          "stderr": "/bin/sh: 1: huggingface-cli: not found\n",
+          "duration_sec": 0.0037255287170410156
+        }
+      ],
+      "artifacts": {
+        "bigcode-project/starcoder": false
+      }
+    },
+    {
+      "id": "run_main_experiment",
+      "description": "Run the main experiment",
+      "commands": [
+        {
+          "command": "python finetune.py --model_path=\"bigcode/starcoder\" --dataset_name=\"ArmelR/stack-exchange-instruction\" --subset=\"data/finetune\" --split=\"train\" --size_valid_set 10000 --streaming --seq_length 2048 --max_steps 1000 --batch_size 1 --input_column_name=\"question\" --output_column_name=\"response\" --gradient_accumulation_steps 16 --learning_rate 1e-4 --lr_scheduler_type=\"cosine\" --num_warmup_steps 100 --weight_decay 0.05 --output_dir=\"./checkpoints\"",
+          "cwd": "/workspace/repo/finetune",
+          "returncode": 1,
+          "stdout": "",
+          "stderr": "Traceback (most recent call last):\n  File \"/workspace/repo/finetune/finetune.py\", line 4, in <module>\n    import torch\nModuleNotFoundError: No module named 'torch'\n",
+          "duration_sec": 0.05959677696228027
+        }
+      ],
+      "artifacts": {
+        "fine-tuned model": false
+      }
     }
   ]
 }
