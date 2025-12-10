@@ -1,36 +1,55 @@
 {
-  "paper_id": "P05",
-  "repo_name": "bigcode-project/starcoder",
-  "env": {
-    "type": "micromamba",
+"paper_id": "P05",
+"repo_name": "bigcode-project/starcoder",
+"env": {
+    "type": "conda",
     "setup_commands": [
-      "micromamba create -n starcoder python=3.9 -y",
-      "micromamba install pytorch torchvision torchaudio pytorch-cuda=11.6 -c pytorch -c nvidia -y",
-      "micromamba install -c huggingface -c conda-forge datasets accelerate huggingface_hub -y",
-      "micromamba install -c huggingface transformers -y",
-      "micromamba install git+https://github.com/huggingface/peft.git -y",
-      "micromamba install bitsandbytes wandb -y",
-      "git clone https://github.com/bigcode-project/starcoder.git"
+        "micromamba create -n starcoder_env python=3.9 -y",
+        "micromamba install -n starcoder_env -c conda-forge transformers torch torchvision pytorch-cuda cudatoolkit=11.6",
+        "micromamba install -n starcoder_env -c huggingface datasets accelerate huggingface_hub bitsandbytes wandb",
+        "pip install -r requirements.txt --no-cache-dir"
     ]
-  },
-  "steps": [
+},
+"steps": [
     {
-      "id": "install_dependencies",
-      "description": "Installing dependencies",
-      "working_dir": "starcoder",
-      "commands": [
-        "micromamba run -n starcoder pip install -r requirements.txt"
-      ],
-      "expected_artifacts": ["requirements.txt", "README.md"]
+        "id": "install_dependencies",
+        "description": "Install required packages and dependencies",
+        "working_dir": ".",
+        "commands": [
+            "micromamba run -n starcoder_env pip install -r requirements.txt"
+        ],
+        "expected_artifacts": []
     },
     {
-      "id": "run_main_experiment",
-      "description": "Running the main experiment",
-      "working_dir": "starcoder/chat",
-      "commands": [
-        "micromamba run -n starcoder python train.py"
-      ],
-      "expected_artifacts": ["model.pt", "training_log.txt"]
+        "id": "prepare_data",
+        "description": "No explicit data preparation mentioned, assuming 'data/finetune' is the relevant directory",
+        "working_dir": "data/finetune",
+        "commands": [
+            "cp -r ./* ."
+        ],
+        "expected_artifacts": []
+    },
+    {
+        "id": "fine_tuning",
+        "description": "Fine-tune StarCoder on Stack Exchange instruction dataset",
+        "working_dir": "finetune",
+        "commands": [
+            "python finetune/finetune.py ... (using the provided command with dataset and other parameters)"
+        ],
+        "expected_artifacts": [
+            "checkpoints"
+        ]
+    },
+    {
+        "id": "evaluation",
+        "description": "Evaluate the fine-tuned model using BigCode-Evaluation-Harness",
+        "working_dir": "bigcode-evaluation-harness",
+        "commands": [
+            "cd bigcode-evaluation-harness && python evaluate.py"
+        ],
+        "expected_artifacts": [
+            "evaluation_results"
+        ]
     }
-  ]
+]
 }

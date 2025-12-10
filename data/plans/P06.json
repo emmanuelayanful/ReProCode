@@ -4,59 +4,47 @@
   "env": {
     "type": "conda",
     "setup_commands": [
-      "micromamba create -n codet5 python=3.9 -y",
-      "micromamba install pytorch torchvision torchaudio cudatoolkit=11.3 -c pytorch -y",
-      "micromamba install -n codet5 -c conda-forge transformers -y",
-      "micromamba install -n codet5 -c conda-forge sentencepiece -y",
-      "micromamba install -n codet5 -c conda-forge tqdm -y",
-      "micromamba install -n codet5 -c conda-forge pandas -y",
-      "micromamba install -n codet5 -c conda-forge scikit-learn -y",
-      "micromamba install -n codet5 -c conda-forge matplotlib -y",
-      "micromamba install -n codet5 -c conda-forge seaborn -y",
-      "micromamba install -n codet5 -c conda-forge jupyter -y",
-      "micromamba install -n codet5 -c conda-forge jupyterlab -y",
-      "micromamba install -n codet5 -c conda-forge jupyter_contrib_nbextensions -y",
-      "micromamba install -n codet5 -c conda-forge jupyter_nbextensions_configurator -y",
-      "micromamba install -n codet5 -c conda-forge black -y",
-      "micromamba install -n codet5 -c conda-forge flake8 -y",
-      "micromamba install -n codet5 -c conda-forge isort -y",
-      "micromamba install -n codet5 -c conda-forge pre-commit -y"
+      "micromamba create -n codet5_env python=3.9 -y",
+      "micromamba install -n codet5_env pip>=21.3.1",
+      "micromamba install -n codet5_env torch torchvision transformers scikit-learn numpy pandas",
+      "micromamba install -n codet5_env git",
+      "pip install --upgrade setuptools wheel"
     ]
   },
   "steps": [
     {
-      "id": "install_dependencies",
-      "description": "Installing dependencies",
-      "working_dir": ".",
+      "id": "Install Dependencies",
+      "description": "Install required packages using Conda",
+      "working_dir": "/path/to/repo",
       "commands": [
-        "micromamba run -n codet5 pip install -r requirements.txt"
+        "source activate codet5_env",
+        "pip install -r requirements.txt"
       ],
       "expected_artifacts": [
-        "requirements.txt"
+        "dependency_package_list.txt"
       ]
     },
     {
-      "id": "download_data",
-      "description": "Downloading data",
-      "working_dir": "CodeT5",
+      "id": "Prepare Data (if applicable)",
+      "description": "Download or preprocess data (if not provided)",
+      "working_dir": "/path/to/repo",
       "commands": [
-        "wget https://s3.amazonaws.com/datasets.huggingface.co/models/Salesforce/codet5-base/files/Salesforce-codet5-base-pytorch_model.bin",
-        "wget https://s3.amazonaws.com/datasets.huggingface.co/models/Salesforce/codet5-base/files/Salesforce-codet5-base-config.json"
+        "python CodeT5/run_download_data.py"
       ],
       "expected_artifacts": [
-        "Salesforce-codet5-base-pytorch_model.bin",
-        "Salesforce-codet5-base-config.json"
+        "data_downloaded.zip"
       ]
     },
     {
-      "id": "run_main_experiment",
-      "description": "Running main experiment",
-      "working_dir": "CodeT5",
+      "id": "Run Main Experiment",
+      "description": "Execute the main experiment using run_multi_gen.py",
+      "working_dir": "/path/to/repo",
       "commands": [
-        "python run_gen.py --model_name_or_path Salesforce/codet5-base-multi-sum --do_train --do_eval --train_file train.json --validation_file valid.json --test_file test.json --output_dir output_dir"
+        "source activate codet5_env",
+        "python CodeT5/run_multi_gen.py --config path/to/config/file"
       ],
       "expected_artifacts": [
-        "output_dir"
+        "output_files.tar.gz"
       ]
     }
   ]

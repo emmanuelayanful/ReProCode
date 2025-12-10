@@ -4,6 +4,7 @@ from pathlib import Path
 
 import pandas as pd
 from tqdm import tqdm
+import os
 
 BASE_DIR = Path(__file__).resolve().parents[1]   # ReProCode/
 DATA_DIR = BASE_DIR / "data"
@@ -28,6 +29,10 @@ def clone_one(github_url: str):
 
 def main():
     df = pd.read_csv(PAPERS_CSV)
+    target_pid = os.getenv("FILTER_PAPER_ID")
+    if target_pid:
+        df = df[df["paper_id"].astype(str) == str(target_pid)]
+        print(f"[INFO] FILTER_PAPER_ID set -> processing only {target_pid}")
     for _, row in tqdm(df.iterrows(), total=len(df)):
         clone_one(row["github_url"])
 

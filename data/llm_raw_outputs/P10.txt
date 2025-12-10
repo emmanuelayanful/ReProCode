@@ -1,0 +1,37 @@
+```json
+{
+    "paper_id": "P10",
+    "repo_name": "cookiecutter/cookiecutter-django",
+    "env": {
+        "type": "conda",
+        "setup_commands": [
+            "micromamba create -n cookiecutter_env python=3.13 -y",
+            "micromamba install -n cookiecutter_env -y pip wheel setuptools<60.0.0 wheel<0.37.0",
+            "micromamba install -n cookiecutter_env -y poetry",
+            # Install dependencies from requirements.txt or setup.py (if provided)
+            "micromamba run -n cookiecutter_env pip install -r requirements.txt"
+        ]
+    },
+    "steps": [
+        {
+            "id": "Install dependencies",
+            "description": "Install required packages using Poetry or pip",
+            "working_dir": "{{cookiecutter.project_slug}}",
+            "commands": [
+                "poetry install" # If using Poetry
+                # "pip install -r requirements.txt" # If using pip directly from requirements.txt
+            ],
+            "expected_artifacts": []
+        },
+        {
+            "id": "Run main experiment",
+            "description": "Depends on the specific experiment mentioned in the README",
+            "working_dir": "{{cookiecutter.project_slug}}",
+            "commands": [
+                # Provide commands for running the main experiment, e.g., "python manage.py test" or "npm run start"
+            ],
+            "expected_artifacts": []
+        }
+    ]
+}
+```

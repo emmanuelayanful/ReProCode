@@ -213,6 +213,15 @@ Compute Scores with the runtime logs with
 python -m scripts.compute_hybrid_score
 ```
 
+### 6. Run the web API + frontend
+The FastAPI server serves both the JSON API and the bundled frontend (under `/`).
+
+```bash
+uvicorn app.main:app --reload
+```
+
+Then open http://localhost:8000 in your browser to use the Quick and Advanced scoring UI.
+
 
 ## Example Results
 

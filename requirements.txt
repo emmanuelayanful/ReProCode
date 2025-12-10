@@ -9,3 +9,5 @@ joblib
 transformers
 openai
 torch
+fastapi
+uvicorn
