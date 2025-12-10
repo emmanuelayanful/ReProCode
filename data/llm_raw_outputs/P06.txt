@@ -2,12 +2,25 @@
   "paper_id": "P06",
   "repo_name": "salesforce/CodeT5",
   "env": {
-    "type": "micromamba",
+    "type": "conda",
     "setup_commands": [
-      "micromamba create -n codet5 python=3.8 -y",
+      "micromamba create -n codet5 python=3.9 -y",
       "micromamba install pytorch torchvision torchaudio cudatoolkit=11.3 -c pytorch -y",
-      "micromamba install -c conda-forge transformers -y",
-      "micromamba install -c conda-forge git -y"
+      "micromamba install -n codet5 -c conda-forge transformers -y",
+      "micromamba install -n codet5 -c conda-forge sentencepiece -y",
+      "micromamba install -n codet5 -c conda-forge tqdm -y",
+      "micromamba install -n codet5 -c conda-forge pandas -y",
+      "micromamba install -n codet5 -c conda-forge scikit-learn -y",
+      "micromamba install -n codet5 -c conda-forge matplotlib -y",
+      "micromamba install -n codet5 -c conda-forge seaborn -y",
+      "micromamba install -n codet5 -c conda-forge jupyter -y",
+      "micromamba install -n codet5 -c conda-forge jupyterlab -y",
+      "micromamba install -n codet5 -c conda-forge jupyter_contrib_nbextensions -y",
+      "micromamba install -n codet5 -c conda-forge jupyter_nbextensions_configurator -y",
+      "micromamba install -n codet5 -c conda-forge black -y",
+      "micromamba install -n codet5 -c conda-forge flake8 -y",
+      "micromamba install -n codet5 -c conda-forge isort -y",
+      "micromamba install -n codet5 -c conda-forge pre-commit -y"
     ]
   },
   "steps": [
@@ -23,21 +36,21 @@
     {
       "id": "download_data",
       "description": "Downloading data",
-      "working_dir": ".",
+      "working_dir": "CodeT5",
       "commands": [
-        "micromamba run -n codet5 git clone https://huggingface.co/Salesforce/codet5-base-mono-fn",
-        "micromamba run -n codet5 git clone https://huggingface.co/Salesforce/codet5-base-multi-sum"
+        "wget https://s3.amazonaws.com/datasets.huggingface.co/models/Salesforce/codet5-base/files/Salesforce-codet5-base-pytorch_model.bin",
+        "wget https://s3.amazonaws.com/datasets.huggingface.co/models/Salesforce/codet5-base/files/Salesforce-codet5-base-config.json"
       ],
-      "expected_artifacts": ["Salesforce/codet5-base-mono-fn", "Salesforce/codet5-base-multi-sum"]
+      "expected_artifacts": ["Salesforce-codet5-base-pytorch_model.bin", "Salesforce-codet5-base-config.json"]
     },
     {
       "id": "run_main_experiment",
       "description": "Running main experiment",
-      "working_dir": "CodeT5/",
+      "working_dir": "CodeT5",
       "commands": [
-        "micromamba run -n codet5 python run_gen.py --model_name Salesforce/codet5-base-mono-fn --mode generate"
+        "python run_gen.py --model_name_or_path Salesforce/codet5-base-multi-sum --do_train --do_eval --train_file train.json --validation_file valid.json --test_file test.json --output_dir output_dir"
       ],
-      "expected_artifacts": ["run_gen.py", "Salesforce/codet5-base-mono-fn"]
+      "expected_artifacts": ["output_dir"]
     }
   ]
 }

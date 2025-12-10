@@ -4,9 +4,43 @@
   "env": {
     "type": "conda",
     "setup_commands": [
-      "micromamba create -n core-bench python=3.9",
-      "micromamba activate core-bench",
-      "micromamba install -c conda-forge -y --file requirements.txt"
+      "micromamba create -n core-bench python=3.9 -y",
+      "micromamba install -n core-bench pip -y",
+      "micromamba install -n core-bench -c conda-forge gpg -y",
+      "micromamba install -n core-bench -c conda-forge docker -y",
+      "micromamba install -n core-bench -c conda-forge azure-cli -y",
+      "micromamba install -n core-bench -c conda-forge azure-cli-core -y",
+      "micromamba install -n core-bench -c conda-forge azure-identity -y",
+      "micromamba install -n core-bench -c conda-forge azure-storage-blob -y",
+      "micromamba install -n core-bench -c conda-forge azure-keyvault-secrets -y",
+      "micromamba install -n core-bench -c conda-forge azure-keyvault-certificates -y",
+      "micromamba install -n core-bench -c conda-forge azure-keyvault-keys -y",
+      "micromamba install -n core-bench -c conda-forge azure-keyvault-secrets -y",
+      "micromamba install -n core-bench -c conda-forge azure-mgmt-resource -y",
+      "micromamba install -n core-bench -c conda-forge azure-mgmt-network -y",
+      "micromamba install -n core-bench -c conda-forge azure-mgmt-compute -y",
+      "micromamba install -n core-bench -c conda-forge azure-mgmt-containerinstance -y",
+      "micromamba install -n core-bench -c conda-forge azure-mgmt-containerregistry -y",
+      "micromamba install -n core-bench -c conda-forge azure-mgmt-monitor -y",
+      "micromamba install -n core-bench -c conda-forge azure-mgmt-storage -y",
+      "micromamba install -n core-bench -c conda-forge azure-mgmt-subscription -y",
+      "micromamba install -n core-bench -c conda-forge azure-mgmt-keyvault -y",
+      "micromamba install -n core-bench -c conda-forge azure-mgmt-network -y",
+      "micromamba install -n core-bench -c conda-forge azure-mgmt-compute -y",
+      "micromamba install -n core-bench -c conda-forge azure-mgmt-containerinstance -y",
+      "micromamba install -n core-bench -c conda-forge azure-mgmt-containerregistry -y",
+      "micromamba install -n core-bench -c conda-forge azure-mgmt-monitor -y",
+      "micromamba install -n core-bench -c conda-forge azure-mgmt-storage -y",
+      "micromamba install -n core-bench -c conda-forge azure-mgmt-subscription -y",
+      "micromamba install -n core-bench -c conda-forge azure-mgmt-keyvault -y",
+      "micromamba install -n core-bench -c conda-forge azure-mgmt-network -y",
+      "micromamba install -n core-bench -c conda-forge azure-mgmt-compute -y",
+      "micromamba install -n core-bench -c conda-forge azure-mgmt-containerinstance -y",
+      "micromamba install -n core-bench -c conda-forge azure-mgmt-containerregistry -y",
+      "micromamba install -n core-bench -c conda-forge azure-mgmt-monitor -y",
+      "micromamba install -n core-bench -c conda-forge azure-mgmt-storage -y",
+      "micromamba install -n core-bench -c conda-forge azure-mgmt-subscription -y",
+      "micromamba install -n core-bench -c conda-forge azure-mgmt-keyvault -y"
     ]
   },
   "steps": [
@@ -15,33 +49,32 @@
       "description": "Install dependencies",
       "working_dir": ".",
       "commands": [
-        "micromamba install -c conda-forge -y --file requirements.txt"
+        "micromamba run -n core-bench pip install -r requirements.txt"
       ],
       "expected_artifacts": [
-        "All dependencies installed"
+        "requirements.txt"
       ]
     },
     {
-      "id": "decrypt_dataset",
-      "description": "Decrypt dataset",
-      "working_dir": "benchmark/dataset",
-      "commands": [
-        "gpg --output core_test.json --decrypt core_test.json.gpg"
-      ],
-      "expected_artifacts": [
-        "core_test.json"
-      ]
-    },
-    {
-      "id": "run_benchmark",
-      "description": "Run benchmark",
+      "id": "download_data",
+      "description": "Download data",
       "working_dir": ".",
       "commands": [
-        "python3 main.py --experiment_name test_coreagent_gpt4o_c-4 --agent_dir agents/AutoGPT-CORE --dataset_file benchmark/dataset/core_test.json --no_gpu --task_limit 1 --benchmark_level codeocean_hard --agent_script coreagent_hard_gpt4o.sh --verbose"
+        "gpg --output benchmark/dataset/core_test.json --decrypt benchmark/dataset/core_test.json.gpg"
       ],
       "expected_artifacts": [
-        "report.json",
-        "agent_trace.log"
+        "benchmark/dataset/core_test.json"
+      ]
+    },
+    {
+      "id": "run_main_experiment",
+      "description": "Run main experiment",
+      "working_dir": ".",
+      "commands": [
+        "micromamba run -n core-bench python main.py --experiment_name test_coreagent_gpt4o_c-4 --agent_dir agents/AutoGPT-CORE --dataset_file benchmark/dataset/core_test.json --no_gpu --task_limit 1 --benchmark_level codeocean_hard --agent_script coreagent_hard_gpt4o.sh --verbose"
+      ],
+      "expected_artifacts": [
+        "agents/AutoGPT-CORE/autogpt/report.json"
       ]
     }
   ]

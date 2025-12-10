@@ -4,33 +4,38 @@
   "env": {
     "type": "micromamba",
     "setup_commands": [
-      "micromamba create -n starcoder python=3.8 -y",
-      "micromamba activate starcoder",
-      "micromamba install -c conda-forge -y numpy scipy pandas scikit-learn",
-      "micromamba install -c huggingface -y transformers peft bitsandbytes"
+      "micromamba create -n starcoder python=3.9 -y",
+      "micromamba install pytorch torchvision torchaudio pytorch-cuda=11.6 -c pytorch -c nvidia -y",
+      "micromamba install -c huggingface -c conda-forge datasets accelerate huggingface_hub -y",
+      "micromamba install -c huggingface transformers -y",
+      "micromamba install git+https://github.com/huggingface/peft.git -y",
+      "micromamba install bitsandbytes wandb -y",
+      "git clone https://github.com/bigcode-project/starcoder.git"
     ]
   },
   "steps": [
     {
       "id": "install_dependencies",
-      "description": "Install the required dependencies",
-      "working_dir": ".",
+      "description": "Installing dependencies",
+      "working_dir": "starcoder",
       "commands": [
         "micromamba run -n starcoder pip install -r requirements.txt"
       ],
       "expected_artifacts": [
-        "starcoder environment with installed dependencies"
+        "requirements.txt",
+        "README.md"
       ]
     },
     {
       "id": "run_main_experiment",
-      "description": "Run the main experiment",
-      "working_dir": "chat",
+      "description": "Running the main experiment",
+      "working_dir": "starcoder/chat",
       "commands": [
         "micromamba run -n starcoder python train.py"
       ],
       "expected_artifacts": [
-        "Trained model"
+        "model.pt",
+        "training_log.txt"
       ]
     }
   ]

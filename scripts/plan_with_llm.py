@@ -26,7 +26,7 @@ RAW_LLM_DIR = DATA_DIR / "llm_raw_outputs"
 RAW_LLM_DIR.mkdir(parents=True, exist_ok=True)
 
 # Aggressive truncation
-MAX_README_CHARS = 50000
+MAX_README_CHARS = 100000
 MAX_TREE_CHARS = 10000
 
 

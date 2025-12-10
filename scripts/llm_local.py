@@ -79,7 +79,7 @@ def generate_completion_local(prompt: str) -> str:
     with torch.no_grad():
         outputs = _model.generate(
             **inputs,
-            max_new_tokens=1024,
+            max_new_tokens=8192,
             do_sample=False,
         )
 

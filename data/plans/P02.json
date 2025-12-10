@@ -4,48 +4,33 @@
   "env": {
     "type": "conda",
     "setup_commands": [
-      "conda create -n codex python=3.7 -y",
-      "conda activate codex"
+      "micromamba create -n codex python=3.7 -y",
+      "micromamba install -n codex pip -y",
+      "micromamba run -n codex pip install setuptools<60.0.0 wheel<0.37.0 -y"
     ]
   },
   "steps": [
     {
       "id": "installation",
       "description": "Install the repository and its dependencies",
-      "working_dir": ".",
+      "working_dir": "~",
       "commands": [
-        "pip install -e human-eval"
+        "git clone https://github.com/openai/human-eval",
+        "micromamba run -n codex pip install -e human-eval"
       ],
       "expected_artifacts": [
-        "human_eval/__init__.py",
-        "human_eval/execution.py",
-        "human_eval/evaluation.py",
-        "human_eval/evaluate_functional_correctness.py",
-        "human_eval/data.py"
+        "human-eval"
       ]
     },
     {
-      "id": "data_preparation",
-      "description": "Prepare the data for evaluation",
-      "working_dir": ".",
+      "id": "usage",
+      "description": "Run the main experiment",
+      "working_dir": "human-eval",
       "commands": [
-        "micromamba run -n codex python human_eval/data.py"
+        "micromamba run -n codex python generate_samples.py"
       ],
       "expected_artifacts": [
-        "data/example_problem.jsonl",
-        "data/example_samples.jsonl",
-        "data/HumanEval.jsonl.gz"
-      ]
-    },
-    {
-      "id": "evaluation",
-      "description": "Evaluate the generated samples",
-      "working_dir": ".",
-      "commands": [
-        "micromamba run -n codex python human_eval/evaluate_functional_correctness.py data/example_samples.jsonl --problem_file=data/example_problem.jsonl"
-      ],
-      "expected_artifacts": [
-        "data/example_samples.jsonl_results.jsonl"
+        "samples.jsonl"
       ]
     }
   ]

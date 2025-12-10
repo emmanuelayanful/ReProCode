@@ -4,12 +4,9 @@
   "env": {
     "type": "conda",
     "setup_commands": [
-      "micromamba create -n gr_env -y",
-      "micromamba activate gr_env",
-      "micromamba install -c conda-forge python=3.8 -y",
-      "micromamba install -c conda-forge pytorch torchvision torchaudio -c pytorch -y",
-      "micromamba install -c conda-forge cudatoolkit=11.3 -y",
-      "pip install git+https://github.com/NVIDIA/apex.git"
+      "micromamba create -n gr_env python=3.9 -y",
+      "micromamba install -n gr_env pip -y",
+      "micromamba run -n gr_env pip install setuptools<60.0.0 wheel<0.37.0"
     ]
   },
   "steps": [
@@ -23,26 +20,26 @@
         "micromamba run -n gr_env pip install -r multi_annotator/requirements.txt",
         "micromamba run -n gr_env pip install -r camp_zipnerf/requirements.txt"
       ],
-      "expected_artifacts": ["gr_env"]
+      "expected_artifacts": ["speculative_kd", "action_gap_rl", "multi_annotator", "camp_zipnerf"]
     },
     {
       "id": "download_data",
-      "description": "Download data",
+      "description": "Prepare/download data",
       "working_dir": ".",
       "commands": [
-        "git clone https://github.com/google-research-datasets/Google-Lens-Dataset.git",
-        "git clone https://github.com/google-research-datasets/Action-Gap-Dataset.git",
-        "git clone https://github.com/google-research-datasets/Multi-Annotator-Dataset.git",
-        "git clone https://github.com/google-research-datasets/Camp-ZipNerf-Dataset.git"
+        "git lfs install",
+        "git lfs fetch --all"
       ],
-      "expected_artifacts": ["Google-Lens-Dataset", "Action-Gap-Dataset", "Multi-Annotator-Dataset", "Camp-ZipNerf-Dataset"]
+      "expected_artifacts": ["data files"]
     },
     {
       "id": "run_experiment",
       "description": "Run the main experiment",
       "working_dir": "speculative_kd",
-      "commands": ["bash run.sh"],
-      "expected_artifacts": ["experiment_results"]
+      "commands": [
+        "./run.sh"
+      ],
+      "expected_artifacts": ["experiment results"]
     }
   ]
 }

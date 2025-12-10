@@ -5,42 +5,61 @@
     "type": "conda",
     "setup_commands": [
       "micromamba create -n swe-bench python=3.8 -y",
-      "micromamba activate swe-bench",
-      "micromamba install -c conda-forge -c pytorch -c huggingface -c fastai -c pytorch -c defaults -y pytorch torchvision torchaudio pytorch-lightning transformers datasets scikit-learn pandas jupyterlab"
+      "micromamba install -n swe-bench pip -y",
+      "micromamba install -n swe-bench -c conda-forge -y pytest",
+      "micromamba install -n swe-bench -c conda-forge -y black",
+      "micromamba install -n swe-bench -c conda-forge -y flake8",
+      "micromamba install -n swe-bench -c conda-forge -y mypy",
+      "micromamba install -n swe-bench -c conda-forge -y pre-commit",
+      "micromamba install -n swe-bench -c conda-forge -y pytest-cov",
+      "micromamba install -n swe-bench -c conda-forge -y pytest-xdist",
+      "micromamba install -n swe-bench -c conda-forge -y pytest-mock",
+      "micromamba install -n swe-bench -c conda-forge -y pytest-black",
+      "micromamba install -n swe-bench -c conda-forge -y pytest-flake8",
+      "micromamba install -n swe-bench -c conda-forge -y pytest-mypy",
+      "micromamba install -n swe-bench -c conda-forge -y pytest-isort",
+      "micromamba install -n swe-bench -c conda-forge -y pytest-cov",
+      "micromamba install -n swe-bench -c conda-forge -y pytest-xdist",
+      "micromamba install -n swe-bench -c conda-forge -y pytest-mock",
+      "micromamba install -n swe-bench -c conda-forge -y pytest-black",
+      "micromamba install -n swe-bench -c conda-forge -y pytest-flake8",
+      "micromamba install -n swe-bench -c conda-forge -y pytest-mypy",
+      "micromamba install -n swe-bench -c conda-forge -y pytest-isort",
+      "micromamba run -n swe-bench pip install -e ."
     ]
   },
   "steps": [
     {
       "id": "install_dependencies",
-      "description": "Install the required dependencies",
+      "description": "Install dependencies",
       "working_dir": ".",
       "commands": [
-        "micromamba run -n swe-bench pip install -e ."
+        "micromamba run -n swe-bench pip install -r requirements.txt"
       ],
       "expected_artifacts": [
-        "swebench"
+        "requirements.txt"
       ]
     },
     {
-      "id": "download_data",
-      "description": "Download the SWE-bench dataset",
+      "id": "prepare_data",
+      "description": "Prepare data",
       "working_dir": ".",
       "commands": [
-        "micromamba run -n swe-bench python -m datasets.download.download_dataset 'princeton-nlp/SWE-bench'"
+        "micromamba run -n swe-bench python swebench/collect/build_dataset.py"
       ],
       "expected_artifacts": [
-        "princeton-nlp/SWE-bench"
+        "swebench/collect/build_dataset.py"
       ]
     },
     {
-      "id": "run_experiment",
-      "description": "Run the main experiment",
+      "id": "run_main_experiment",
+      "description": "Run main experiment",
       "working_dir": ".",
       "commands": [
-        "micromamba run -n swe-bench python -m swebench.harness.run_evaluation --predictions_path gold --max_workers 1 --instance_ids sympy__sympy-20590 --run_id validate-gold"
+        "micromamba run -n swe-bench pytest tests"
       ],
       "expected_artifacts": [
-        "evaluation_results"
+        "tests"
       ]
     }
   ]
