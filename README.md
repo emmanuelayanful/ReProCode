@@ -203,9 +203,14 @@ Generate execution plans using an LLM with
 python -m scripts.plan_with_llm
 ```
 
-Executge all the plans in the docker with
+Execute all the plans in the docker with
 ```bash
 python -m scripts.run_all_in_docker
+```
+
+Compute Scores with the runtime logs with
+```bash
+python -m scripts.compute_hybrid_score
 ```
 
 
