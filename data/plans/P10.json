@@ -1,6 +1,6 @@
 {
-  "paper_id": "P02",
-  "repo_name": "openai/human-eval",
+  "paper_id": "P10",
+  "repo_name": "cookiecutter/cookiecutter-django",
   "env": {
     "type": "conda",
     "setup_commands": []

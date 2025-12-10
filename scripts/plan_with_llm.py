@@ -293,6 +293,10 @@ def call_llm_to_plan(paper_id: str, repo_name: str, readme: str, file_tree: str)
 
 def main():
     df = pd.read_csv(PAPERS_CSV)
+    target_pid = os.getenv("FILTER_PAPER_ID")
+    if target_pid:
+        df = df[df["paper_id"].astype(str) == str(target_pid)]
+        print(f"[INFO] FILTER_PAPER_ID set -> processing only {target_pid}")
 
     for _, row in tqdm(df.iterrows(), total=len(df)):
         paper_id = str(row["paper_id"])

@@ -5,39 +5,37 @@
     "env": {
         "type": "conda",
         "setup_commands": [
-            "conda create -n swebench python=3.8",
-            "conda activate swebench",
-            "pip install -e .",
-            "pip install docker"
+            "micromamba create -n swe-bench python=3.8 -y",
+            "micromamba install -n swe-bench -c conda-forge numpy pandas scikit-learn matplotlib pyyaml huggingface transformers==4.21.0 -y",
+            "micromamba run -n swe-bench pip install setuptools<60.0.0 wheel<0.37.0 -r requirements.txt"
         ]
     },
     "steps": [
         {
-            "id": "Install Dependencies",
-            "description": "Install required packages using Conda",
-            "working_dir": "/path/to/repo",
+            "id": "Install dependencies",
+            "description": "Set up the environment with required packages",
+            "working_dir": ".",
             "commands": [
-                "conda env update",
+                "source activate swe-bench",
                 "pip install -r requirements.txt"
             ],
             "expected_artifacts": []
         },
         {
-            "id": "Download Data (Optional)",
-            "description": "If data is not included, skip this step",
-            "working_dir": "/path/to/repo",
+            "id": "Prepare dataset (optional)",
+            "description": "Download SWE-bench data if not present",
+            "working_dir": "swebench",
             "commands": [
-                "python scripts/download_data.py"  # Assuming a script exists for data download
+                "python -m swebench.collect/download_data"
             ],
-            "expected_artifacts": ["data.zip"]  # Assuming the downloaded data is zipped
+            "expected_artifacts": ["swe-bench_dataset.zip"]
         },
         {
-            "id": "Run Main Experiment",
-            "description": "Evaluate patch predictions using the evaluation harness",
-            "working_dir": "/path/to/repo",
+            "id": "Run evaluation",
+            "description": "Evaluate a model on SWE-bench Lite",
+            "working_dir": "swebench",
             "commands": [
-                "python -m swebench.harness.run_evaluation --predictions_path '<path_to_predictions>' --max_workers '<num_workers>' --run_id '<run_id>'",
-                // Corrected quotes around command arguments
+                "python -m swebench.harness.run_evaluation --dataset_name princeton-nlp/SWE-bench_Lite --predictions_path <path_to_predictions> --max_workers <num_workers> --run_id <run_id>"
             ],
             "expected_artifacts": ["evaluation_results"]
         }

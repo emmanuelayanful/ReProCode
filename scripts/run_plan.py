@@ -4,6 +4,7 @@ import json
 import subprocess
 import time
 from pathlib import Path
+import os
 
 
 def run_command(cmd, cwd, timeout=3600, env=None):

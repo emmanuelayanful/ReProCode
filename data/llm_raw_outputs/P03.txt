@@ -1,45 +1,41 @@
 {
-  "paper_id": "P03",
-  "repo_name": "google-research/google-research",
-  "env": {
-    "type": "conda",
-    "setup_commands": [
-      "micromamba create -n gr_env python=3.9 -y",
-      "micromamba install -n gr_env pip -y",
-      "micromamba run -n gr_env pip install setuptools<60.0.0 wheel<0.37.0"
-    ]
-  },
-  "steps": [
-    {
-      "id": "install_dependencies",
-      "description": "Install dependencies",
-      "working_dir": ".",
-      "commands": [
-        "micromamba run -n gr_env pip install -r speculative_kd/requirements.txt",
-        "micromamba run -n gr_env pip install -r action_gap_rl/requirements.txt",
-        "micromamba run -n gr_env pip install -r multi_annotator/requirements.txt",
-        "micromamba run -n gr_env pip install -r camp_zipnerf/requirements.txt"
-      ],
-      "expected_artifacts": ["speculative_kd", "action_gap_rl", "multi_annotator", "camp_zipnerf"]
-    },
-    {
-      "id": "download_data",
-      "description": "Prepare/download data",
-      "working_dir": ".",
-      "commands": [
-        "git lfs install",
-        "git lfs fetch --all"
-      ],
-      "expected_artifacts": ["data files"]
-    },
-    {
-      "id": "run_experiment",
-      "description": "Run the main experiment",
-      "working_dir": "speculative_kd",
-      "commands": [
-        "./run.sh"
-      ],
-      "expected_artifacts": ["experiment results"]
-    }
-  ]
+"paper_id": "P03",
+"repo_name": "google-research/google-research",
+"env": {
+"type": "conda",
+"setup_commands": [
+"micromamba create -n experiments python=3.9 -y",
+"micromamba install -n experiments -c conda-forge -c pytorch torch==1.10.0 torchvision==0.11.2 -y",
+"micromamba install -n experiments -c conda-forge numpy scipy scikit-learn pandas matplotlib -y",
+"micromamba install -n experiments -c pytorch torchaudio -y",
+"micromamba install -n experiments -c conda-forge torchtext -y",
+"micromamba install -n experiments -c pip setuptools<60.0.0 wheel<0.37.0"
+]
+},
+"steps": [
+{
+"id": "Data Preparation",
+"description": "Download and preprocess data",
+"working_dir": "./fm4tlp",
+"commands": [
+"git clone https://github.com/google-research/google-research.git --depth=1",
+"cd fm4tlp",
+"python utils/pre_process.py"
+],
+"expected_artifacts": [
+"processed_data.zip"
+]
+},
+{
+"id": "Model Training",
+"description": "Train the JODIE model",
+"working_dir": "./fm4tlp",
+"commands": [
+"python train.py --config config/jodie.pbtxt"
+],
+"expected_artifacts": [
+"model_trained.pth"
+]
+}
+]
 }

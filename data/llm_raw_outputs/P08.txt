@@ -1,0 +1,40 @@
+{
+"paper_id": "P08",
+"repo_name": "mem0ai/mem0",
+"env": {
+"type": "conda",
+"setup_commands": [
+"micromamba create -n mem0_dev python=3.9 -y",
+"micromamba install -n mem0_dev -c conda-forge numpy pandas torch transformers scikit-learn"
+]
+},
+"steps": [
+{
+"id": "Install Dependencies",
+"description": "Install required packages for the project",
+"working_dir": ".",
+"commands": [
+"micromamba run -n mem0_dev pip install -r poetry.lock"
+],
+"expected_artifacts": []
+},
+{
+"id": "Prepare Data (if applicable)",
+"description": "Download or preprocess data if not included in the repo",
+"working_dir": "data",
+"commands": [
+"<!-- Add commands for downloading or preprocessing data if needed -->"
+],
+"expected_artifacts": ["data.zip", "processed_data.csv"]
+},
+{
+"id": "Run Main Experiment",
+"description": "Execute the main experiment using Mem0",
+"working_dir": "src",
+"commands": [
+"micromamba run -n mem0_dev python tests/test_memory.py"
+],
+"expected_artifacts": ["results.csv"]
+}
+]
+}

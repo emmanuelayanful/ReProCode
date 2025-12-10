@@ -4,6 +4,7 @@ from pathlib import Path
 
 import pandas as pd
 from tqdm import tqdm
+import os
 
 BASE_DIR = Path(__file__).resolve().parents[1]
 DATA_DIR = BASE_DIR / "data"
@@ -19,6 +20,10 @@ IMAGE_NAME = "reprocode-base"
 
 def main():
     df = pd.read_csv(PAPERS_CSV)
+    target_pid = os.getenv("FILTER_PAPER_ID")
+    if target_pid:
+        df = df[df["paper_id"].astype(str) == str(target_pid)]
+        print(f"[INFO] FILTER_PAPER_ID set -> processing only {target_pid}")
 
     for _, row in tqdm(df.iterrows(), total=len(df)):
         paper_id = str(row["paper_id"])
