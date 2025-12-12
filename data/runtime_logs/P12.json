@@ -1,0 +1,74 @@
+{
+  "paper_id": "P12",
+  "repo_name": "borgbackup/borg",
+  "env_logs": [
+    {
+      "command": "micromamba create -n borg_env python=3.9 -y",
+      "cwd": "/workspace/repo",
+      "returncode": 0,
+      "stdout": "\n\nTransaction\n\n  Prefix: /home/runner/.local/share/mamba/envs/borg_env\n\n  Updating specs:\n\n   - python=3.9\n\n\n  Package                Version  Build                 Channel          Size\n\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\n  Install:\n\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\n\n  + _libgcc_mutex            0.1  conda_forge           conda-forge       3kB\n  + _openmp_mutex            4.5  2_gnu                 conda-forge      24kB\n  + bzip2                  1.0.8  hda65f42_8            conda-forge     260kB\n  + ca-certificates   2025.11.12  hbd8a1cb_0            conda-forge     152kB\n  + ld_impl_linux-64        2.45  default_hbd61a6d_104  conda-forge     726kB\n  + libexpat               2.7.3  hecca717_0            conda-forge      77kB\n  + libffi                 3.5.2  h9ec8514_0            conda-forge      58kB\n  + libgcc                15.2.0  he0feb66_16           conda-forge       1MB\n  + libgcc-ng             15.2.0  h69a702a_16           conda-forge      27kB\n  + libgomp               15.2.0  he0feb66_16           conda-forge     603kB\n  + liblzma                5.8.1  hb9d3cd8_2            conda-forge     113kB\n  + libnsl                 2.0.1  hb9d3cd8_1            conda-forge      34kB\n  + libsqlite             3.51.1  h0c1763c_0            conda-forge     939kB\n  + libuuid               2.41.2  h5347b49_1            conda-forge      40kB\n  + libxcrypt             4.4.36  hd590300_1            conda-forge     100kB\n  + libzlib                1.3.1  hb9d3cd8_2            conda-forge      61kB\n  + ncurses                  6.5  h2d0b736_3            conda-forge     892kB\n  + openssl                3.6.0  h26f9b46_0            conda-forge       3MB\n  + pip                     25.2  pyh8b19718_0          conda-forge       1MB\n  + python                3.9.23  hc30ae73_0_cpython    conda-forge      24MB\n  + readline                 8.2  h8c095d6_2            conda-forge     282kB\n  + setuptools            80.9.0  pyhff2d567_0          conda-forge     749kB\n  + tk                    8.6.13  noxft_ha0e22de_103    conda-forge       3MB\n  + tzdata                 2025b  h78e105d_0            conda-forge     123kB\n  + wheel                 0.45.1  pyhd8ed1ab_1          conda-forge      63kB\n  + zstd                   1.5.7  hb78ec9c_6            conda-forge     601kB\n\n  Summary:\n\n  Install: 26 packages\n\n  Total download: 38MB\n\n\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\n\n\n\nTransaction starting\nLinking tzdata-2025b-h78e105d_0\nLinking ca-certificates-2025.11.12-hbd8a1cb_0\nLinking libgomp-15.2.0-he0feb66_16\nLinking _libgcc_mutex-0.1-conda_forge\nLinking _openmp_mutex-4.5-2_gnu\nLinking libgcc-15.2.0-he0feb66_16\nLinking openssl-3.6.0-h26f9b46_0\nLinking ncurses-6.5-h2d0b736_3\nLinking libzlib-1.3.1-hb9d3cd8_2\nLinking libgcc-ng-15.2.0-h69a702a_16\nLinking libuuid-2.41.2-h5347b49_1\nLinking libnsl-2.0.1-hb9d3cd8_1\nLinking liblzma-5.8.1-hb9d3cd8_2\nLinking libffi-3.5.2-h9ec8514_0\nLinking libexpat-2.7.3-hecca717_0\nLinking bzip2-1.0.8-hda65f42_8\nLinking readline-8.2-h8c095d6_2\nLinking libsqlite-3.51.1-h0c1763c_0\nLinking zstd-1.5.7-hb78ec9c_6\nLinking tk-8.6.13-noxft_ha0e22de_103\nLinking libxcrypt-4.4.36-hd590300_1\nLinking ld_impl_linux-64-2.45-default_hbd61a6d_104\nLinking python-3.9.23-hc30ae73_0_cpython\nLinking wheel-0.45.1-pyhd8ed1ab_1\nLinking setuptools-80.9.0-pyhff2d567_0\nLinking pip-25.2-pyh8b19718_0\n\nTransaction finished\n\n\nTo activate this environment, use:\n\n    micromamba activate borg_env\n\nOr to execute a single command in this environment, use:\n\n    micromamba run -n borg_env mycommand\n\n",
+      "stderr": "",
+      "duration_sec": 44.31390428543091
+    },
+    {
+      "command": "micromamba install -n borg_env pip -y",
+      "cwd": "/workspace/repo",
+      "returncode": 0,
+      "stdout": "conda-forge/linux-64                                        Using cache\nconda-forge/noarch                                          Using cache\n\nPinned packages:\n\n  - python=3.9\n\n\nTransaction\n\n  Prefix: /home/runner/.local/share/mamba/envs/borg_env\n\n  All requested packages already installed\n\n\nTransaction starting\n\nTransaction finished\n\n",
+      "stderr": "",
+      "duration_sec": 8.167598724365234
+    },
+    {
+      "command": "micromamba run -n borg_env pip install setuptools<60.0.0",
+      "cwd": "/workspace/repo",
+      "returncode": 2,
+      "stdout": "",
+      "stderr": "/bin/sh: 1: cannot open 60.0.0: No such file\n",
+      "duration_sec": 0.0019524097442626953
+    },
+    {
+      "command": "micromamba run -n borg_env pip install wheel<0.37.0",
+      "cwd": "/workspace/repo",
+      "returncode": 2,
+      "stdout": "",
+      "stderr": "/bin/sh: 1: cannot open 0.37.0: No such file\n",
+      "duration_sec": 0.0023374557495117188
+    }
+  ],
+  "step_logs": [
+    {
+      "id": "install_dependencies",
+      "description": "Installing dependencies",
+      "commands": [
+        {
+          "command": "micromamba run -n borg_env pip install -r requirements.txt",
+          "cwd": "/workspace/repo",
+          "returncode": 1,
+          "stdout": "",
+          "stderr": "ERROR: Could not open requirements file: [Errno 2] No such file or directory: 'requirements.txt'\n",
+          "duration_sec": 0.8584198951721191
+        }
+      ],
+      "artifacts": {
+        "borgbackup/borg": false
+      }
+    },
+    {
+      "id": "run_main_experiment",
+      "description": "Running the main experiment",
+      "commands": [
+        {
+          "command": "micromamba run -n borg_env python src/borg/__main__.py",
+          "cwd": "/workspace/repo",
+          "returncode": 1,
+          "stdout": "",
+          "stderr": "Traceback (most recent call last):\n  File \"/workspace/repo/src/borg/__main__.py\", line 15, in <module>\n    from borg.archiver import main\nModuleNotFoundError: No module named 'borg'\n",
+          "duration_sec": 0.09018492698669434
+        }
+      ],
+      "artifacts": {
+        "output of the main experiment": false
+      }
+    }
+  ]
+}
