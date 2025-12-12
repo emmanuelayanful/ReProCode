@@ -1,0 +1,66 @@
+{
+  "paper_id": "P14",
+  "repo_name": "pymc-devs/pymc",
+  "env_logs": [
+    {
+      "command": "micromamba create -n pymc python=3.9 -y",
+      "cwd": "/workspace/repo",
+      "returncode": 0,
+      "stdout": "\n\nTransaction\n\n  Prefix: /home/runner/.local/share/mamba/envs/pymc\n\n  Updating specs:\n\n   - python=3.9\n\n\n  Package                Version  Build                 Channel          Size\n\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\n  Install:\n\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\n\n  + _libgcc_mutex            0.1  conda_forge           conda-forge       3kB\n  + _openmp_mutex            4.5  2_gnu                 conda-forge      24kB\n  + bzip2                  1.0.8  hda65f42_8            conda-forge     260kB\n  + ca-certificates   2025.11.12  hbd8a1cb_0            conda-forge     152kB\n  + ld_impl_linux-64        2.45  default_hbd61a6d_104  conda-forge     726kB\n  + libexpat               2.7.3  hecca717_0            conda-forge      77kB\n  + libffi                 3.5.2  h9ec8514_0            conda-forge      58kB\n  + libgcc                15.2.0  he0feb66_16           conda-forge       1MB\n  + libgcc-ng             15.2.0  h69a702a_16           conda-forge      27kB\n  + libgomp               15.2.0  he0feb66_16           conda-forge     603kB\n  + liblzma                5.8.1  hb9d3cd8_2            conda-forge     113kB\n  + libnsl                 2.0.1  hb9d3cd8_1            conda-forge      34kB\n  + libsqlite             3.51.1  h0c1763c_0            conda-forge     939kB\n  + libuuid               2.41.2  h5347b49_1            conda-forge      40kB\n  + libxcrypt             4.4.36  hd590300_1            conda-forge     100kB\n  + libzlib                1.3.1  hb9d3cd8_2            conda-forge      61kB\n  + ncurses                  6.5  h2d0b736_3            conda-forge     892kB\n  + openssl                3.6.0  h26f9b46_0            conda-forge       3MB\n  + pip                     25.2  pyh8b19718_0          conda-forge       1MB\n  + python                3.9.23  hc30ae73_0_cpython    conda-forge      24MB\n  + readline                 8.2  h8c095d6_2            conda-forge     282kB\n  + setuptools            80.9.0  pyhff2d567_0          conda-forge     749kB\n  + tk                    8.6.13  noxft_ha0e22de_103    conda-forge       3MB\n  + tzdata                 2025b  h78e105d_0            conda-forge     123kB\n  + wheel                 0.45.1  pyhd8ed1ab_1          conda-forge      63kB\n  + zstd                   1.5.7  hb78ec9c_6            conda-forge     601kB\n\n  Summary:\n\n  Install: 26 packages\n\n  Total download: 38MB\n\n\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\n\n\n\nTransaction starting\nLinking tzdata-2025b-h78e105d_0\nLinking ca-certificates-2025.11.12-hbd8a1cb_0\nLinking libgomp-15.2.0-he0feb66_16\nLinking _libgcc_mutex-0.1-conda_forge\nLinking _openmp_mutex-4.5-2_gnu\nLinking libgcc-15.2.0-he0feb66_16\nLinking openssl-3.6.0-h26f9b46_0\nLinking ncurses-6.5-h2d0b736_3\nLinking libzlib-1.3.1-hb9d3cd8_2\nLinking libgcc-ng-15.2.0-h69a702a_16\nLinking libuuid-2.41.2-h5347b49_1\nLinking libnsl-2.0.1-hb9d3cd8_1\nLinking liblzma-5.8.1-hb9d3cd8_2\nLinking libffi-3.5.2-h9ec8514_0\nLinking libexpat-2.7.3-hecca717_0\nLinking bzip2-1.0.8-hda65f42_8\nLinking readline-8.2-h8c095d6_2\nLinking libsqlite-3.51.1-h0c1763c_0\nLinking zstd-1.5.7-hb78ec9c_6\nLinking tk-8.6.13-noxft_ha0e22de_103\nLinking libxcrypt-4.4.36-hd590300_1\nLinking ld_impl_linux-64-2.45-default_hbd61a6d_104\nLinking python-3.9.23-hc30ae73_0_cpython\nLinking wheel-0.45.1-pyhd8ed1ab_1\nLinking setuptools-80.9.0-pyhff2d567_0\nLinking pip-25.2-pyh8b19718_0\n\nTransaction finished\n\n\nTo activate this environment, use:\n\n    micromamba activate pymc\n\nOr to execute a single command in this environment, use:\n\n    micromamba run -n pymc mycommand\n\n",
+      "stderr": "",
+      "duration_sec": 48.271005392074585
+    },
+    {
+      "command": "micromamba install -n pymc pip -y",
+      "cwd": "/workspace/repo",
+      "returncode": 0,
+      "stdout": "conda-forge/linux-64                                        Using cache\nconda-forge/noarch                                          Using cache\n\nPinned packages:\n\n  - python=3.9\n\n\nTransaction\n\n  Prefix: /home/runner/.local/share/mamba/envs/pymc\n\n  All requested packages already installed\n\n\nTransaction starting\n\nTransaction finished\n\n",
+      "stderr": "",
+      "duration_sec": 8.38316798210144
+    },
+    {
+      "command": "micromamba run -n pymc pip install setuptools<60.0.0 wheel<0.37.0 -y",
+      "cwd": "/workspace/repo",
+      "returncode": 2,
+      "stdout": "",
+      "stderr": "/bin/sh: 1: cannot open 60.0.0: No such file\n",
+      "duration_sec": 0.0018396377563476562
+    }
+  ],
+  "step_logs": [
+    {
+      "id": "install_dependencies",
+      "description": "Installing dependencies",
+      "commands": [
+        {
+          "command": "micromamba run -n pymc pip install -r requirements.txt",
+          "cwd": "/workspace/repo",
+          "returncode": 1,
+          "stdout": "Collecting arviz>=0.13.0 (from -r requirements.txt (line 1))\n  Downloading arviz-0.17.1-py3-none-any.whl.metadata (8.7 kB)\nCollecting cachetools>=4.2.1 (from -r requirements.txt (line 2))\n  Downloading cachetools-6.2.2-py3-none-any.whl.metadata (5.6 kB)\nCollecting cloudpickle (from -r requirements.txt (line 3))\n  Downloading cloudpickle-3.1.2-py3-none-any.whl.metadata (7.1 kB)\nCollecting numpy>=1.25.0 (from -r requirements.txt (line 4))\n  Downloading numpy-2.0.2-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (60 kB)\nCollecting pandas>=0.24.0 (from -r requirements.txt (line 5))\n  Downloading pandas-2.3.3-cp39-cp39-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl.metadata (91 kB)\n",
+          "stderr": "ERROR: Ignored the following versions that require a different python version: 0.18.0 Requires-Python >=3.10; 0.19.0 Requires-Python >=3.10; 0.20.0 Requires-Python >=3.10; 0.21.0 Requires-Python >=3.10; 0.22.0 Requires-Python >=3.10; 2.1.0 Requires-Python >=3.10; 2.1.1 Requires-Python >=3.10; 2.1.2 Requires-Python >=3.10; 2.1.3 Requires-Python >=3.10; 2.2.0 Requires-Python >=3.10; 2.2.1 Requires-Python >=3.10; 2.2.2 Requires-Python >=3.10; 2.2.3 Requires-Python >=3.10; 2.2.4 Requires-Python >=3.10; 2.2.5 Requires-Python >=3.10; 2.2.6 Requires-Python >=3.10; 2.20.0 Requires-Python >=3.10,<3.13; 2.21.0 Requires-Python >=3.10,<3.13; 2.22.0 Requires-Python >=3.10,<3.13; 2.22.1 Requires-Python >=3.10,<3.13; 2.23.0 Requires-Python >=3.10,<3.13; 2.24.0 Requires-Python >=3.10,<3.13; 2.24.1 Requires-Python >=3.10,<3.13; 2.24.2 Requires-Python >=3.10,<3.13; 2.25.0 Requires-Python >=3.10,<3.13; 2.25.1 Requires-Python >=3.10,<3.13; 2.25.2 Requires-Python >=3.10,<3.13; 2.25.3 Requires-Python >=3.10,<3.13; 2.25.4 Requires-Python >=3.10,<3.13; 2.25.5 Requires-Python >=3.10,<3.13; 2.26.0 Requires-Python >=3.10,<3.13; 2.26.1 Requires-Python >=3.10,<3.13; 2.26.2 Requires-Python >=3.10,<3.13; 2.26.3 Requires-Python >=3.10,<3.13; 2.26.4 Requires-Python >=3.10,<3.13; 2.27.0 Requires-Python >=3.10,<3.13; 2.27.1 Requires-Python >=3.10,<3.13; 2.28.0 Requires-Python >=3.10,<3.14; 2.28.1 Requires-Python >=3.10,<3.14; 2.28.2 Requires-Python >=3.10,<3.14; 2.28.3 Requires-Python >=3.10,<3.14; 2.29.0 Requires-Python >=3.10,<3.14; 2.3.0 Requires-Python >=3.11; 2.3.1 Requires-Python >=3.11; 2.3.2 Requires-Python >=3.11; 2.3.3 Requires-Python >=3.11; 2.3.4 Requires-Python >=3.11; 2.3.5 Requires-Python >=3.11; 2.30.0 Requires-Python >=3.10,<3.14; 2.30.1 Requires-Python >=3.10,<3.14; 2.30.2 Requires-Python >=3.10,<3.14; 2.30.3 Requires-Python >=3.10,<3.14; 2.31.0 Requires-Python >=3.10,<3.14; 2.31.1 Requires-Python >=3.10,<3.14; 2.31.2 Requires-Python >=3.10,<3.14; 2.31.3 Requires-Python >=3.10,<3.14; 2.31.4 Requires-Python >=3.10,<3.14; 2.31.5 Requires-Python >=3.10,<3.14; 2.31.6 Requires-Python >=3.10,<3.14; 2.31.7 Requires-Python >=3.10,<3.14; 2.32.0 Requires-Python >=3.10,<3.14; 2.33.0 Requires-Python >=3.10,<3.14; 2.34.0 Requires-Python >=3.10,<3.14; 2.35.0 Requires-Python >=3.11,<3.14; 2.35.1 Requires-Python >=3.11,<3.14; 2.4.0rc1 Requires-Python >=3.11; 3.0.0rc0 Requires-Python >=3.11\nERROR: Could not find a version that satisfies the requirement pytensor<2.36,>=2.35.0 (from versions: 2.8.10, 2.8.11, 2.9.1, 2.10.0, 2.10.1, 2.11.0, 2.11.1, 2.11.2, 2.11.3, 2.12.0, 2.12.1, 2.12.2, 2.12.3, 2.13.0, 2.13.1, 2.14.0, 2.14.1, 2.14.2, 2.15.0, 2.16.0, 2.16.1, 2.16.2, 2.16.3, 2.17.0, 2.17.1, 2.17.2, 2.17.3, 2.17.4, 2.18.0, 2.18.1, 2.18.2, 2.18.3, 2.18.4, 2.18.5, 2.18.6, 2.19.0)\nERROR: No matching distribution found for pytensor<2.36,>=2.35.0\n",
+          "duration_sec": 2.851820230484009
+        }
+      ],
+      "artifacts": {
+        "pymc": true
+      }
+    },
+    {
+      "id": "run_main_experiment",
+      "description": "Running the main experiment",
+      "commands": [
+        {
+          "command": "micromamba run -n pymc python tests/models.py",
+          "cwd": "/workspace/repo",
+          "returncode": 1,
+          "stdout": "",
+          "stderr": "Traceback (most recent call last):\n  File \"/workspace/repo/tests/models.py\", line 17, in <module>\n    import numpy as np\nModuleNotFoundError: No module named 'numpy'\n",
+          "duration_sec": 0.09183549880981445
+        }
+      ],
+      "artifacts": {
+        "output.txt": false
+      }
+    }
+  ]
+}
