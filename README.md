@@ -287,7 +287,7 @@ Again, this is a prototype, not a full benchmark.
 
 ## Authors
 
-- **Emmanuel Ayanful** — scoring design, docker setup and implementation,   
+- **Emmanuel Ayanful** — scoring design, docker setup, implementation and running  
 - **Munib Ahmed** — metadata collection, integration, debugging  
 
 We both contributed equally to research, testing, and writing and plan continuing to extend the project over the Thanksgiving break. 
