@@ -23,8 +23,7 @@ We selected well-known code-generation repositories such as:
 This project includes:
 1. A GitHub metadata scraper  
 2. A reproducibility scoring system (RDS)  
-3. A regression model that predicts RDS  
-4. A small dataset of metadata and scores  
+3. A small dataset of metadata and scores  
 
 
 ## Project Structure
@@ -40,8 +39,6 @@ ReProCode/
 │   ├── repro_scores.csv                # RDS (difficulty scores)
 │   └── runtime_logs                    # Folder containing runtime logs from the docker implementation
 ├── environment.yaml                    # Environment dependencies for reproducibility
-├── models
-│   └── rds_regressor.pkl               # Trained Random Forest Regressor model
 ├── README.md
 ├── repos                               # Cloned GitHub repos corresponding to papers in papers_list.csv
 │   ├── bigcode-project__starcoder
@@ -59,19 +56,18 @@ ReProCode/
 └── scripts
     ├── clone_repos.py
     ├── collect_metadata.py             # GitHub scraper
-    ├── compute_score.py                # Score calculator
+    ├── compute_hybrid_score.py         # Score calculator using runtime logs and checklist
+    ├── compute_score.py                # Score calculator using checklist
     ├── docker_plan.json                # Plan sample to be followed by LLM
     ├── Dockerfile.reprocode            # Setup docker environment
     ├── llm_local.py                    # HugginFace LLM run locally
     ├── plan_with_llm.py                # Generate docker plans using thr LLM
     ├── run_all_in_docker.py            # Run all docker plans in the docker environment
-    ├── run_plan.py                     # Run a given docker plan in the docker environment
-    └── train_model.py                  # Model training script
+    └── run_plan.py                     # Run a given docker plan in the docker environment
 ```
 
 
-
-## Reproducibility Checklist (RDS Criteria)
+## Reproducibility Static Score (Checklist)
 
 We calculate the Reproducibility Difficulty Score (RDS) based on these weighted features:
 
@@ -91,6 +87,7 @@ criteria:
 - **1.0 = very difficult to reproduce**
 
 Repositories lose points as they satisfy more checklist items which means the difficulty decreases to reproduce the code.
+
 
 
 
@@ -133,27 +130,60 @@ Output = `data/repro_scores.csv`
 
 
 
-### 3. Machine Learning Model
 
-We train a small regression model (Random Forest Regressor) to predict the RDS based on repository metadata.
+### 3. Dynamic Scoring (Docker + LLM Plans)
 
-To run:
+We use an LLM to read the README and produce a step-by-step plan (create env, install deps, run commands, check outputs). Then we execute the plan inside a controlled Docker image (`Dockerfile.reprocode`) and log everything.
 
-```bash
-python scripts/train_model.py
+Logs are saved under `data/runtime_logs/{paper_id}.json`.
+
+The **Dynamic Score** is calculated from three components (failure fraction penalties):
+
+#### 1. Environment Penalty (20%)
+Based on `env_logs` (environment commands: conda/pip/install/etc.).
+- `failed_env_cmds`: Commands with nonzero return code and non-empty stderr.
+- `env_penalty` = `failed_env_cmds / total_env_cmds` (0 = everything OK, 1 = everything failed).
+
+#### 2. Step Execution Penalty (40%)
+Based on logical steps in `step_logs` (e.g., “train model”, “run evaluation”).
+A step counts as failed if **any** command in it fails.
+- `failed_steps`: Number of steps with ≥1 failed command.
+- `step_penalty` = `failed_steps / total_steps`
+- If no steps, `step_penalty = 1.0` (nothing ran).
+
+#### 3. Artifact Penalty (40%)
+For each step, we check for expected artifacts (files/logs/models).
+- `missing_artifacts`: Number of artifacts marked False.
+- `artifact_penalty` = `missing_artifacts / total_artifacts`
+- If no artifacts defined, `artifact_penalty = 0.0`.
+
+#### Formula
+```python
+dynamic_score = 0.2 * env_penalty + 0.4 * step_penalty + 0.4 * artifact_penalty
+```
+The result is clipped to [0, 1] (0 = everything ran & produced artifacts, 1 = everything failed).
+
+
+### 4. Hybrid Score
+
+Hybrid score combines static + dynamic scores.
+
+For each repo `paper_id`:
+- `s_score` = static_score (checklist)
+- `d_score` = dynamic_score (Docker run)
+
+**Final Score Formula**:
+```python
+final_score = 0.4 * s_score + 0.6 * d_score
 ```
 
-This will print:
+**Intuition**:
+- **Static (40%)** — “Repo looks reproducible on paper.”
+- **Dynamic (60%)** — “Repo actually behaves reproducibly in Docker.”
 
-- Training/test split size  
-- MAE and R² score  
-- Feature importances  
-
-The trained model is saved to:
-
-```
-models/rds_regressor.pkl
-```
+**Interpretation**:
+- **0.0** → Very easy: good documentation + successful execution + expected artifacts.
+- **1.0** → Very hard: poor documentation and/or commands fail, missing outputs.
 
 
 
@@ -166,33 +196,27 @@ git clone https://github.com/emmanuelayanful/ReProCode.git
 cd ReProCode
 ```
 
-### 2. Create and activate a virtual environment
+### 2. Create and activate a virtual environment and install dependencies
 
 ```bash
-python3 -m venv .env
-source .env/bin/activate
+conda create --file environment.yaml --name reprocode
+conda activate reprocode
 ```
 
-### 3. Install dependencies
-
-```bash
-pip install -r requirements.txt
-```
-
-### 4. Add your GitHub token
+### 3. Add your GitHub token and HuggingFace model name
 
 Create a `.env` file:
-
 ```
 GITHUB_TOKEN=ghp_yourtokenhere
+HF_MODEL_NAME=yourmodelhere
 ```
 
-### 5. How to run the Docker part
+### 4. How to run the Docker part
 Build the docker image with
 ```bash
 docker build -f scripts/Dockerfile.reprocode -t reprocode-base .
 ```
-Create a directory called repo to clone all ppaer repositories from the root directory with
+Create a directory called repo to clone all paper repositories from the root directory with
 ```bash
 mkdir repo
 python -m scripts.clone_repos
@@ -213,7 +237,7 @@ Compute Scores with the runtime logs with
 python -m scripts.compute_hybrid_score
 ```
 
-### 6. Run the web API + frontend
+### 5. Run the web API + frontend
 The FastAPI server serves both the JSON API and the bundled frontend (under `/`).
 
 ```bash
@@ -227,28 +251,24 @@ Then open http://localhost:8000 in your browser to use the Quick and Advanced sc
 
 Some example difficulty scores:
 
-| Repo          | RDS  |
-| ------------- | ---- |
-| CORE-Bench    | 0.00 |
-| HumanEval     | 0.10 |
-| MBPP          | 0.30 |
-| SWE-Bench     | 0.15 |
-| StarCoder     | 0.10 |
-| CodeT5        | 0.55 |
-| CodeRAG-Bench | 0.20 |
-
-Model results on our small dataset:
-
-- Mean Absolute Error: **0.194**  
-- R²: **-0.009** (this result is expected because the dataset is very small)
-
-Top predictive features:
-
-- open issues  
-- stars  
-- forks  
-- example usage  
-
+| paper_id | static_score | dynamic_score | final_score |
+| :--- | :--- | :--- | :--- |
+| P01 | 0.0 | 0.55 | 0.33 |
+| P02 | 0.1 | 0.67 | 0.44 |
+| P03 | 0.3 | 0.6 | 0.48 |
+| P04 | 0.15 | 0.43 | 0.32 |
+| P05 | 0.1 | 0.49 | 0.33 |
+| P06 | 0.55 | 1.0 | 0.82 |
+| P07 | 0.2 | 0.75 | 0.53 |
+| P08 | 0.3 | 0.9 | 0.66 |
+| P09 | 0.45 | 0.87 | 0.7 |
+| P10 | 0.3 | 0.0 | 0.12 |
+| P11 | 0.45 | 0.53 | 0.5 |
+| P12 | 0.25 | 0.9 | 0.64 |
+| P13 | 0.15 | 0.72 | 0.49 |
+| P14 | 0.15 | 0.67 | 0.46 |
+| P15 | 0.3 | 0.87 | 0.64 |
+| P16 | 0.2 | 0.38 | 0.31 |
 
 ## Purpose of This Project
 
@@ -257,7 +277,9 @@ This project helped us practice:
 - API usage  
 - Data collection and cleaning  
 - Feature engineering  
-- Building a small ML model  
+- Understanding Docker
+- Understanding LLMs
+- Understanding GitHub
 - Understanding reproducibility issues  
 
 Again, this is a prototype, not a full benchmark.
