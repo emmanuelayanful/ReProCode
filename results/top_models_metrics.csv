@@ -1,4 +1,0 @@
-model,mae,r2,n_train,n_test,model_path
-extra_trees,0.0513,0.8264,14,7,/Users/munibahmed/Desktop/AI_final_project/ReProCode/models/extra_trees.pkl
-random_forest,0.1337,0.2549,14,7,/Users/munibahmed/Desktop/AI_final_project/ReProCode/models/random_forest.pkl
-hist_gb,0.1745,-0.0013,14,7,/Users/munibahmed/Desktop/AI_final_project/ReProCode/models/hist_gb.pkl
