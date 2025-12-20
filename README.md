@@ -28,6 +28,7 @@ This project includes:
 
 ## Project Structure
 
+```text
 ReProCode/
 ├── checklist.yaml                      # Weighted checklist for computing scores
 ├── data
@@ -63,6 +64,7 @@ ReProCode/
     ├── plan_with_llm.py                # Generate docker plans using the LLM
     ├── run_all_in_docker.py            # Run all docker plans in the docker environment
     └── run_plan.py                     # Run a given docker plan in the docker environment
+```
 
 
 ## Reproducibility Static Score (Checklist)
