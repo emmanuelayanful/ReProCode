@@ -8,7 +8,7 @@
 
 ## Overview
 
-ReProCode is a project where we measure how difficult it is to reproduce code from AI-for-Code research papers. Many AI-for-Code Generation papers release their code on GitHub, but the repositories are often missing files, have unclear setup instructions, or rely on very specific environments. Hence, it is harder to reproduce the working code. Our goal is to measure how “reproducible” each repo is using a checklist and then train a small regression model to predict that difficulty.
+ReProCode is a project where we measure how difficult it is to reproduce code from AI-for-Code research papers. Many AI-for-Code Generation papers release their code on GitHub, but the repositories are often missing files, have unclear setup instructions, or rely on very specific environments. Hence, it is harder to reproduce the working code. Our goal is to measure how “reproducible” each repo is using a checklist and dynamic execution logs.
 
 We selected well-known code-generation repositories such as:
 
@@ -28,13 +28,12 @@ This project includes:
 
 ## Project Structure
 
-```
 ReProCode/
 ├── checklist.yaml                      # Weighted checklist for computing scores
 ├── data
 │   ├── llm_raw_outputs                 # Folder containing LLM raw outputs
 │   ├── papers_list.csv                 # List of repos we evaluate
-│   ├── plans                           # Folder containg LLM json plans
+│   ├── plans                           # Folder containing LLM json plans
 │   ├── raw_metadata.json               # GitHub metadata
 │   ├── repro_scores.csv                # RDS (difficulty scores)
 │   └── runtime_logs                    # Folder containing runtime logs from the docker implementation
@@ -49,7 +48,7 @@ ReProCode/
 │   ├── siegelz__core-bench
 │   └── swe-bench__swe-bench
 ├── requirements.txt
-├── results
+├── results                             # Results from scoring
 │   ├── feature_importances.csv
 │   ├── model_metrics.json
 │   └── test_predictions.csv
@@ -60,11 +59,10 @@ ReProCode/
     ├── compute_score.py                # Score calculator using checklist
     ├── docker_plan.json                # Plan sample to be followed by LLM
     ├── Dockerfile.reprocode            # Setup docker environment
-    ├── llm_local.py                    # HugginFace LLM run locally
-    ├── plan_with_llm.py                # Generate docker plans using thr LLM
+    ├── llm_local.py                    # HuggingFace LLM run locally
+    ├── plan_with_llm.py                # Generate docker plans using the LLM
     ├── run_all_in_docker.py            # Run all docker plans in the docker environment
     └── run_plan.py                     # Run a given docker plan in the docker environment
-```
 
 
 ## Reproducibility Static Score (Checklist)
