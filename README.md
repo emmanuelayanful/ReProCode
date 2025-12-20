@@ -30,6 +30,10 @@ This project includes:
 
 ```text
 ReProCode/
+├── app                                 # Web Application
+│   ├── frontend                        # Frontend assets
+│   │   └── index.html
+│   └── main.py                         # FastAPI backend
 ├── checklist.yaml                      # Weighted checklist for computing scores
 ├── data
 │   ├── llm_raw_outputs                 # Folder containing LLM raw outputs
